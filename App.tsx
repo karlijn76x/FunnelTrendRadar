@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   tinyLogo: {
+    marginTop:30,
     width: 400,
     height: 60,
   },
