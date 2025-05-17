@@ -1,5 +1,8 @@
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
+import { Dropdown } from 'react-native-element-dropdown';
 import { StyleSheet, Text, View, Image } from 'react-native';
+import DropdownComponent from './components/Dropdown_menu';
 
 export default function App() {
   return (
@@ -8,6 +11,7 @@ export default function App() {
         style={styles.tinyLogo}
         source={require('./assets/vanderlande_logo.png')}
       />
+      <DropdownComponent />
     </View>
   );
 }
@@ -18,8 +22,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   tinyLogo: {
-    marginTop:30,
+    marginLeft:30,
+    marginTop:50,
     width: 400,
     height: 60,
   },
 });
+
