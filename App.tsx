@@ -11,7 +11,9 @@ export default function App() {
         style={styles.tinyLogo}
         source={require('./assets/vanderlande_logo.png')}
       />
+      <View style = {{backgroundColor:'#FFEFDF', margin:20, padding:20, borderColor:'black', borderRadius:20, borderWidth: 2, alignItems: 'center', justifyContent: 'center'}}>
       <DropdownComponent />
+      </View>
     </View>
   );
 }
