@@ -1,12 +1,29 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable, Text } from 'react-native';
+
+type Impact = 'low' | 'medium' | 'high';
 
 type Props = {
-  size: number;
+  impact: Impact;
   onPress: () => void;
 };
 
-const TechTrendCircle: React.FC<Props> = ({ size, onPress }) => {
+const getSize = (impact: Impact): number => {
+  switch (impact) {
+    case 'low':
+      return 60;
+    case 'medium':
+      return 90;
+    case 'high':
+      return 130;
+    default:
+      return 80;
+  }
+};
+
+const TechTrendCircle: React.FC<Props> = ({ impact, onPress }) => {
+  const size = getSize(impact);
+
   return (
     <Pressable onPress={onPress}>
       <View
@@ -16,8 +33,6 @@ const TechTrendCircle: React.FC<Props> = ({ size, onPress }) => {
             width: size,
             height: size,
             borderRadius: size / 2,
-            borderWidth: 2,
-            borderColor: '#000', // zwarte rand
           },
         ]}
       >
@@ -29,13 +44,16 @@ const TechTrendCircle: React.FC<Props> = ({ size, onPress }) => {
 
 const styles = StyleSheet.create({
   circle: {
-    backgroundColor: '#5A136D', // paarse kleur
+    backgroundColor: '#5A136D',
+    borderWidth: 2,
+    borderColor: '#000',
+    margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
   },
   label: {
-    color: '#fff', // wit voor contrast
+    color: '#fff',
+    fontSize: 10,
     fontWeight: 'bold',
   },
 });

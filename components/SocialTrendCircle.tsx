@@ -1,12 +1,22 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 
+type ImpactLevel = 'low' | 'medium' | 'high';
+
 type Props = {
-  size: number;
+  impact: ImpactLevel;
   onPress: () => void;
 };
 
-const SocialTrendCircle: React.FC<Props> = ({ size, onPress }) => {
+const impactSizes = {
+  low: 50,
+  medium: 80,
+  high: 120,
+};
+
+const SocialTrendCircle: React.FC<Props> = ({ impact, onPress }) => {
+  const size = impactSizes[impact];
+
   return (
     <Pressable onPress={onPress}>
       <View
@@ -17,7 +27,7 @@ const SocialTrendCircle: React.FC<Props> = ({ size, onPress }) => {
             height: size,
             borderRadius: size / 2,
             borderWidth: 2,
-            borderColor: '#000', // zwarte rand
+            borderColor: '#000',
           },
         ]}
       >
@@ -29,13 +39,14 @@ const SocialTrendCircle: React.FC<Props> = ({ size, onPress }) => {
 
 const styles = StyleSheet.create({
   circle: {
-    backgroundColor: '#F57523', // oranje kleur
+    backgroundColor: '#F57523',
     justifyContent: 'center',
     alignItems: 'center',
     margin: 10,
   },
   label: {
     color: '#000',
+    fontSize: 10,
     fontWeight: 'bold',
   },
 });
