@@ -45,7 +45,7 @@ const TechTrendCircle: React.FC<Props> = ({ impact, onPress }) => {
 const styles = StyleSheet.create({
   circle: {
     backgroundColor: '#5A136D',
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#000',
     margin: 10,
     justifyContent: 'center',

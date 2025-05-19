@@ -26,7 +26,7 @@ const SocialTrendCircle: React.FC<Props> = ({ impact, onPress }) => {
             width: size,
             height: size,
             borderRadius: size / 2,
-            borderWidth: 2,
+            borderWidth: 1,
             borderColor: '#000',
           },
         ]}
