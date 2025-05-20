@@ -59,7 +59,7 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
           </Text>
 
           <Image
-            source={require("../assets/circular-economy.png")}
+            source={require("../assets/Circular-economy.jpg")}
             style={styles.image}
             resizeMode="cover"
           />
