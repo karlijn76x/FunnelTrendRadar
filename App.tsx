@@ -1,6 +1,9 @@
 
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import TrendDetail from './Components/TrendDetail';
 import { Dropdown } from 'react-native-element-dropdown';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import DropdownComponent from './components/Dropdown_menu';
@@ -66,7 +69,6 @@ const styles = StyleSheet.create({
     marginTop:50,
     width: 400,
     height: 60,
--------
     gap: 3,
     backgroundColor: '#fff',
     alignItems: 'center',
