@@ -19,7 +19,7 @@ export default function App() {
         style={styles.tinyLogo}
         source={require('./assets/vanderlande_logo.png')}
       />
-      <View style = {{backgroundColor:'#FFEFDF', margin:20, padding:20, borderColor:'black', borderRadius:20, borderWidth: 2, alignItems: 'center', justifyContent: 'center'}}>
+      <View style = {styles.dropDownStyle}>
         <DropdownComponent />
       </View>
       <View style={styles.container}>
@@ -61,6 +61,17 @@ const styles = StyleSheet.create({
     gap: 3,
     backgroundColor: '#fff',
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dropDownStyle: {
+    backgroundColor:'#FFEFDF', 
+    width:750,
+    margin:20, 
+    padding:20, 
+    borderColor:'black', 
+    borderRadius:20, 
+    borderWidth: 2, 
+    alignItems: 'center', 
     justifyContent: 'center',
   },
   tinyLogo: {
