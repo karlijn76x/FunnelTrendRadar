@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
 import { Dropdown } from 'react-native-element-dropdown';
 import { StyleSheet, Text, View} from 'react-native';
 import { useFonts } from 'expo-font';
@@ -49,10 +48,8 @@ const techFocusArea = [
     const [techFocusAreaValue, setTechFocusAreaValue] = useState(null);
     const [isFocus, setIsFocus] = useState(false);
     const [loaded, error] = useFonts({
-        Aptos: require("../assets/fonts/Aptos.ttf"),
-        Aptos_Bold: require("../assets/fonts/Aptos-Bold.ttf"),
-        Aptos_ExtraBold: require("../assets/fonts/Aptos-ExtraBold.ttf")
-      });
+        Aptos_Bold: require("../assets/fonts/Aptos-Bold.ttf")
+    });
 
 //Type of filters
     return (
@@ -121,7 +118,7 @@ const techFocusArea = [
         </View>
 
         <View style={styles.titleAndMenu}>
-        <Text style= {styles.titles}>Social Key Trends</Text>
+        <Text style= {styles.titles}>Social Key Trend</Text>
         <Dropdown
           style={[styles.dropdown, isFocus && { borderColor: 'black', borderWidth:2,}]}
           placeholderStyle={styles.placeholderStyle}
@@ -142,7 +139,7 @@ const techFocusArea = [
         </View>
 
         <View style={styles.titleAndMenu}>
-        <Text style= {styles.titles}>Technology Focus Area</Text>
+        <Text style= {styles.titles}>Tech Focus Area</Text>
         <Dropdown
           style={[styles.dropdown, isFocus && { borderColor: 'black', borderWidth:2,}]}
           placeholderStyle={styles.placeholderStyle}
