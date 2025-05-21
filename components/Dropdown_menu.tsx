@@ -3,24 +3,26 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { StyleSheet, Text, View} from 'react-native';
 import { useFonts } from 'expo-font';
 
-//Data for each filter
+// Data for each filter
 const trendType = [
-    { label: 'Social & Business trends', value: '1' },
-    { label: 'Technology trends', value: '2' },
-    { label: 'All trends', value: '3' },
+    { label: 'All', value: '1' },
+    { label: 'Social & Business Trends', value: '2' },
+    { label: 'Technology Trends', value: '3' },
   ];
 
 const impact = [
-    { label: 'Low', value: '1' },
-    { label: 'Medium', value: '2' },
-    { label: 'High', value: '3' },
-    { label: 'Very high', value: '4' },
+    { label: 'All', value: '1' },
+    { label: 'Low', value: '2' },
+    { label: 'Medium', value: '3' },
+    { label: 'High', value: '4' },
+    { label: 'Very High', value: '5' },
   ];
 
 const timeframe = [
-    { label: '0-3 years', value: '1' },
-    { label: '3-5 years', value: '2' },
-    { label: '5-10 years', value: '3' },
+    { label: 'All', value: '1' },
+    { label: '0-3 years', value: '2' },
+    { label: '3-5 years', value: '3' },
+    { label: '5-10 years', value: '4' },
   ];
 
 const socialKeyTrends = [
@@ -51,7 +53,7 @@ const techFocusArea = [
         Aptos_Bold: require("../assets/fonts/Aptos-Bold.ttf")
     });
 
-//Type of filters
+// Type of filters
     return (
       <View style={styles.container}>
         <View style={styles.titleAndMenu}>
