@@ -17,6 +17,8 @@ export default function App() {
     Aptos_ExtraBold: require("./assets/fonts/Aptos-ExtraBold.ttf")
   });
 
+  const [visible, setVisible] = useState(false);
+
   return (
     <View style={styles.container}>
       <Image
@@ -39,12 +41,12 @@ export default function App() {
             />
             <TechTrendCircle
             impact= "high"
-            onPress={() => alert('Tech High clicked')}
+            onPress={() => setVisible(true)} 
             style={{ position: 'absolute', top: 5, left: 100, zIndex: 1 }}
             />
              <SocialTrendCircle
              impact="low"
-             onPress={() => alert('Social Medium clicked')}
+             onPress={() => setVisible(true)}
              style={{ position: 'absolute', top: 30, left: 250, zIndex: 1 }}
              />
              </View>
@@ -62,12 +64,12 @@ export default function App() {
             />
             <TechTrendCircle
             impact="medium"
-            onPress={() => alert('Tech Medium clicked')}
+            onPress={() => setVisible(true)}
             style={{ position: 'absolute', top: -5, left: 400, zIndex: 10 }}
             />
             <SocialTrendCircle
             impact="low"
-            onPress={() => alert('Social Low clicked')}
+            onPress={() => setVisible(true)}
             style={{ position: 'absolute', top: 20, left: 550, zIndex: 10 }}
             />
             </View>
@@ -86,26 +88,28 @@ export default function App() {
           />
           <TechTrendCircle
           impact="medium"
-          onPress={() => alert('Tech Low clicked')}
+          onPress={() => setVisible(true)}
           style={{ position: 'absolute', top: 10, left: 100, zIndex: 10 }}
           />
          <SocialTrendCircle
          impact="high"
-         onPress={() => alert('Social Medium clicked')}
+         onPress={() => setVisible(true)}
          style={{ position: 'absolute', top: 90, left: 200, zIndex: 10 }}
         />
         <TechTrendCircle
         impact="low"
-        onPress={() => alert('Tech High clicked')}
+        onPress={() => setVisible(true)}
         style={{ position: 'absolute', top: 50, left: 350, zIndex: 10 }}
        />
        <SocialTrendCircle
        impact="medium"
-       onPress={() => alert('Social Low clicked')}
+       onPress={() => setVisible(true)}
        style={{ position: 'absolute', top: 150, left: 400, zIndex: 10 }}
        />
         </View>
       </View>
+      <TrendDetail visible={visible} onClose={() => setVisible(false)} />
+
 
       </View>
     </View>
