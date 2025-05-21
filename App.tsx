@@ -33,11 +33,30 @@ export default function App() {
   };
 
   const shouldShowSocial = () => {
-    return selectedTrendType === null || selectedTrendType === '2' || selectedTrendType === '1';
+    return selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '2';
   };
 
   const shouldShowTech = () => {
-    return selectedTrendType === null || selectedTrendType === '3' || selectedTrendType === '1';
+    return selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '3';
+  };
+
+  const matchesImpact = (value: string) => {
+    const map: { [key: string]: string } = {
+      'low': '2',
+      'medium': '3',
+      'high': '4',
+      'very high': '5',
+    };
+    return selectedImpact === null || selectedImpact === '1' || selectedImpact === map[value.toLowerCase()];
+  };
+
+  const matchesTimeframe = (value: string) => {
+    const map: { [key: string]: string } = {
+      '0-3 years': '2',
+      '3-5 years': '3',
+      '5-10 years': '4',
+    };
+    return selectedTimeframe === null || selectedTimeframe === '1' || selectedTimeframe === map[value.toLowerCase()];
   };
 
   if (!loaded) {
