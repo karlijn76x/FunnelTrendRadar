@@ -30,98 +30,115 @@ export default function App() {
     return selectedTrendType === null || selectedTrendType === '3' || selectedTrendType === '1';
   };
 
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       <Image
         style={styles.tinyLogo}
         source={require('./assets/images/vanderlande_logo.png')}
       />
-      <View style = {styles.dropDownStyle}>
+      <View style={styles.dropDownStyle}>
         <DropdownComponent onTrendTypeChange={handleTrendTypeChange} />
       </View>
       <View style={styles.funnelStyle}>
-
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View style={styles.column}>
-              <Text style={{ fontFamily: 'Aptos_ExtraBold', fontSize: 18 }}>5-10 years</Text>
-            </View>
-            <View>
-             <Image
-                style={{ width: 900, height: 100, resizeMode: 'cover' }}
-                source={require('./assets/images/funnel_top.png')}
-            />
-            <TechTrendCircle
-            impact= "high"
-            onPress={() => setVisible(true)} 
-            style={{ position: 'absolute', top: 5, left: 100, zIndex: 1 }}
-            />
-             <SocialTrendCircle
-             impact="low"
-             onPress={() => setVisible(true)}
-             style={{ position: 'absolute', top: 30, left: 250, zIndex: 1 }}
-             />
-             </View>
+        {/* 5-10 years section */}
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={styles.column}>
+            <Text style={{ fontFamily: 'Aptos_ExtraBold', fontSize: 18 }}>5-10 years</Text>
           </View>
-
-
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View style={styles.column}>
-              <Text style={{ fontFamily: 'Aptos_ExtraBold', fontSize: 18 }}>3-5 years</Text>
-            </View>
-            <View>
-             <Image
-                style={{ width: 800, height: 100, resizeMode: 'cover' }}
-                source={require('./assets/images/funnel_middle.png')}
+          <View>
+            <Image
+              style={{ width: 900, height: 100, resizeMode: 'cover' }}
+              source={require('./assets/images/funnel_top.png')}
             />
-            <TechTrendCircle
-            impact="medium"
-            onPress={() => setVisible(true)}
-            style={{ position: 'absolute', top: -5, left: 400, zIndex: 10 }}
-            />
-            <SocialTrendCircle
-            impact="low"
-            onPress={() => setVisible(true)}
-            style={{ position: 'absolute', top: 20, left: 550, zIndex: 10 }}
-            />
-            </View>
+            {shouldShowTech() && (
+              <TechTrendCircle
+                impact="high"
+                onPress={() => setVisible(true)} 
+                style={{ position: 'absolute', top: 5, left: 100, zIndex: 1 }}
+              />
+            )}
+            {shouldShowSocial() && (
+              <SocialTrendCircle
+                impact="low"
+                onPress={() => setVisible(true)}
+                style={{ position: 'absolute', top: 30, left: 250, zIndex: 1 }}
+              />
+            )}
           </View>
+        </View>
 
+        {/* 3-5 years section */}
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={styles.column}>
+            <Text style={{ fontFamily: 'Aptos_ExtraBold', fontSize: 18 }}>3-5 years</Text>
+          </View>
+          <View>
+            <Image
+              style={{ width: 800, height: 100, resizeMode: 'cover' }}
+              source={require('./assets/images/funnel_middle.png')}
+            />
+            {shouldShowTech() && (
+              <TechTrendCircle
+                impact="medium"
+                onPress={() => setVisible(true)}
+                style={{ position: 'absolute', top: -5, left: 400, zIndex: 10 }}
+              />
+            )}
+            {shouldShowSocial() && (
+              <SocialTrendCircle
+                impact="low"
+                onPress={() => setVisible(true)}
+                style={{ position: 'absolute', top: 20, left: 550, zIndex: 10 }}
+              />
+            )}
+          </View>
+        </View>
 
-
-         <View style={{ flexDirection: 'row' }}>
+        {/* 0-3 years section */}
+        <View style={{ flexDirection: 'row' }}>
           <View style={[styles.column, { paddingTop: 30 }]}>
             <Text style={{ fontFamily: 'Aptos_ExtraBold', fontSize: 18 }}>0-3 years</Text>
           </View>
           <View style={{ position: 'relative' }}>
-           <Image
-            style={{ width: 700, height: 250, resizeMode: 'cover', zIndex: 0 }}
-            source={require('./assets/images/funnel_bottom.png')}
-          />
-          <TechTrendCircle
-          impact="medium"
-          onPress={() => setVisible(true)}
-          style={{ position: 'absolute', top: 10, left: 100, zIndex: 10 }}
-          />
-         <SocialTrendCircle
-         impact="high"
-         onPress={() => setVisible(true)}
-         style={{ position: 'absolute', top: 90, left: 200, zIndex: 10 }}
-        />
-        <TechTrendCircle
-        impact="low"
-        onPress={() => setVisible(true)}
-        style={{ position: 'absolute', top: 50, left: 350, zIndex: 10 }}
-       />
-       <SocialTrendCircle
-       impact="medium"
-       onPress={() => setVisible(true)}
-       style={{ position: 'absolute', top: 150, left: 400, zIndex: 10 }}
-       />
+            <Image
+              style={{ width: 700, height: 250, resizeMode: 'cover', zIndex: 0 }}
+              source={require('./assets/images/funnel_bottom.png')}
+            />
+            {shouldShowTech() && (
+              <TechTrendCircle
+                impact="medium"
+                onPress={() => setVisible(true)}
+                style={{ position: 'absolute', top: 10, left: 100, zIndex: 10 }}
+              />
+            )}
+            {shouldShowSocial() && (
+              <SocialTrendCircle
+                impact="high"
+                onPress={() => setVisible(true)}
+                style={{ position: 'absolute', top: 90, left: 200, zIndex: 10 }}
+              />
+            )}
+            {shouldShowTech() && (
+              <TechTrendCircle
+                impact="low"
+                onPress={() => setVisible(true)}
+                style={{ position: 'absolute', top: 50, left: 350, zIndex: 10 }}
+              />
+            )}
+            {shouldShowSocial() && (
+              <SocialTrendCircle
+                impact="medium"
+                onPress={() => setVisible(true)}
+                style={{ position: 'absolute', top: 150, left: 400, zIndex: 10 }}
+              />
+            )}
+          </View>
         </View>
-      </View>
-      <TrendDetail visible={visible} onClose={() => setVisible(false)} />
-
-
+        <TrendDetail visible={visible} onClose={() => setVisible(false)} />
       </View>
     </View>
   );
