@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
 import { Dropdown } from 'react-native-element-dropdown';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View} from 'react-native';
+import { useFonts } from 'expo-font';
 
 //Data for each filter
 const trendType = [
@@ -47,11 +47,15 @@ const techFocusArea = [
     const [socialKeyTrendsValue, setSocialKeyTrendsValue] = useState(null);
     const [techFocusAreaValue, setTechFocusAreaValue] = useState(null);
     const [isFocus, setIsFocus] = useState(false);
+    const [loaded, error] = useFonts({
+        Aptos_Bold: require("../assets/fonts/Aptos-Bold.ttf")
+    });
 
 //Type of filters
     return (
       <View style={styles.container}>
-        <Text style= {{fontSize:20, fontWeight:'800'}}>Trend Type</Text>
+        <View style={styles.titleAndMenu}>
+        <Text style= {styles.titles}>Trend Type</Text>
         <Dropdown
           style={[styles.dropdown, isFocus && { borderColor: 'black', borderWidth:2,}]}
           placeholderStyle={styles.placeholderStyle}
@@ -69,8 +73,10 @@ const techFocusArea = [
             setIsFocus(false);
           }}
         />
+        </View>
 
-        <Text style= {{fontSize:20, fontWeight:'800'}}>Impact</Text>
+        <View style={styles.titleAndMenu}>
+        <Text style= {styles.titles}>Impact</Text>
         <Dropdown
           style={[styles.dropdown, isFocus && { borderColor: 'black', borderWidth:2,}]}
           placeholderStyle={styles.placeholderStyle}
@@ -88,8 +94,10 @@ const techFocusArea = [
             setIsFocus(false);
           }}
         />
+        </View>
 
-        <Text style= {{fontSize:20, fontWeight:'800'}}>Timeframe</Text>
+        <View style={styles.titleAndMenu}>
+        <Text style= {styles.titles}>Timeframe</Text>
         <Dropdown
           style={[styles.dropdown, isFocus && { borderColor: 'black', borderWidth:2,}]}
           placeholderStyle={styles.placeholderStyle}
@@ -107,8 +115,10 @@ const techFocusArea = [
             setIsFocus(false);
           }}
         />
+        </View>
 
-        <Text style= {{fontSize:20, fontWeight:'800'}}>Social Key Trends</Text>
+        <View style={styles.titleAndMenu}>
+        <Text style= {styles.titles}>Social Key Trend</Text>
         <Dropdown
           style={[styles.dropdown, isFocus && { borderColor: 'black', borderWidth:2,}]}
           placeholderStyle={styles.placeholderStyle}
@@ -126,8 +136,10 @@ const techFocusArea = [
             setIsFocus(false);
           }}
         />
+        </View>
 
-        <Text style= {{fontSize:20, fontWeight:'800'}}>Technology Focus Area</Text>
+        <View style={styles.titleAndMenu}>
+        <Text style= {styles.titles}>Tech Focus Area</Text>
         <Dropdown
           style={[styles.dropdown, isFocus && { borderColor: 'black', borderWidth:2,}]}
           placeholderStyle={styles.placeholderStyle}
@@ -145,6 +157,7 @@ const techFocusArea = [
             setIsFocus(false);
           }}
         />
+        </View>
       </View>
     );
   };
@@ -153,20 +166,31 @@ const techFocusArea = [
 
   const styles = StyleSheet.create({
     container: {
-
+      flexDirection:'row',
+      gap:10,
     },
     dropdown: {
       height: 50,
+      width:120,
       borderColor: 'black',
       backgroundColor:'white',
       borderWidth: 2,
       borderRadius: 8,
       paddingHorizontal: 8,
     },
+    titleAndMenu: {
+      flexDirection:'column',
+    },
     placeholderStyle: {
-      fontSize: 16,
+      fontSize: 14,
+      fontFamily: 'Aptos_Bold',
     },
     selectedTextStyle: {
-      fontSize: 16,
+      fontSize: 14,
+      fontFamily: 'Aptos_Bold',
+    },
+    titles:{
+      fontSize:18,
+      fontFamily: 'Aptos_Bold',
     },
   });
