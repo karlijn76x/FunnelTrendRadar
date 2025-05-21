@@ -10,9 +10,9 @@ type Props = {
 };
 
 const impactSizes = {
-  low: 50,
-  medium: 80,
-  high: 120,
+  low: 40,
+  medium: 60,
+  high: 80,
 };
 
 const SocialTrendCircle: React.FC<Props> = ({ impact, onPress, style }) => {
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
   circle: {
     backgroundColor: '#F57523',
     justifyContent: 'center',
+    borderWidth: 1,
     alignItems: 'center',
     margin: 10,
   },

@@ -38,9 +38,9 @@ export default function App() {
                 source={require('./assets/images/funnel_top.png')}
             />
             <TechTrendCircle
-            impact= "low"
+            impact= "high"
             onPress={() => alert('Tech High clicked')}
-            style={{ position: 'absolute', top: 10, left: 100, zIndex: 1 }}
+            style={{ position: 'absolute', top: 5, left: 100, zIndex: 1 }}
             />
              <SocialTrendCircle
              impact="low"
@@ -55,20 +55,58 @@ export default function App() {
             <View style={styles.column}>
               <Text style={{ fontFamily: 'Aptos_ExtraBold', fontSize: 18 }}>3-5 years</Text>
             </View>
-            <Image
+            <View>
+             <Image
                 style={{ width: 800, height: 100, resizeMode: 'cover' }}
                 source={require('./assets/images/funnel_middle.png')}
             />
-          </View>
-          <View style={{flexDirection: 'row'}}>
-            <View style={[styles.column, {paddingTop: 30}]}>
-              <Text style={{ fontFamily: 'Aptos_ExtraBold', fontSize: 18 }}>0-3 years</Text>
-            </View>
-            <Image
-                style={{ width: 700, height: 250, resizeMode: 'cover' }}
-                source={require('./assets/images/funnel_bottom.png')}
+            <TechTrendCircle
+            impact="medium"
+            onPress={() => alert('Tech Medium clicked')}
+            style={{ position: 'absolute', top: -5, left: 400, zIndex: 10 }}
             />
-         </View>
+            <SocialTrendCircle
+            impact="low"
+            onPress={() => alert('Social Low clicked')}
+            style={{ position: 'absolute', top: 20, left: 550, zIndex: 10 }}
+            />
+            </View>
+          </View>
+
+
+
+         <View style={{ flexDirection: 'row' }}>
+          <View style={[styles.column, { paddingTop: 30 }]}>
+            <Text style={{ fontFamily: 'Aptos_ExtraBold', fontSize: 18 }}>0-3 years</Text>
+          </View>
+          <View style={{ position: 'relative' }}>
+           <Image
+            style={{ width: 700, height: 250, resizeMode: 'cover', zIndex: 0 }}
+            source={require('./assets/images/funnel_bottom.png')}
+          />
+          <TechTrendCircle
+          impact="medium"
+          onPress={() => alert('Tech Low clicked')}
+          style={{ position: 'absolute', top: 10, left: 100, zIndex: 10 }}
+          />
+         <SocialTrendCircle
+         impact="high"
+         onPress={() => alert('Social Medium clicked')}
+         style={{ position: 'absolute', top: 90, left: 200, zIndex: 10 }}
+        />
+        <TechTrendCircle
+        impact="low"
+        onPress={() => alert('Tech High clicked')}
+        style={{ position: 'absolute', top: 50, left: 350, zIndex: 10 }}
+       />
+       <SocialTrendCircle
+       impact="medium"
+       onPress={() => alert('Social Low clicked')}
+       style={{ position: 'absolute', top: 150, left: 400, zIndex: 10 }}
+       />
+        </View>
+      </View>
+
       </View>
     </View>
   );

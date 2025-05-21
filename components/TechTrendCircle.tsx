@@ -12,13 +12,13 @@ type Props = {
 const getSize = (impact: Impact): number => {
   switch (impact) {
     case 'low':
-      return 60;
+      return 40;
     case 'medium':
-      return 90;
+      return 60;
     case 'high':
-      return 130;
-    default:
       return 80;
+    default:
+      return 50;
   }
 };
 
