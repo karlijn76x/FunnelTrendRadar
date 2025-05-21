@@ -6,6 +6,7 @@ type Impact = 'low' | 'medium' | 'high';
 type Props = {
   impact: Impact;
   onPress: () => void;
+  style?: any;  // style prop toevoegen zodat je externe styles kunt doorgeven
 };
 
 const getSize = (impact: Impact): number => {
@@ -21,26 +22,27 @@ const getSize = (impact: Impact): number => {
   }
 };
 
-const TechTrendCircle: React.FC<Props> = ({ impact, onPress }) => {
-  const size = getSize(impact);
-
-  return (
-    <Pressable onPress={onPress}>
-      <View
-        style={[
-          styles.circle,
-          {
-            width: size,
-            height: size,
-            borderRadius: size / 2,
-          },
-        ]}
-      >
-        <Text style={styles.label}>Tech</Text>
-      </View>
-    </Pressable>
-  );
-};
+const TechTrendCircle: React.FC<Props> = ({ impact, onPress, style }) => {
+    const size = getSize(impact);
+  
+    return (
+      <Pressable onPress={onPress} style={[{ zIndex: 1 }, style]}>
+        <View
+          style={[
+            styles.circle,
+            {
+              width: size,
+              height: size,
+              borderRadius: size / 2,
+            },
+          ]}
+        >
+          <Text style={styles.label}>Tech</Text>
+        </View>
+      </Pressable>
+    );
+  };
+  
 
 const styles = StyleSheet.create({
   circle: {

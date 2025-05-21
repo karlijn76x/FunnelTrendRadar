@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
-import TrendDetail from './Components/TrendDetail';
+import TrendDetail from './components/TrendDetail';
 import { Dropdown } from 'react-native-element-dropdown';
-import DropdownComponent from './Components/Dropdown_menu';
+import DropdownComponent from './components/Dropdown_menu';
 import { useFonts } from 'expo-font';
+import SocialTrendCircle from './components/SocialTrendCircle';
+import TechTrendCircle from './components/TechTrendCircle';
+
 
 
 export default function App() {
@@ -24,15 +27,30 @@ export default function App() {
         <DropdownComponent />
       </View>
       <View style={styles.funnelStyle}>
+
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={styles.column}>
               <Text style={{ fontFamily: 'Aptos_ExtraBold', fontSize: 18 }}>5-10 years</Text>
             </View>
-            <Image
+            <View>
+             <Image
                 style={{ width: 900, height: 100, resizeMode: 'cover' }}
                 source={require('./assets/images/funnel_top.png')}
             />
+            <TechTrendCircle
+            impact= "low"
+            onPress={() => alert('Tech High clicked')}
+            style={{ position: 'absolute', top: 10, left: 100, zIndex: 1 }}
+            />
+             <SocialTrendCircle
+             impact="low"
+             onPress={() => alert('Social Medium clicked')}
+             style={{ position: 'absolute', top: 30, left: 250, zIndex: 1 }}
+             />
+             </View>
           </View>
+
+
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={styles.column}>
               <Text style={{ fontFamily: 'Aptos_ExtraBold', fontSize: 18 }}>3-5 years</Text>
