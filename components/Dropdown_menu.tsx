@@ -47,30 +47,29 @@ const techFocusArea = [
     { label: 'Other', value: '6' },
   ];
 
-const DropdownComponent = ({ onTrendTypeChange, onImpactChange, onTimeframeChange }: DropdownComponentProps) => {
-  const [trendValue, setTrendValue] = useState(null);
-  const [impactValue, setImpactValue] = useState(null);
-  const [timeframeValue, setTimeframeValue] = useState(null);
-  const [socialKeyTrendsValue, setSocialKeyTrendsValue] = useState(null);
-  const [techFocusAreaValue, setTechFocusAreaValue] = useState(null);
+const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange, onImpactChange, onTimeframeChange }) => {
+  const [trendValue, setTrendValue] = useState<string | null>(null);
+  const [impactValue, setImpactValue] = useState<string | null>(null);
+  const [timeframeValue, setTimeframeValue] = useState<string | null>(null);
+  const [socialKeyTrendsValue, setSocialKeyTrendsValue] = useState<string | null>(null);
+  const [techFocusAreaValue, setTechFocusAreaValue] = useState<string | null>(null);
   const [focusedDropdown, setFocusedDropdown] = useState<string | null>(null);
   const [loaded] = useFonts({
     Aptos_Bold: require("../assets/fonts/Aptos-Bold.ttf")
   });
 
-  if (!loaded) {
-    return null;
-  }
+  if (!loaded) return null;
 
-  const handleFocus = (dropdownName: string) => {
-    setFocusedDropdown(dropdownName);
-  };
+  const handleFocus = (dropdownName: string) => setFocusedDropdown(dropdownName);
+  const handleBlur = () => setFocusedDropdown(null);
 
-  const handleBlur = () => {
-    setFocusedDropdown(null);
-  };
-
-  const renderDropdown = (title: string, data: any[], value: any, setValue: any) => {
+  const renderDropdown = (
+    title: string,
+    data: { label: string; value: string }[],
+    value: string | null,
+    setValue: React.Dispatch<React.SetStateAction<string | null>>,
+    notifyParent?: (value: string | null) => void
+  ) => {
     const isFocused = focusedDropdown === title;
     return (
       <View style={styles.titleAndMenu}>
@@ -92,13 +91,7 @@ const DropdownComponent = ({ onTrendTypeChange, onImpactChange, onTimeframeChang
           onBlur={handleBlur}
           onChange={item => {
             setValue(item.value);
-            if (title === 'Trend Type') {
-              onTrendTypeChange(item.value);
-            } else if (title === 'Impact') {
-              onImpactChange(item.value);
-            } else if (title === 'Timeframe') {
-              onTimeframeChange(item.value);
-            }
+            if (notifyParent) notifyParent(item.value);
           }}
         />
       </View>
@@ -107,9 +100,9 @@ const DropdownComponent = ({ onTrendTypeChange, onImpactChange, onTimeframeChang
 
   return (
     <View style={styles.container}>
-      {renderDropdown('Trend Type', trendType, trendValue, setTrendValue)}
-      {renderDropdown('Impact', impact, impactValue, setImpactValue)}
-      {renderDropdown('Timeframe', timeframe, timeframeValue, setTimeframeValue)}
+      {renderDropdown('Trend Type', trendType, trendValue, setTrendValue, onTrendTypeChange)}
+      {renderDropdown('Impact', impact, impactValue, setImpactValue, onImpactChange)}
+      {renderDropdown('Timeframe', timeframe, timeframeValue, setTimeframeValue, onTimeframeChange)}
       {renderDropdown('Social Key Trend', socialKeyTrends, socialKeyTrendsValue, setSocialKeyTrendsValue)}
       {renderDropdown('Tech Focus Area', techFocusArea, techFocusAreaValue, setTechFocusAreaValue)}
     </View>

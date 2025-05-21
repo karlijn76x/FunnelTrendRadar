@@ -20,14 +20,10 @@ export default function App() {
   const [selectedImpact, setSelectedImpact] = useState<string | null>(null);
   const [selectedTimeframe, setSelectedTimeframe] = useState<string | null>(null);
 
-  const shouldShowSocial = () => {
-    return selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '2';
-  };
-
-  const shouldShowTech = () => {
-    return selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '3';
-  };
-
+  const shouldShowSocial = () =>
+    selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '2';
+  const shouldShowTech = () =>
+    selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '3';
   const matchesImpact = (value: string) => {
     const map: { [key: string]: string } = {
       'low': '2',
@@ -37,7 +33,6 @@ export default function App() {
     };
     return selectedImpact === null || selectedImpact === '1' || selectedImpact === map[value.toLowerCase()];
   };
-
   const matchesTimeframe = (value: string) => {
     const map: { [key: string]: string } = {
       '0-3 years': '2',
