@@ -5,6 +5,8 @@ import { useFonts } from 'expo-font';
 
 interface DropdownComponentProps {
   onTrendTypeChange: (value: string | null) => void;
+  onImpactChange: (value: string | null) => void;
+  onTimeframeChange: (value: string | null) => void;
 }
 
 const trendType = [
@@ -45,7 +47,7 @@ const techFocusArea = [
     { label: 'Other', value: '6' },
   ];
 
-const DropdownComponent = ({ onTrendTypeChange }: DropdownComponentProps) => {
+const DropdownComponent = ({ onTrendTypeChange, onImpactChange, onTimeframeChange }: DropdownComponentProps) => {
   const [trendValue, setTrendValue] = useState(null);
   const [impactValue, setImpactValue] = useState(null);
   const [timeframeValue, setTimeframeValue] = useState(null);
@@ -92,6 +94,10 @@ const DropdownComponent = ({ onTrendTypeChange }: DropdownComponentProps) => {
             setValue(item.value);
             if (title === 'Trend Type') {
               onTrendTypeChange(item.value);
+            } else if (title === 'Impact') {
+              onImpactChange(item.value);
+            } else if (title === 'Timeframe') {
+              onTimeframeChange(item.value);
             }
           }}
         />
