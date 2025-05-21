@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
-import TrendDetail from './Components/TrendDetail';
+import TrendDetail from './components/TrendDetail';
 import { Dropdown } from 'react-native-element-dropdown';
-import DropdownComponent from './Components/Dropdown_menu';
+import DropdownComponent from './components/Dropdown_menu';
 import { useFonts } from 'expo-font';
+import SocialTrendCircle from './components/SocialTrendCircle';
+import TechTrendCircle from './components/TechTrendCircle';
+
 
 
 export default function App() {
@@ -24,33 +27,86 @@ export default function App() {
         <DropdownComponent />
       </View>
       <View style={styles.funnelStyle}>
+
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={styles.column}>
               <Text style={{ fontFamily: 'Aptos_ExtraBold', fontSize: 18 }}>5-10 years</Text>
             </View>
-            <Image
+            <View>
+             <Image
                 style={{ width: 900, height: 100, resizeMode: 'cover' }}
                 source={require('./assets/images/funnel_top.png')}
             />
+            <TechTrendCircle
+            impact= "high"
+            onPress={() => alert('Tech High clicked')}
+            style={{ position: 'absolute', top: 5, left: 100, zIndex: 1 }}
+            />
+             <SocialTrendCircle
+             impact="low"
+             onPress={() => alert('Social Medium clicked')}
+             style={{ position: 'absolute', top: 30, left: 250, zIndex: 1 }}
+             />
+             </View>
           </View>
+
+
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={styles.column}>
               <Text style={{ fontFamily: 'Aptos_ExtraBold', fontSize: 18 }}>3-5 years</Text>
             </View>
-            <Image
+            <View>
+             <Image
                 style={{ width: 800, height: 100, resizeMode: 'cover' }}
                 source={require('./assets/images/funnel_middle.png')}
             />
-          </View>
-          <View style={{flexDirection: 'row'}}>
-            <View style={[styles.column, {paddingTop: 30}]}>
-              <Text style={{ fontFamily: 'Aptos_ExtraBold', fontSize: 18 }}>0-3 years</Text>
-            </View>
-            <Image
-                style={{ width: 700, height: 250, resizeMode: 'cover' }}
-                source={require('./assets/images/funnel_bottom.png')}
+            <TechTrendCircle
+            impact="medium"
+            onPress={() => alert('Tech Medium clicked')}
+            style={{ position: 'absolute', top: -5, left: 400, zIndex: 10 }}
             />
-         </View>
+            <SocialTrendCircle
+            impact="low"
+            onPress={() => alert('Social Low clicked')}
+            style={{ position: 'absolute', top: 20, left: 550, zIndex: 10 }}
+            />
+            </View>
+          </View>
+
+
+
+         <View style={{ flexDirection: 'row' }}>
+          <View style={[styles.column, { paddingTop: 30 }]}>
+            <Text style={{ fontFamily: 'Aptos_ExtraBold', fontSize: 18 }}>0-3 years</Text>
+          </View>
+          <View style={{ position: 'relative' }}>
+           <Image
+            style={{ width: 700, height: 250, resizeMode: 'cover', zIndex: 0 }}
+            source={require('./assets/images/funnel_bottom.png')}
+          />
+          <TechTrendCircle
+          impact="medium"
+          onPress={() => alert('Tech Low clicked')}
+          style={{ position: 'absolute', top: 10, left: 100, zIndex: 10 }}
+          />
+         <SocialTrendCircle
+         impact="high"
+         onPress={() => alert('Social Medium clicked')}
+         style={{ position: 'absolute', top: 90, left: 200, zIndex: 10 }}
+        />
+        <TechTrendCircle
+        impact="low"
+        onPress={() => alert('Tech High clicked')}
+        style={{ position: 'absolute', top: 50, left: 350, zIndex: 10 }}
+       />
+       <SocialTrendCircle
+       impact="medium"
+       onPress={() => alert('Social Low clicked')}
+       style={{ position: 'absolute', top: 150, left: 400, zIndex: 10 }}
+       />
+        </View>
+      </View>
+
       </View>
     </View>
   );

@@ -6,41 +6,41 @@ type ImpactLevel = 'low' | 'medium' | 'high';
 type Props = {
   impact: ImpactLevel;
   onPress: () => void;
+  style?: any;  // style prop toegevoegd
 };
 
 const impactSizes = {
-  low: 50,
-  medium: 80,
-  high: 120,
+  low: 40,
+  medium: 60,
+  high: 80,
 };
 
-const SocialTrendCircle: React.FC<Props> = ({ impact, onPress }) => {
-  const size = impactSizes[impact];
-
-  return (
-    <Pressable onPress={onPress}>
-      <View
-        style={[
-          styles.circle,
-          {
-            width: size,
-            height: size,
-            borderRadius: size / 2,
-            borderWidth: 1,
-            borderColor: '#000',
-          },
-        ]}
-      >
-        <Text style={styles.label}>Social</Text>
-      </View>
-    </Pressable>
-  );
-};
+const SocialTrendCircle: React.FC<Props> = ({ impact, onPress, style }) => {
+    const size = impactSizes[impact];
+  
+    return (
+      <Pressable onPress={onPress} style={[style]}>
+        <View
+          style={[
+            styles.circle,
+            {
+              width: size,
+              height: size,
+              borderRadius: size / 2,
+            },
+          ]}
+        >
+        </View>
+      </Pressable>
+    );
+  };
+  
 
 const styles = StyleSheet.create({
   circle: {
     backgroundColor: '#F57523',
     justifyContent: 'center',
+    borderWidth: 1,
     alignItems: 'center',
     margin: 10,
   },
