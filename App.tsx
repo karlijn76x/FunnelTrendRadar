@@ -20,18 +20,6 @@ export default function App() {
   const [selectedImpact, setSelectedImpact] = useState<string | null>(null);
   const [selectedTimeframe, setSelectedTimeframe] = useState<string | null>(null);
 
-  const handleTrendTypeChange = (value: string | null) => {
-    setSelectedTrendType(value);
-  };
-
-  const handleImpactChange = (value: string | null) => {
-    setSelectedImpact(value);
-  };
-
-  const handleTimeframeChange = (value: string | null) => {
-    setSelectedTimeframe(value);
-  };
-
   const shouldShowSocial = () => {
     return selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '2';
   };
@@ -69,9 +57,9 @@ export default function App() {
       />
       <View style={styles.dropDownStyle}>
         <DropdownComponent 
-          onTrendTypeChange={handleTrendTypeChange}
-          onImpactChange={handleImpactChange}
-          onTimeframeChange={handleTimeframeChange}
+          onTrendTypeChange={setSelectedTrendType}
+          onImpactChange={setSelectedImpact}
+          onTimeframeChange={setSelectedTimeframe}
         />
       </View>
 
