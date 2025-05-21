@@ -17,9 +17,19 @@ export default function App() {
 
   const [visible, setVisible] = useState(false);
   const [selectedTrendType, setSelectedTrendType] = useState<string | null>(null);
+  const [selectedImpact, setSelectedImpact] = useState<string | null>(null);
+  const [selectedTimeframe, setSelectedTimeframe] = useState<string | null>(null);
 
   const handleTrendTypeChange = (value: string | null) => {
     setSelectedTrendType(value);
+  };
+
+  const handleImpactChange = (value: string | null) => {
+    setSelectedImpact(value);
+  };
+
+  const handleTimeframeChange = (value: string | null) => {
+    setSelectedTimeframe(value);
   };
 
   const shouldShowSocial = () => {
@@ -41,7 +51,11 @@ export default function App() {
         source={require('./assets/images/vanderlande_logo.png')}
       />
       <View style={styles.dropDownStyle}>
-        <DropdownComponent onTrendTypeChange={handleTrendTypeChange} />
+        <DropdownComponent 
+          onTrendTypeChange={handleTrendTypeChange}
+          onImpactChange={handleImpactChange}
+          onTimeframeChange={handleTimeframeChange}
+        />
       </View>
       <View style={styles.funnelStyle}>
         {/* 5-10 years section */}
