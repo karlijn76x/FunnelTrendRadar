@@ -30,7 +30,6 @@ const SocialTrendCircle: React.FC<Props> = ({ impact, onPress, style }) => {
             },
           ]}
         >
-          <Text style={styles.label}>Social</Text>
         </View>
       </Pressable>
     );

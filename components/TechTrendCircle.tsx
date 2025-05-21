@@ -37,7 +37,6 @@ const TechTrendCircle: React.FC<Props> = ({ impact, onPress, style }) => {
             },
           ]}
         >
-          <Text style={styles.label}>Tech</Text>
         </View>
       </Pressable>
     );
