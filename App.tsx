@@ -8,8 +8,6 @@ import { useFonts } from 'expo-font';
 import SocialTrendCircle from './components/SocialTrendCircle';
 import TechTrendCircle from './components/TechTrendCircle';
 
-
-
 export default function App() {
   const [loaded, error] = useFonts({
     Aptos: require("./assets/fonts/Aptos.ttf"),
@@ -18,6 +16,19 @@ export default function App() {
   });
 
   const [visible, setVisible] = useState(false);
+  const [selectedTrendType, setSelectedTrendType] = useState<string | null>(null);
+
+  const handleTrendTypeChange = (value: string | null) => {
+    setSelectedTrendType(value);
+  };
+
+  const shouldShowSocial = () => {
+    return selectedTrendType === null || selectedTrendType === '2' || selectedTrendType === '1';
+  };
+
+  const shouldShowTech = () => {
+    return selectedTrendType === null || selectedTrendType === '3' || selectedTrendType === '1';
+  };
 
   return (
     <View style={styles.container}>
@@ -26,7 +37,7 @@ export default function App() {
         source={require('./assets/images/vanderlande_logo.png')}
       />
       <View style = {styles.dropDownStyle}>
-        <DropdownComponent />
+        <DropdownComponent onTrendTypeChange={handleTrendTypeChange} />
       </View>
       <View style={styles.funnelStyle}>
 
