@@ -59,9 +59,7 @@ export default function App() {
     return selectedTimeframe === null || selectedTimeframe === '1' || selectedTimeframe === map[value.toLowerCase()];
   };
 
-  if (!loaded) {
-    return null;
-  }
+  if (!loaded) return null;
 
   return (
     <View style={styles.container}>
@@ -76,6 +74,7 @@ export default function App() {
           onTimeframeChange={handleTimeframeChange}
         />
       </View>
+
       <View style={styles.funnelStyle}>
         {/* 5-10 years section */}
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -87,14 +86,14 @@ export default function App() {
               style={{ width: 900, height: 100, resizeMode: 'cover' }}
               source={require('./assets/images/funnel_top.png')}
             />
-            {shouldShowTech() && (
+            {matchesTimeframe('5-10 years') && shouldShowTech() && matchesImpact('high') && (
               <TechTrendCircle
                 impact="high"
                 onPress={() => setVisible(true)} 
                 style={{ position: 'absolute', top: 5, left: 100, zIndex: 1 }}
               />
             )}
-            {shouldShowSocial() && (
+            {matchesTimeframe('5-10 years') && shouldShowSocial() && matchesImpact('low') && (
               <SocialTrendCircle
                 impact="low"
                 onPress={() => setVisible(true)}
@@ -114,14 +113,14 @@ export default function App() {
               style={{ width: 800, height: 100, resizeMode: 'cover' }}
               source={require('./assets/images/funnel_middle.png')}
             />
-            {shouldShowTech() && (
+            {matchesTimeframe('3-5 years') && shouldShowTech() && matchesImpact('medium') && (
               <TechTrendCircle
                 impact="medium"
                 onPress={() => setVisible(true)}
                 style={{ position: 'absolute', top: -5, left: 400, zIndex: 10 }}
               />
             )}
-            {shouldShowSocial() && (
+            {matchesTimeframe('3-5 years') && shouldShowSocial() && matchesImpact('low') && (
               <SocialTrendCircle
                 impact="low"
                 onPress={() => setVisible(true)}
@@ -141,28 +140,28 @@ export default function App() {
               style={{ width: 700, height: 250, resizeMode: 'cover', zIndex: 0 }}
               source={require('./assets/images/funnel_bottom.png')}
             />
-            {shouldShowTech() && (
+            {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('medium') && (
               <TechTrendCircle
                 impact="medium"
                 onPress={() => setVisible(true)}
                 style={{ position: 'absolute', top: 10, left: 100, zIndex: 10 }}
               />
             )}
-            {shouldShowSocial() && (
+            {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('high') && (
               <SocialTrendCircle
                 impact="high"
                 onPress={() => setVisible(true)}
                 style={{ position: 'absolute', top: 90, left: 200, zIndex: 10 }}
               />
             )}
-            {shouldShowTech() && (
+            {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('low') && (
               <TechTrendCircle
                 impact="low"
                 onPress={() => setVisible(true)}
                 style={{ position: 'absolute', top: 50, left: 350, zIndex: 10 }}
               />
             )}
-            {shouldShowSocial() && (
+            {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('medium') && (
               <SocialTrendCircle
                 impact="medium"
                 onPress={() => setVisible(true)}
