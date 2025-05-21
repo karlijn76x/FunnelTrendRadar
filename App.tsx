@@ -1,5 +1,8 @@
+import React, { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, Button, Image } from 'react-native';
+import TrendDetail from './Components/TrendDetail';
 import { Dropdown } from 'react-native-element-dropdown';
-import { StyleSheet, Text, View, Image } from 'react-native';
 import DropdownComponent from './Components/Dropdown_menu';
 import { useFonts } from 'expo-font';
 
@@ -59,11 +62,11 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 20,
   },
-  funnelStyle: {
+  funnelStyle: { 
     gap: 3,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
   },
   dropDownStyle: {
     backgroundColor:'#FFEFDF',
