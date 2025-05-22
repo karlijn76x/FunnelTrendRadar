@@ -9,8 +9,6 @@ import SocialTrendCircle from './Components/SocialTrendCircle';
 import TechTrendCircle from './Components/TechTrendCircle';
 import Legend from './Components/Legend';
 
-
-
 export default function App() {
   const [loaded, error] = useFonts({
     Aptos: require("./assets/fonts/Aptos.ttf"),
@@ -19,6 +17,33 @@ export default function App() {
   });
 
   const [visible, setVisible] = useState(false);
+  const [selectedTrendType, setSelectedTrendType] = useState<string | null>(null);
+  const [selectedImpact, setSelectedImpact] = useState<string | null>(null);
+  const [selectedTimeframe, setSelectedTimeframe] = useState<string | null>(null);
+
+  const shouldShowSocial = () =>
+    selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '2';
+  const shouldShowTech = () =>
+    selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '3';
+  const matchesImpact = (value: string) => {
+    const map: { [key: string]: string } = {
+      'low': '2',
+      'medium': '3',
+      'high': '4',
+      'very high': '5',
+    };
+    return selectedImpact === null || selectedImpact === '1' || selectedImpact === map[value.toLowerCase()];
+  };
+  const matchesTimeframe = (value: string) => {
+    const map: { [key: string]: string } = {
+      '0-3 years': '2',
+      '3-5 years': '3',
+      '5-10 years': '4',
+    };
+    return selectedTimeframe === null || selectedTimeframe === '1' || selectedTimeframe === map[value.toLowerCase()];
+  };
+
+  if (!loaded) return null;
 
   return (
     <View style={styles.container}>
@@ -26,97 +51,114 @@ export default function App() {
         style={styles.tinyLogo}
         source={require('./assets/images/vanderlande_logo.png')}
       />
-      <View style = {styles.dropDownStyle}>
-        <DropdownComponent />
+      <View style={styles.dropDownStyle}>
+        <DropdownComponent 
+          onTrendTypeChange={setSelectedTrendType}
+          onImpactChange={setSelectedImpact}
+          onTimeframeChange={setSelectedTimeframe}
+        />
       </View>
       <View style={styles.row}>
         <View style={styles.legend}>
             <Legend />
         </View>
-          <View style={styles.funnelStyle}>
-
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <View style={styles.column}>
-                  <Text style={styles.text}>5-10 years</Text>
-                </View>
-                <View>
-                 <Image
-                    style={{ width: 900, height: 100, resizeMode: 'cover' }}
-                    source={require('./assets/images/funnel_top.png')}
-                />
+        <View style={styles.funnelStyle}>
+          {/* 5-10 years section */}
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={styles.column}>
+              <Text style={styles.text}>5-10 years</Text>
+            </View>
+            <View>
+              <Image
+                style={{ width: 900, height: 100, resizeMode: 'cover' }}
+                source={require('./assets/images/funnel_top.png')}
+              />
+              {matchesTimeframe('5-10 years') && shouldShowTech() && matchesImpact('high') && (
                 <TechTrendCircle
-                impact= "high"
-                onPress={() => setVisible(true)}
-                style={{ position: 'absolute', top: 5, left: 100, zIndex: 1 }}
+                  impact="high"
+                  onPress={() => setVisible(true)} 
+                  style={{ position: 'absolute', top: 5, left: 100, zIndex: 1 }}
                 />
-                 <SocialTrendCircle
-                 impact="low"
-                 onPress={() => setVisible(true)}
-                 style={{ position: 'absolute', top: 30, left: 250, zIndex: 1 }}
-                 />
-                 </View>
-              </View>
-
-
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <View style={styles.column}>
-                  <Text style={styles.text}>3-5 years</Text>
-                </View>
-                <View>
-                 <Image
-                    style={{ width: 800, height: 100, resizeMode: 'cover' }}
-                    source={require('./assets/images/funnel_middle.png')}
-                />
-                <TechTrendCircle
-                impact="medium"
-                onPress={() => setVisible(true)}
-                style={{ position: 'absolute', top: -5, left: 400, zIndex: 10 }}
-                />
+              )}
+              {matchesTimeframe('5-10 years') && shouldShowSocial() && matchesImpact('low') && (
                 <SocialTrendCircle
-                impact="low"
-                onPress={() => setVisible(true)}
-                style={{ position: 'absolute', top: 20, left: 550, zIndex: 10 }}
+                  impact="low"
+                  onPress={() => setVisible(true)}
+                  style={{ position: 'absolute', top: 30, left: 250, zIndex: 1 }}
                 />
-                </View>
-              </View>
+              )}
+            </View>
+          </View>
 
+          {/* 3-5 years section */}
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={styles.column}>
+              <Text style={styles.text}>3-5 years</Text>
+            </View>
+            <View>
+              <Image
+                style={{ width: 800, height: 100, resizeMode: 'cover' }}
+                source={require('./assets/images/funnel_middle.png')}
+              />
+              {matchesTimeframe('3-5 years') && shouldShowTech() && matchesImpact('medium') && (
+                <TechTrendCircle
+                  impact="medium"
+                  onPress={() => setVisible(true)}
+                  style={{ position: 'absolute', top: -5, left: 400, zIndex: 10 }}
+                />
+              )}
+              {matchesTimeframe('3-5 years') && shouldShowSocial() && matchesImpact('low') && (
+                <SocialTrendCircle
+                  impact="low"
+                  onPress={() => setVisible(true)}
+                  style={{ position: 'absolute', top: 20, left: 550, zIndex: 10 }}
+                />
+              )}
+            </View>
+          </View>
 
-
-             <View style={{ flexDirection: 'row' }}>
-              <View style={[styles.column, { paddingTop: 30 }]}>
-                <Text style={styles.text}>0-3 years</Text>
-              </View>
-              <View style={{ position: 'relative' }}>
-               <Image
+          {/* 0-3 years section */}
+          <View style={{ flexDirection: 'row' }}>
+            <View style={[styles.column, { paddingTop: 30 }]}>
+              <Text style={styles.text}>0-3 years</Text>
+            </View>
+            <View style={{ position: 'relative' }}>
+              <Image
                 style={{ width: 700, height: 250, resizeMode: 'cover', zIndex: 0 }}
                 source={require('./assets/images/funnel_bottom.png')}
               />
-              <TechTrendCircle
-              impact="medium"
-              onPress={() => setVisible(true)}
-              style={{ position: 'absolute', top: 10, left: 100, zIndex: 10 }}
-              />
-             <SocialTrendCircle
-             impact="high"
-             onPress={() => setVisible(true)}
-             style={{ position: 'absolute', top: 90, left: 200, zIndex: 10 }}
-            />
-            <TechTrendCircle
-            impact="low"
-            onPress={() => setVisible(true)}
-            style={{ position: 'absolute', top: 50, left: 350, zIndex: 10 }}
-           />
-           <SocialTrendCircle
-           impact="medium"
-           onPress={() => setVisible(true)}
-           style={{ position: 'absolute', top: 150, left: 400, zIndex: 10 }}
-           />
+              {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('medium') && (
+                <TechTrendCircle
+                  impact="medium"
+                  onPress={() => setVisible(true)}
+                  style={{ position: 'absolute', top: 10, left: 100, zIndex: 10 }}
+                />
+              )}
+              {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('high') && (
+                <SocialTrendCircle
+                  impact="high"
+                  onPress={() => setVisible(true)}
+                  style={{ position: 'absolute', top: 90, left: 200, zIndex: 10 }}
+                />
+              )}
+              {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('low') && (
+                <TechTrendCircle
+                  impact="low"
+                  onPress={() => setVisible(true)}
+                  style={{ position: 'absolute', top: 50, left: 350, zIndex: 10 }}
+                />
+              )}
+              {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('medium') && (
+                <SocialTrendCircle
+                  impact="medium"
+                  onPress={() => setVisible(true)}
+                  style={{ position: 'absolute', top: 150, left: 400, zIndex: 10 }}
+                />
+              )}
             </View>
           </View>
           <TrendDetail visible={visible} onClose={() => setVisible(false)} />
-
-
-          </View>
+        </View>
       </View>
     </View>
   );

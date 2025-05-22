@@ -1,26 +1,33 @@
 import React, { useState } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
-import { StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useFonts } from 'expo-font';
 
-//Data for each filter
+interface DropdownComponentProps {
+  onTrendTypeChange: (value: string | null) => void;
+  onImpactChange: (value: string | null) => void;
+  onTimeframeChange: (value: string | null) => void;
+}
+
 const trendType = [
-    { label: 'Social & Business trends', value: '1' },
-    { label: 'Technology trends', value: '2' },
-    { label: 'All trends', value: '3' },
+    { label: 'All', value: '1' },
+    { label: 'Social & Business Trends', value: '2' },
+    { label: 'Technology Trends', value: '3' },
   ];
 
 const impact = [
-    { label: 'Low', value: '1' },
-    { label: 'Medium', value: '2' },
-    { label: 'High', value: '3' },
-    { label: 'Very high', value: '4' },
+    { label: 'All', value: '1' },
+    { label: 'Low', value: '2' },
+    { label: 'Medium', value: '3' },
+    { label: 'High', value: '4' },
+    { label: 'Very High', value: '5' },
   ];
 
 const timeframe = [
-    { label: '0-3 years', value: '1' },
-    { label: '3-5 years', value: '2' },
-    { label: '5-10 years', value: '3' },
+    { label: 'All', value: '1' },
+    { label: '0-3 years', value: '2' },
+    { label: '3-5 years', value: '3' },
+    { label: '5-10 years', value: '4' },
   ];
 
 const socialKeyTrends = [
@@ -40,157 +47,102 @@ const techFocusArea = [
     { label: 'Other', value: '6' },
   ];
 
-  const DropdownComponent = () => {
-    const [trendValue, setTrendValue] = useState(null);
-    const [impactValue, setImpactValue] = useState(null);
-    const [timeframeValue, setTimeframeValue] = useState(null);
-    const [socialKeyTrendsValue, setSocialKeyTrendsValue] = useState(null);
-    const [techFocusAreaValue, setTechFocusAreaValue] = useState(null);
-    const [isFocus, setIsFocus] = useState(false);
-    const [loaded, error] = useFonts({
-        Aptos_Bold: require("../assets/fonts/Aptos-Bold.ttf")
-    });
+const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange, onImpactChange, onTimeframeChange }) => {
+  const [trendValue, setTrendValue] = useState<string | null>(null);
+  const [impactValue, setImpactValue] = useState<string | null>(null);
+  const [timeframeValue, setTimeframeValue] = useState<string | null>(null);
+  const [socialKeyTrendsValue, setSocialKeyTrendsValue] = useState<string | null>(null);
+  const [techFocusAreaValue, setTechFocusAreaValue] = useState<string | null>(null);
+  const [focusedDropdown, setFocusedDropdown] = useState<string | null>(null);
+  const [loaded] = useFonts({
+    Aptos_Bold: require("../assets/fonts/Aptos-Bold.ttf")
+  });
 
-//Type of filters
+  if (!loaded) return null;
+
+  const handleFocus = (dropdownName: string) => setFocusedDropdown(dropdownName);
+  const handleBlur = () => setFocusedDropdown(null);
+
+  const renderDropdown = (
+    title: string,
+    data: { label: string; value: string }[],
+    value: string | null,
+    setValue: React.Dispatch<React.SetStateAction<string | null>>,
+    notifyParent?: (value: string | null) => void
+  ) => {
+    const isFocused = focusedDropdown === title;
     return (
-      <View style={styles.container}>
-        <View style={styles.titleAndMenu}>
-        <Text style= {styles.titles}>Trend Type</Text>
+      <View style={styles.titleAndMenu}>
+        <Text style={styles.titles}>{title}</Text>
         <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: 'black', borderWidth:2,}]}
+          style={[
+            styles.dropdown, 
+            isFocused && { borderColor: 'black', borderWidth: 2 }
+          ]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
-          data={trendType}
+          data={data}
           maxHeight={300}
           labelField="label"
           valueField="value"
-          placeholder={!isFocus ? 'All' : 'All'}
-          value={trendValue}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
+          placeholder={'All'}
+          value={value}
+          onFocus={() => handleFocus(title)}
+          onBlur={handleBlur}
           onChange={item => {
-            setTrendValue(item.value);
-            setIsFocus(false);
+            setValue(item.value);
+            if (notifyParent) notifyParent(item.value);
           }}
         />
-        </View>
-
-        <View style={styles.titleAndMenu}>
-        <Text style= {styles.titles}>Impact</Text>
-        <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: 'black', borderWidth:2,}]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          data={impact}
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocus ? 'All' : 'All'}
-          value={impactValue}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={item => {
-            setImpactValue(item.value);
-            setIsFocus(false);
-          }}
-        />
-        </View>
-
-        <View style={styles.titleAndMenu}>
-        <Text style= {styles.titles}>Timeframe</Text>
-        <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: 'black', borderWidth:2,}]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          data={timeframe}
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocus ? 'All' : 'All'}
-          value={timeframeValue}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={item => {
-            setTimeframeValue(item.value);
-            setIsFocus(false);
-          }}
-        />
-        </View>
-
-        <View style={styles.titleAndMenu}>
-        <Text style= {styles.titles}>Social Key Trend</Text>
-        <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: 'black', borderWidth:2,}]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          data={socialKeyTrends}
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocus ? 'All' : 'All'}
-          value={socialKeyTrendsValue}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={item => {
-            setSocialKeyTrendsValue(item.value);
-            setIsFocus(false);
-          }}
-        />
-        </View>
-
-        <View style={styles.titleAndMenu}>
-        <Text style= {styles.titles}>Tech Focus Area</Text>
-        <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: 'black', borderWidth:2,}]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          data={techFocusArea}
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocus ? 'All' : 'All'}
-          value={techFocusAreaValue}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={item => {
-            setTechFocusAreaValue(item.value);
-            setIsFocus(false);
-          }}
-        />
-        </View>
       </View>
     );
   };
 
-  export default DropdownComponent;
+  return (
+    <View style={styles.container}>
+      {renderDropdown('Trend Type', trendType, trendValue, setTrendValue, onTrendTypeChange)}
+      {renderDropdown('Impact', impact, impactValue, setImpactValue, onImpactChange)}
+      {renderDropdown('Timeframe', timeframe, timeframeValue, setTimeframeValue, onTimeframeChange)}
+      {renderDropdown('Social Key Trend', socialKeyTrends, socialKeyTrendsValue, setSocialKeyTrendsValue)}
+      {renderDropdown('Tech Focus Area', techFocusArea, techFocusAreaValue, setTechFocusAreaValue)}
+    </View>
+  );
+};
 
-  const styles = StyleSheet.create({
-    container: {
-      flexDirection:'row',
-      gap:10,
-    },
-    dropdown: {
-      height: 50,
-      width:120,
-      borderColor: 'black',
-      backgroundColor:'white',
-      borderWidth: 2,
-      borderRadius: 8,
-      paddingHorizontal: 8,
-    },
-    titleAndMenu: {
-      flexDirection:'column',
-    },
-    placeholderStyle: {
-      fontSize: 14,
-      fontFamily: 'Aptos_Bold',
-    },
-    selectedTextStyle: {
-      fontSize: 14,
-      fontFamily: 'Aptos_Bold',
-    },
-    titles:{
-      fontSize:18,
-      fontFamily: 'Aptos_Bold',
-    },
-  });
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    gap: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    flexWrap: 'wrap',
+  },
+  dropdown: {
+    height: 50,
+    width: 120,
+    borderColor: 'black',
+    backgroundColor: 'white',
+    borderWidth: 2,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  titleAndMenu: {
+    flexDirection: 'column',
+    marginBottom: 10,
+  },
+  placeholderStyle: {
+    fontSize: 14,
+    fontFamily: 'Aptos_Bold',
+  },
+  selectedTextStyle: {
+    fontSize: 14,
+    fontFamily: 'Aptos_Bold',
+  },
+  titles: {
+    fontSize: 18,
+    fontFamily: 'Aptos_Bold',
+    marginBottom: 5,
+  },
+});
+
+export default DropdownComponent;
