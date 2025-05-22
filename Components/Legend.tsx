@@ -8,29 +8,41 @@ const Legend = () => {
     });
 
     return (
-        <View style={styles.row}>
-            <View style={styles.column}>
-                <View style={styles.circleColumn}>
-                    <View style={[styles.circle, styles.smallCircle]}></View>
+        <View style={styles.container}>
+            <View style={styles.row}>
+                <View style={styles.column}>
+                    <View style={styles.topCircleColumn}>
+                        <View style={[styles.circle, styles.smallCircle]}></View>
+                    </View>
+                    <View style={styles.textColumn}>
+                        <Text style={styles.text}>Low impact</Text>
+                    </View>
                 </View>
-                <View style={styles.textColumn}>
-                    <Text style={styles.text}>Low impact</Text>
+                <View style={styles.column}>
+                    <View style={styles.topCircleColumn}>
+                        <View style={[styles.circle, styles.mediumCircle]}></View>
+                    </View>
+                    <View style={styles.textColumn}>
+                        <Text style={styles.text}>Medium impact</Text>
+                    </View>
                 </View>
             </View>
-            <View style={styles.column}>
-                <View style={styles.circleColumn}>
-                    <View style={[styles.circle, styles.mediumCircle]}></View>
+            <View style={styles.row}>
+                <View style={styles.column}>
+                    <View style={styles.bottomCircleColumn}>
+                        <View style={[styles.circle, styles.bigCircle]}></View>
+                    </View>
+                    <View style={styles.textColumn}>
+                        <Text style={styles.text}>High impact</Text>
+                    </View>
                 </View>
-                <View style={styles.textColumn}>
-                    <Text style={styles.text}>Medium impact</Text>
-                </View>
-            </View>
-            <View style={styles.column}>
-                <View style={styles.circleColumn}>
-                    <View style={[styles.circle, styles.bigCircle]}></View>
-                </View>
-                <View style={styles.textColumn}>
-                    <Text style={styles.text}>High impact</Text>
+                <View style={styles.column}>
+                    <View style={styles.bottomCircleColumn}>
+                        <View style={[styles.circle, styles.veryBigCircle]}></View>
+                    </View>
+                    <View style={styles.textColumn}>
+                        <Text style={styles.text}>Very high impact</Text>
+                    </View>
                 </View>
             </View>
         </View>
@@ -38,35 +50,49 @@ const Legend = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    gap: 5,
+  },
   circle: {
     backgroundColor: '#F57523',
     borderWidth: 1,
     borderColor: '#000'
   },
   smallCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20
+    width: 35,
+    height: 35,
+    borderRadius: 17.5
   },
   mediumCircle: {
-    width: 60,
-    height: 60,
-    borderRadius: 30
+    width: 55,
+    height: 55,
+    borderRadius: 27.5
   },
   bigCircle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40
+    width: 75,
+    height: 75,
+    borderRadius: 37.5
+  },
+  veryBigCircle: {
+    width: 90,
+    height: 90,
+    borderRadius: 45
   },
   row: {
     flexDirection: 'row',
     gap: 15
   },
-  circleColumn: {
+  topCircleColumn: {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 80
+    height: 55
+  },
+  bottomCircleColumn: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 90
   },
   textColumn: {
     flexDirection: 'column',
