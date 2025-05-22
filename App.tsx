@@ -156,7 +156,7 @@ export default function App() {
                   style={{ position: 'absolute', top: 150, left: 400, zIndex: 10 }}
                 />
               )}
-              {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('very high') && (
+              {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('very high') && (
                 <TechTrendCircle
                   impact="veryHigh"
                   onPress={() => setVisible(true)}
