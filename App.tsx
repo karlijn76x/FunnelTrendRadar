@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
-import TrendDetail from './Components/TrendDetail';
+import TrendDetail from './components/TrendDetail';
 import { Dropdown } from 'react-native-element-dropdown';
-import DropdownComponent from './Components/Dropdown_menu';
+import DropdownComponent from './components/Dropdown_menu';
 import { useFonts } from 'expo-font';
-import SocialTrendCircle from './Components/SocialTrendCircle';
-import TechTrendCircle from './Components/TechTrendCircle';
-import Legend from './Components/Legend';
+import SocialTrendCircle from './components/SocialTrendCircle';
+import TechTrendCircle from './components/TechTrendCircle';
+import Legend from './components/Legend';
 
 export default function App() {
   const [loaded, error] = useFonts({
@@ -107,13 +107,14 @@ export default function App() {
                   style={{ position: 'absolute', top: -5, left: 400, zIndex: 10 }}
                 />
               )}
-              {matchesTimeframe('3-5 years') && shouldShowSocial() && matchesImpact('low') && (
-                <SocialTrendCircle
-                  impact="low"
-                  onPress={() => setVisible(true)}
-                  style={{ position: 'absolute', top: 20, left: 550, zIndex: 10 }}
+              {matchesTimeframe('3-5 years') && shouldShowSocial() && matchesImpact('very high') && (
+              <SocialTrendCircle
+                impact="veryHigh"
+                onPress={() => setVisible(true)}
+                style={{ position: 'absolute', top: -5, left: 600, zIndex: 11 }}
                 />
               )}
+
             </View>
           </View>
 
@@ -153,6 +154,13 @@ export default function App() {
                   impact="medium"
                   onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: 150, left: 400, zIndex: 10 }}
+                />
+              )}
+              {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('very high') && (
+                <TechTrendCircle
+                  impact="veryHigh"
+                  onPress={() => setVisible(true)}
+                  style={{ position: 'absolute', top: 5, left: 430, zIndex: 10 }}
                 />
               )}
             </View>
