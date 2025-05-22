@@ -188,14 +188,14 @@ const styles = StyleSheet.create({
     backgroundColor:'#FFEFDF',
     width:750,
     marginVertical:10,
-    padding:20,
+    padding:10,
     borderColor:'black',
     borderRadius:20,
     borderWidth: 2,
   },
   tinyLogo: {
-    width: 400,
-    height: 60,
+    width: 267,
+    height: 40,
   },
   column: {
     paddingRight: 25,
