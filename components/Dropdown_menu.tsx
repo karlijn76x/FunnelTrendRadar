@@ -35,22 +35,22 @@ const impact = [
   { 
     label: 'Low', 
     value: '2',
-    image: require('../assets/images/low_impact_.svg')
+    image: require('../assets/images/low_impact.png')
   },
   { 
     label: 'Medium', 
     value: '3',
-    image: require('../assets/images/mid_impact_.svg')
+    image: require('../assets/images/mid_impact.png')
   },
   { 
     label: 'High', 
     value: '4',
-    image: require('../assets/images/high_impact_.svg')
+    image: require('../assets/images/high_impact.png')
   },
   { 
     label: 'Very High', 
     value: '5',
-    image: require('../assets/images/very_high_impact_.svg')
+    image: require('../assets/images/very_high_impact.png')
   },
 ];
 
