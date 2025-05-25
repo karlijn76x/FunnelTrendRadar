@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import { useFonts } from 'expo-font';
 
 interface DropdownComponentProps {
@@ -10,18 +10,49 @@ interface DropdownComponentProps {
 }
 
 const trendType = [
-    { label: 'All', value: '1' },
-    { label: 'Social & Business Trends', value: '2' },
-    { label: 'Technology Trends', value: '3' },
-  ];
+  { 
+    label: 'All', 
+    value: '1',
+    image: require('../assets/images/all_trends.png')
+  },
+  { 
+    label: 'Social & Business Trends', 
+    value: '2',
+    image: require('../assets/images/social_trends.png')
+  },
+  { 
+    label: 'Technology Trends', 
+    value: '3',
+    image: require('../assets/images/tech_trends.png')
+  },
+];
 
 const impact = [
-    { label: 'All', value: '1' },
-    { label: 'Low', value: '2' },
-    { label: 'Medium', value: '3' },
-    { label: 'High', value: '4' },
-    { label: 'Very High', value: '5' },
-  ];
+  { 
+    label: 'All', 
+    value: '1',
+  },
+  { 
+    label: 'Low', 
+    value: '2',
+    image: require('../assets/images/low_impact_.svg')
+  },
+  { 
+    label: 'Medium', 
+    value: '3',
+    image: require('../assets/images/mid_impact_.svg')
+  },
+  { 
+    label: 'High', 
+    value: '4',
+    image: require('../assets/images/high_impact_.svg')
+  },
+  { 
+    label: 'Very High', 
+    value: '5',
+    image: require('../assets/images/very_high_impact_.svg')
+  },
+];
 
 const timeframe = [
     { label: 'All', value: '1' },
@@ -65,7 +96,7 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
 
   const renderDropdown = (
     title: string,
-    data: { label: string; value: string }[],
+    data: { label: string; value: string; image?: any }[],
     value: string | null,
     setValue: React.Dispatch<React.SetStateAction<string | null>>,
     notifyParent?: (value: string | null) => void
@@ -89,6 +120,17 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
           value={value}
           onFocus={() => handleFocus(title)}
           onBlur={handleBlur}
+          renderItem={item => (
+            <View style={styles.item}>
+              {item.image && (
+                <Image
+                  source={item.image}
+                  style={styles.itemImage}
+                />
+              )}
+              <Text style={styles.itemText}>{item.label}</Text>
+            </View>
+          )}
           onChange={item => {
             setValue(item.value);
             if (notifyParent) notifyParent(item.value);
@@ -142,6 +184,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Aptos_Bold',
     marginBottom: 5,
+  },
+  item: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+  },
+  itemImage: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+    resizeMode:'contain',
+  },
+  itemText: {
+    fontSize: 14,
+    fontFamily: 'Aptos_Bold',
   },
 });
 
