@@ -128,7 +128,10 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
                   style={styles.itemImage}
                 />
               )}
-              <Text style={styles.itemText}>{item.label}</Text>
+              <Text style={[
+                styles.itemText,
+                item.value === value && styles.selectedItemText
+              ]}>{item.label}</Text>
             </View>
           )}
           onChange={item => {
@@ -198,7 +201,9 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 14,
-    fontFamily: 'Aptos_Bold',
+  },
+  selectedItemText: {
+    fontWeight: 'bold',
   },
 });
 
