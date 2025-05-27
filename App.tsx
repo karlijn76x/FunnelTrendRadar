@@ -53,8 +53,20 @@ export default function App() {
     };
     return selectedSocialKeyTrend === null || selectedSocialKeyTrend === '1' || selectedSocialKeyTrend === map[trendName];
   };
+  const matchesTechFocusArea = (areaName: string) => {
+    const map: Record<string, string> = {
+      'Autonomous Systems': '2',
+      'Artificial Intelligence': '3',
+      'Robotics': '4',
+      'Digital & Cloud': '5',
+      'Other': '6',
+    };
+    return selectedTechFocusArea === null || selectedTechFocusArea === '1' || selectedTechFocusArea === map[areaName];
+  };
   const getSocialOpacity = (trendName: string) => 
     matchesSocialKeyTrend(trendName) ? 1 : 0.15;
+  const getTechOpacity = (areaName: string) =>
+    matchesTechFocusArea(areaName) ? 1 : 0.15;
 
   if (!loaded) return null;
 
