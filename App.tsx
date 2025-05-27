@@ -21,6 +21,7 @@ export default function App() {
   const [selectedImpact, setSelectedImpact] = useState<string | null>(null);
   const [selectedTimeframe, setSelectedTimeframe] = useState<string | null>(null);
   const [selectedSocialKeyTrend, setSelectedSocialKeyTrend] = useState<string | null>(null);
+  const [selectedTechFocusArea, setSelectedTechFocusArea] = useState<string | null>(null);
 
   const shouldShowSocial = () =>
     selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '2';
@@ -69,6 +70,7 @@ export default function App() {
           onImpactChange={setSelectedImpact}
           onTimeframeChange={setSelectedTimeframe}
           onSocialKeyTrendChange={setSelectedSocialKeyTrend}
+          onTechFocusAreaChange={setSelectedTechFocusArea}
         />
       </View>
       <View style={styles.row}>
