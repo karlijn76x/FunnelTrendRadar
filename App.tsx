@@ -43,6 +43,17 @@ export default function App() {
     };
     return selectedTimeframe === null || selectedTimeframe === '1' || selectedTimeframe === map[value.toLowerCase()];
   };
+  const matchesSocialKeyTrend = (trendName: string) => {
+    const map: Record<string, string> = {
+      'Labor Shortage and Regulations': '2',
+      'Digitalization': '3',
+      'As-A-Service': '4',
+      'Sustainability': '5',
+    };
+    return selectedSocialKeyTrend === null || selectedSocialKeyTrend === '1' || selectedSocialKeyTrend === map[trendName];
+  };
+  const getSocialOpacity = (trendName: string) => 
+    matchesSocialKeyTrend(trendName) ? 1 : 0.15;
 
   if (!loaded) return null;
 
