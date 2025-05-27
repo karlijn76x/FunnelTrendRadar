@@ -105,6 +105,7 @@ export default function App() {
                   impact="high"
                   onPress={() => setVisible(true)} 
                   style={{ position: 'absolute', top: 5, left: 100, zIndex: 1 }}
+                  opacity={getTechOpacity('Autonomous Systems')}
                 />
               )}
               {matchesTimeframe('5-10 years') && shouldShowSocial() && matchesImpact('low') && (
@@ -133,6 +134,7 @@ export default function App() {
                   impact="medium"
                   onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: -5, left: 400, zIndex: 10 }}
+                  opacity={getTechOpacity('Artificial Intelligence')}
                 />
               )}
               {matchesTimeframe('3-5 years') && shouldShowSocial() && matchesImpact('very high') && (
@@ -162,6 +164,7 @@ export default function App() {
                   impact="medium"
                   onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: 10, left: 100, zIndex: 10 }}
+                  opacity={getTechOpacity('Robotics')}
                 />
               )}
               {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('high') && (
@@ -177,6 +180,7 @@ export default function App() {
                   impact="low"
                   onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: 50, left: 350, zIndex: 10 }}
+                  opacity={getTechOpacity('Digital & Cloud')}
                 />
               )}
               {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('medium') && (
@@ -192,6 +196,7 @@ export default function App() {
                   impact="veryHigh"
                   onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: 5, left: 430, zIndex: 10 }}
+                  opacity={getTechOpacity('Other')}
                 />
               )}
             </View>

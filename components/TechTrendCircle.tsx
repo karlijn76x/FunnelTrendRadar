@@ -29,7 +29,7 @@ const TechTrendCircle: React.FC<Props> = ({ impact, onPress, style, opacity = 1 
   const size = getSize(impact);
 
   return (
-    <Pressable onPress={onPress} style={[{ zIndex: 1 }, style]} disabled={opacity < 1}>
+    <Pressable onPress={onPress} style={[style, { opacity }]} disabled={opacity < 1}>
       <View
         style={[
           styles.circle,
