@@ -98,6 +98,7 @@ export default function App() {
                   impact="low"
                   onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: 30, left: 250, zIndex: 1 }}
+                  opacity={getSocialOpacity('Sustainability')}
                 />
               )}
             </View>
@@ -125,6 +126,7 @@ export default function App() {
                 impact="veryHigh"
                 onPress={() => setVisible(true)}
                 style={{ position: 'absolute', top: -5, left: 600, zIndex: 11 }}
+                opacity={getSocialOpacity('Digitalization')}
                 />
               )}
 
@@ -153,6 +155,7 @@ export default function App() {
                   impact="high"
                   onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: 90, left: 200, zIndex: 10 }}
+                  opacity={getSocialOpacity('As-A-Service')}
                 />
               )}
               {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('low') && (
@@ -167,6 +170,7 @@ export default function App() {
                   impact="medium"
                   onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: 150, left: 400, zIndex: 10 }}
+                  opacity={getSocialOpacity('Labor Shortage and Regulations')}
                 />
               )}
               {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('very high') && (
