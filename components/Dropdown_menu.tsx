@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { useFonts } from 'expo-font';
+import SearchBar from './Search_bar';
 
 interface DropdownComponentProps {
   onTrendTypeChange: (value: string | null) => void;
@@ -165,37 +166,38 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
         {renderDropdown('Social Key Trend', socialKeyTrends, socialKeyTrendsValue, setSocialKeyTrendsValue, onSocialKeyTrendChange)}
         {renderDropdown('Tech Focus Area', techFocusArea, techFocusAreaValue, setTechFocusAreaValue, onTechFocusAreaChange)}
       </View>
+      <SearchBar/>
     </View>
   );
 };
 
 //Styling
 const styles = StyleSheet.create({
-//Styling for the whole navbar
+  //Styling for the whole navbar
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor:'#FFEFDF',
-    padding:20,
+    padding: 20,
     borderColor:'black',
     borderBottomWidth: 2,
   },
-//Styling for the logo
+  //Styling for the logo
   logoContainer: {
     marginTop: 10,
-    marginRight:80,
   },
   logo: {
     resizeMode: 'contain',
     width: 170,
     height: 60,
   },
-//Styling for the dropdown menus
+  //Styling for the dropdown menus
   dropdownsContainer: {
     flexDirection: 'row',
     gap: 10,
     flexWrap: 'wrap',
-    flex: 1,
+    justifyContent: 'center',
   },
   dropdown: {
     height: 50,
