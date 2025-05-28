@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
+import { StyleSheet, View, TextInput, Image } from 'react-native';
 
 //Search bar
 const SearchBar = () => {
@@ -12,6 +12,8 @@ const handleSearch = (query:string) => {
 
   return (
     <View style={styles.searchBar}>
+        <Image
+          source={require('../assets/images/edit_icon.png')}></Image>
         <TextInput 
           style={styles.input}
           placeholder='Type to search'
@@ -29,10 +31,12 @@ const handleSearch = (query:string) => {
 const styles = StyleSheet.create({
     searchBar: {
         flex: 0.5,
+        gap:10,
+        marginBottom: 25,
+        alignItems: 'flex-end',
     },
     input: {
         height: 50,
-        marginTop:16,
         borderWidth: 2,
         borderColor: 'black',
         borderRadius: 8,
