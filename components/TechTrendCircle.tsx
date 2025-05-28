@@ -1,12 +1,13 @@
 import React from 'react';
-import { View, StyleSheet, Pressable, Text } from 'react-native';
+import { View, StyleSheet, Pressable, Text, StyleProp, ViewStyle } from 'react-native';
 
 type Impact = 'low' | 'medium' | 'high' | 'veryHigh'; 
 
 type Props = {
   impact: Impact;
   onPress: () => void;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
+  opacity?: number;
 };
 
 const getSize = (impact: Impact): number => {
@@ -24,11 +25,11 @@ const getSize = (impact: Impact): number => {
   }
 };
 
-const TechTrendCircle: React.FC<Props> = ({ impact, onPress, style }) => {
+const TechTrendCircle: React.FC<Props> = ({ impact, onPress, style, opacity = 1 }) => {
   const size = getSize(impact);
 
   return (
-    <Pressable onPress={onPress} style={[{ zIndex: 1 }, style]}>
+    <Pressable onPress={onPress} style={[style, { opacity }]} disabled={opacity < 1}>
       <View
         style={[
           styles.circle,

@@ -20,6 +20,8 @@ export default function App() {
   const [selectedTrendType, setSelectedTrendType] = useState<string | null>(null);
   const [selectedImpact, setSelectedImpact] = useState<string | null>(null);
   const [selectedTimeframe, setSelectedTimeframe] = useState<string | null>(null);
+  const [selectedSocialKeyTrend, setSelectedSocialKeyTrend] = useState<string | null>(null);
+  const [selectedTechFocusArea, setSelectedTechFocusArea] = useState<string | null>(null);
 
   const shouldShowSocial = () =>
     selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '2';
@@ -42,6 +44,29 @@ export default function App() {
     };
     return selectedTimeframe === null || selectedTimeframe === '1' || selectedTimeframe === map[value.toLowerCase()];
   };
+  const matchesSocialKeyTrend = (trendName: string) => {
+    const map: Record<string, string> = {
+      'Labor Shortage and Regulations': '2',
+      'Digitalization': '3',
+      'As-A-Service': '4',
+      'Sustainability': '5',
+    };
+    return selectedSocialKeyTrend === null || selectedSocialKeyTrend === '1' || selectedSocialKeyTrend === map[trendName];
+  };
+  const matchesTechFocusArea = (areaName: string) => {
+    const map: Record<string, string> = {
+      'Autonomous Systems': '2',
+      'Artificial Intelligence': '3',
+      'Robotics': '4',
+      'Digital & Cloud': '5',
+      'Other': '6',
+    };
+    return selectedTechFocusArea === null || selectedTechFocusArea === '1' || selectedTechFocusArea === map[areaName];
+  };
+  const getSocialOpacity = (trendName: string) => 
+    matchesSocialKeyTrend(trendName) ? 1 : 0.15;
+  const getTechOpacity = (areaName: string) =>
+    matchesTechFocusArea(areaName) ? 1 : 0.15;
 
   if (!loaded) return null;
 
@@ -56,6 +81,8 @@ export default function App() {
           onTrendTypeChange={setSelectedTrendType}
           onImpactChange={setSelectedImpact}
           onTimeframeChange={setSelectedTimeframe}
+          onSocialKeyTrendChange={setSelectedSocialKeyTrend}
+          onTechFocusAreaChange={setSelectedTechFocusArea}
         />
       </View>
       <View style={styles.row}>
@@ -78,6 +105,7 @@ export default function App() {
                   impact="high"
                   onPress={() => setVisible(true)} 
                   style={{ position: 'absolute', top: 5, left: 100, zIndex: 1 }}
+                  opacity={getTechOpacity('Autonomous Systems')}
                 />
               )}
               {matchesTimeframe('5-10 years') && shouldShowSocial() && matchesImpact('low') && (
@@ -85,6 +113,7 @@ export default function App() {
                   impact="low"
                   onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: 30, left: 250, zIndex: 1 }}
+                  opacity={getSocialOpacity('Sustainability')}
                 />
               )}
             </View>
@@ -105,6 +134,7 @@ export default function App() {
                   impact="medium"
                   onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: -5, left: 400, zIndex: 10 }}
+                  opacity={getTechOpacity('Artificial Intelligence')}
                 />
               )}
               {matchesTimeframe('3-5 years') && shouldShowSocial() && matchesImpact('very high') && (
@@ -112,6 +142,7 @@ export default function App() {
                 impact="veryHigh"
                 onPress={() => setVisible(true)}
                 style={{ position: 'absolute', top: -5, left: 600, zIndex: 11 }}
+                opacity={getSocialOpacity('Digitalization')}
                 />
               )}
 
@@ -133,6 +164,7 @@ export default function App() {
                   impact="medium"
                   onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: 10, left: 100, zIndex: 10 }}
+                  opacity={getTechOpacity('Robotics')}
                 />
               )}
               {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('high') && (
@@ -140,6 +172,7 @@ export default function App() {
                   impact="high"
                   onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: 90, left: 200, zIndex: 10 }}
+                  opacity={getSocialOpacity('As-A-Service')}
                 />
               )}
               {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('low') && (
@@ -147,6 +180,7 @@ export default function App() {
                   impact="low"
                   onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: 50, left: 350, zIndex: 10 }}
+                  opacity={getTechOpacity('Digital & Cloud')}
                 />
               )}
               {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('medium') && (
@@ -154,6 +188,7 @@ export default function App() {
                   impact="medium"
                   onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: 150, left: 400, zIndex: 10 }}
+                  opacity={getSocialOpacity('Labor Shortage and Regulations')}
                 />
               )}
               {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('very high') && (
@@ -161,6 +196,7 @@ export default function App() {
                   impact="veryHigh"
                   onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: 5, left: 430, zIndex: 10 }}
+                  opacity={getTechOpacity('Other')}
                 />
               )}
             </View>
