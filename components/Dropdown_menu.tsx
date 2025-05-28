@@ -7,6 +7,8 @@ interface DropdownComponentProps {
   onTrendTypeChange: (value: string | null) => void;
   onImpactChange: (value: string | null) => void;
   onTimeframeChange: (value: string | null) => void;
+  onSocialKeyTrendChange: (value: string | null) => void;
+  onTechFocusAreaChange: (value: string | null) => void;
 }
 
 const trendType = [
@@ -78,7 +80,7 @@ const techFocusArea = [
     { label: 'Other', value: '6' },
   ];
 
-const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange, onImpactChange, onTimeframeChange }) => {
+const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange, onImpactChange, onTimeframeChange, onSocialKeyTrendChange, onTechFocusAreaChange }) => {
   const [trendValue, setTrendValue] = useState<string | null>(null);
   const [impactValue, setImpactValue] = useState<string | null>(null);
   const [timeframeValue, setTimeframeValue] = useState<string | null>(null);
@@ -148,8 +150,8 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
       {renderDropdown('Trend Type', trendType, trendValue, setTrendValue, onTrendTypeChange)}
       {renderDropdown('Impact', impact, impactValue, setImpactValue, onImpactChange)}
       {renderDropdown('Timeframe', timeframe, timeframeValue, setTimeframeValue, onTimeframeChange)}
-      {renderDropdown('Social Key Trend', socialKeyTrends, socialKeyTrendsValue, setSocialKeyTrendsValue)}
-      {renderDropdown('Tech Focus Area', techFocusArea, techFocusAreaValue, setTechFocusAreaValue)}
+      {renderDropdown('Social Key Trend', socialKeyTrends, socialKeyTrendsValue, setSocialKeyTrendsValue, onSocialKeyTrendChange)}
+      {renderDropdown('Tech Focus Area', techFocusArea, techFocusAreaValue, setTechFocusAreaValue, onTechFocusAreaChange)}
     </View>
   );
 };

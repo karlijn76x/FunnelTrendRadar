@@ -1,12 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, StyleProp, ViewStyle } from 'react-native';
 
 type ImpactLevel = 'low' | 'medium' | 'high' | 'veryHigh'; // Nieuw type toegevoegd
 
 type Props = {
   impact: ImpactLevel;
   onPress: () => void;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
+  opacity?: number;
 };
 
 const impactSizes = {
@@ -16,11 +17,11 @@ const impactSizes = {
   veryHigh: 90, 
 };
 
-const SocialTrendCircle: React.FC<Props> = ({ impact, onPress, style }) => {
+const SocialTrendCircle: React.FC<Props> = ({ impact, onPress, style, opacity = 1 }) => {
   const size = impactSizes[impact];
 
   return (
-    <Pressable onPress={onPress} style={[style]}>
+    <Pressable onPress={onPress} style={[style, { opacity }]} disabled={opacity < 1}>
       <View
         style={[
           styles.circle,
