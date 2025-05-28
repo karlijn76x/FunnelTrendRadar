@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { useFonts } from 'expo-font';
+import SearchBar from './Search_bar';
 
 interface DropdownComponentProps {
   onTrendTypeChange: (value: string | null) => void;
@@ -11,6 +12,7 @@ interface DropdownComponentProps {
   onTechFocusAreaChange: (value: string | null) => void;
 }
 
+//Data for trendtype dropdown menu
 const trendType = [
   { 
     label: 'All', 
@@ -29,6 +31,7 @@ const trendType = [
   },
 ];
 
+//Data for impact dropdown menu
 const impact = [
   { 
     label: 'All', 
@@ -56,6 +59,7 @@ const impact = [
   },
 ];
 
+//Data for timeframe dropdown menu
 const timeframe = [
     { label: 'All', value: '1' },
     { label: '0-3 years', value: '2' },
@@ -63,6 +67,7 @@ const timeframe = [
     { label: '5-10 years', value: '4' },
   ];
 
+//Data for socialkey trends dropdown menu
 const socialKeyTrends = [
     { label: 'All', value: '1' },
     { label: 'Labor Shortage and Regulations', value: '2' },
@@ -71,6 +76,7 @@ const socialKeyTrends = [
     { label: 'Sustainability', value: '5' },
   ];
 
+//Data for techfocus area dropdown menu
 const techFocusArea = [
     { label: 'All', value: '1' },
     { label: 'Autonomous Systems', value: '2' },
@@ -147,26 +153,55 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
 
   return (
     <View style={styles.container}>
-      {renderDropdown('Trend Type', trendType, trendValue, setTrendValue, onTrendTypeChange)}
-      {renderDropdown('Impact', impact, impactValue, setImpactValue, onImpactChange)}
-      {renderDropdown('Timeframe', timeframe, timeframeValue, setTimeframeValue, onTimeframeChange)}
-      {renderDropdown('Social Key Trend', socialKeyTrends, socialKeyTrendsValue, setSocialKeyTrendsValue, onSocialKeyTrendChange)}
-      {renderDropdown('Tech Focus Area', techFocusArea, techFocusAreaValue, setTechFocusAreaValue, onTechFocusAreaChange)}
+      <View style={styles.logoContainer}>
+        <Image
+          style={styles.logo}
+          source={require('../assets/images/vanderlande_logo.png')}
+        />
+      </View>
+      <View style={styles.dropdownsContainer}>
+        {renderDropdown('Trend Type', trendType, trendValue, setTrendValue, onTrendTypeChange)}
+        {renderDropdown('Impact', impact, impactValue, setImpactValue, onImpactChange)}
+        {renderDropdown('Timeframe', timeframe, timeframeValue, setTimeframeValue, onTimeframeChange)}
+        {renderDropdown('Social Key Trend', socialKeyTrends, socialKeyTrendsValue, setSocialKeyTrendsValue, onSocialKeyTrendChange)}
+        {renderDropdown('Tech Focus Area', techFocusArea, techFocusAreaValue, setTechFocusAreaValue, onTechFocusAreaChange)}
+      </View>
+      <SearchBar/>
     </View>
   );
 };
 
+//Styling
 const styles = StyleSheet.create({
+  //Styling for the whole navbar
   container: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor:'#FFEFDF',
+    padding: 20,
+    borderColor:'black',
+    borderBottomWidth: 2,
+  },
+  //Styling for the logo
+  logoContainer: {
+    marginTop: 10,
+  },
+  logo: {
+    resizeMode: 'contain',
+    width: 170,
+    height: 60,
+  },
+  //Styling for the dropdown menus
+  dropdownsContainer: {
+    flexDirection: 'row',
     gap: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
     flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   dropdown: {
     height: 50,
-    width: 120,
+    width: 140,
     borderColor: 'black',
     backgroundColor: 'white',
     borderWidth: 2,

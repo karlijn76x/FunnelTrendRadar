@@ -72,11 +72,6 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.tinyLogo}
-        source={require('./assets/images/vanderlande_logo.png')}
-      />
-      <View style={styles.dropDownStyle}>
         <DropdownComponent 
           onTrendTypeChange={setSelectedTrendType}
           onImpactChange={setSelectedImpact}
@@ -84,7 +79,6 @@ export default function App() {
           onSocialKeyTrendChange={setSelectedSocialKeyTrend}
           onTechFocusAreaChange={setSelectedTechFocusArea}
         />
-      </View>
       <View style={styles.row}>
         <View style={styles.legend}>
             <Legend />
@@ -212,7 +206,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     flex: 1,
-    padding: 20,
   },
   funnelStyle: { 
     gap: 3,
@@ -220,19 +213,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flex: 1,
   },
-  dropDownStyle: {
-    backgroundColor:'#FFEFDF',
-    width:750,
-    marginVertical:10,
-    padding:10,
-    borderColor:'black',
-    borderRadius:20,
-    borderWidth: 2,
-  },
-  tinyLogo: {
-    width: 267,
-    height: 40,
-  },
+
   column: {
     paddingRight: 25,
     flexDirection: 'column',
