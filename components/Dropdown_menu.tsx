@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
 //Styling for the logo
   logoContainer: {
     marginTop: 10,
-    marginRight:200,
+    marginRight:80,
   },
   logo: {
     resizeMode: 'contain',
@@ -193,13 +193,13 @@ const styles = StyleSheet.create({
 //Styling for the dropdown menus
   dropdownsContainer: {
     flexDirection: 'row',
-    gap: 30,
+    gap: 10,
     flexWrap: 'wrap',
     flex: 1,
   },
   dropdown: {
     height: 50,
-    width: 150,
+    width: 140,
     borderColor: 'black',
     backgroundColor: 'white',
     borderWidth: 2,
