@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import { useFonts } from 'expo-font';
 
 const Legend = () => {
@@ -9,40 +9,69 @@ const Legend = () => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.row}>
-                <View style={styles.column}>
-                    <View style={styles.topCircleColumn}>
-                        <View style={[styles.circle, styles.smallCircle]}></View>
+            <View style={styles.dotsRow}>
+                <View style={styles.dotsBorder}>
+                    <View style={styles.heading}>
+                        <Text style={styles.headingText}>Legend</Text>
                     </View>
-                    <View style={styles.textColumn}>
-                        <Text style={styles.text}>Low impact</Text>
-                    </View>
-                </View>
-                <View style={styles.column}>
-                    <View style={styles.topCircleColumn}>
-                        <View style={[styles.circle, styles.mediumCircle]}></View>
-                    </View>
-                    <View style={styles.textColumn}>
-                        <Text style={styles.text}>Medium impact</Text>
+                    <View style={styles.content}>
+                        <View style={styles.topRow}>
+                            <View style={styles.topCircleColumn}>
+                                <View style={[styles.orangeCircle, styles.trendTypeCircle]}></View>
+                                <View style={[styles.purpleCircle, styles.trendTypeCircle]}></View>
+                            </View>
+                            <View style={styles.textColumn}>
+                                <View style={styles.trendTypeRow}>
+                                    <Text style={styles.contentText}>Social</Text>
+                                </View>
+                                <View style={styles.trendTypeRow}>
+                                    <Text style={styles.contentText}>Technology</Text>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={styles.bottomRow}>
+                            <View style={styles.bottomCircleColumn}>
+                                <View style={[styles.orangeCircle, styles.smallCircle]}></View>
+                                <View style={[styles.orangeCircle, styles.mediumCircle]}></View>
+                                <View style={[styles.orangeCircle, styles.bigCircle]}></View>
+                                <View style={[styles.orangeCircle, styles.veryBigCircle]}></View>
+                            </View>
+                            <View style={styles.textColumn}>
+                                <View style={styles.smallRow}>
+                                    <Text style={styles.contentText}>Low impact</Text>
+                                </View>
+                                <View style={styles.mediumRow}>
+                                    <Text style={styles.contentText}>Medium impact</Text>
+                                </View>
+                                <View style={styles.bigRow}>
+                                    <Text style={styles.contentText}>High impact</Text>
+                                </View>
+                                <View style={styles.veryBigRow}>
+                                    <Text style={styles.contentText}>Very high impact</Text>
+                                </View>
+                            </View>
+                        </View>
                     </View>
                 </View>
             </View>
-            <View style={styles.row}>
-                <View style={styles.column}>
-                    <View style={styles.bottomCircleColumn}>
-                        <View style={[styles.circle, styles.bigCircle]}></View>
-                    </View>
-                    <View style={styles.textColumn}>
-                        <Text style={styles.text}>High impact</Text>
-                    </View>
+            <View style={styles.timeframeRow}>
+                <View style={styles.timeframeColumn}>
+                    <Image
+                        source={require('../assets/images/5-10-years.png')}
+                    />
+                    <Text style={styles.contentText}>5-10 years</Text>
                 </View>
-                <View style={styles.column}>
-                    <View style={styles.bottomCircleColumn}>
-                        <View style={[styles.circle, styles.veryBigCircle]}></View>
-                    </View>
-                    <View style={styles.textColumn}>
-                        <Text style={styles.text}>Very high impact</Text>
-                    </View>
+                <View style={styles.timeframeColumn}>
+                    <Image
+                        source={require('../assets/images/3-5-years.png')}
+                    />
+                    <Text style={styles.contentText}>3-5 years</Text>
+                </View>
+                <View style={styles.timeframeColumn}>
+                    <Image
+                        source={require('../assets/images/0-3-years.png')}
+                    />
+                    <Text style={styles.contentText}>0-3 years</Text>
                 </View>
             </View>
         </View>
@@ -51,12 +80,103 @@ const Legend = () => {
 
 const styles = StyleSheet.create({
   container: {
-    gap: 5,
+    gap: 10
   },
-  circle: {
+  dotsBorder: {
+    borderWidth: 1,
+    borderColor: '#000'
+  },
+  heading: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#000',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: 5
+  },
+  content: {
+    padding: 5,
+    gap: 30
+  },
+  dotsRow: {
+    flexDirection: 'row'
+  },
+  topRow: {
+    flexDirection: 'row',
+    gap: 15,
+    paddingLeft: 17.5
+  },
+  bottomRow: {
+    flexDirection: 'row',
+    gap: 15
+  },
+  trendTypeRow: {
+    flexDirection: 'row',
+    height: 40,
+    alignItems: 'center'
+  },
+  smallRow: {
+    flexDirection: 'row',
+    gap: 15,
+    height: 35,
+    alignItems: 'center'
+  },
+  mediumRow: {
+    flexDirection: 'row',
+    gap: 15,
+    height: 55,
+    alignItems: 'center'
+  },
+  bigRow: {
+    flexDirection: 'row',
+    gap: 15,
+    height: 75,
+    alignItems: 'center'
+  },
+  veryBigRow: {
+    flexDirection: 'row',
+    gap: 15,
+    height: 90,
+    alignItems: 'center'
+  },
+  timeframeRow: {
+    flexDirection: 'row'
+  },
+  timeframeColumn: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 5
+  },
+  topCircleColumn: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: 55,
+    gap: 15
+  },
+  bottomCircleColumn: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: 90,
+    gap: 15
+  },
+  textColumn: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    gap: 15
+  },
+  orangeCircle: {
     backgroundColor: '#F57523',
     borderWidth: 1,
     borderColor: '#000'
+  },
+  purpleCircle: {
+    backgroundColor: '#5A136D',
+    borderWidth: 1,
+    borderColor: '#000'
+  },
+  trendTypeCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20
   },
   smallCircle: {
     width: 35,
@@ -78,31 +198,11 @@ const styles = StyleSheet.create({
     height: 90,
     borderRadius: 45
   },
-  row: {
-    flexDirection: 'row',
-    gap: 15
+  headingText: {
+    fontFamily: 'Aptos_Bold',
+    fontSize: 24
   },
-  topCircleColumn: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 55
-  },
-  bottomCircleColumn: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 90
-  },
-  textColumn: {
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
-  column: {
-    flexDirection: 'column',
-    gap: 5
-  },
-  text: {
+  contentText: {
     fontFamily: 'Aptos_Bold',
     fontSize: 12
   }

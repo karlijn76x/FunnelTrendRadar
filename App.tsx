@@ -72,7 +72,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-        <DropdownComponent 
+        <DropdownComponent
           onTrendTypeChange={setSelectedTrendType}
           onImpactChange={setSelectedImpact}
           onTimeframeChange={setSelectedTimeframe}
@@ -85,10 +85,6 @@ export default function App() {
         </View>
         <View style={styles.funnelStyle}>
           {/* 5-10 years section */}
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View style={styles.column}>
-              <Text style={styles.text}>5-10 years</Text>
-            </View>
             <View>
               <Image
                 style={{ width: 900, height: 100, resizeMode: 'cover' }}
@@ -97,7 +93,7 @@ export default function App() {
               {matchesTimeframe('5-10 years') && shouldShowTech() && matchesImpact('high') && (
                 <TechTrendCircle
                   impact="high"
-                  onPress={() => setVisible(true)} 
+                  onPress={() => setVisible(true)}
                   style={{ position: 'absolute', top: 5, left: 100, zIndex: 1 }}
                   opacity={getTechOpacity('Autonomous Systems')}
                 />
@@ -111,13 +107,8 @@ export default function App() {
                 />
               )}
             </View>
-          </View>
 
           {/* 3-5 years section */}
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View style={styles.column}>
-              <Text style={styles.text}>3-5 years</Text>
-            </View>
             <View>
               <Image
                 style={{ width: 800, height: 100, resizeMode: 'cover' }}
@@ -141,13 +132,8 @@ export default function App() {
               )}
 
             </View>
-          </View>
 
           {/* 0-3 years section */}
-          <View style={{ flexDirection: 'row' }}>
-            <View style={[styles.column, { paddingTop: 30 }]}>
-              <Text style={styles.text}>0-3 years</Text>
-            </View>
             <View style={{ position: 'relative' }}>
               <Image
                 style={{ width: 700, height: 250, resizeMode: 'cover', zIndex: 0 }}
@@ -194,7 +180,6 @@ export default function App() {
                 />
               )}
             </View>
-          </View>
           <TrendDetail visible={visible} onClose={() => setVisible(false)} />
         </View>
       </View>
@@ -213,19 +198,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flex: 1,
   },
-
-  column: {
-    paddingRight: 25,
-    flexDirection: 'column',
-    alignItems: 'flex-end'
-  },
   row: {
     flexDirection: 'row',
-    flex: 1
-  },
-  text: {
-    fontFamily: 'Aptos_ExtraBold',
-    fontSize: 18
+    flex: 1,
+    padding: 20
   },
   legend: {
     flexDirection: 'column',
