@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor:'#FFEFDF',
-    padding: 20,
+    padding: 15,
     borderColor:'black',
     borderBottomWidth: 2,
   },
