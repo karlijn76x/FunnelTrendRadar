@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import TrendDetail from './components/TrendDetail';
@@ -9,6 +9,7 @@ import SocialTrendCircle from './components/SocialTrendCircle';
 import TechTrendCircle from './components/TechTrendCircle';
 import Legend from './components/Legend';
 import OnboardingPopup from './components/OnboardingPopup';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -26,7 +27,67 @@ export default function App() {
   const [selectedSocialKeyTrend, setSelectedSocialKeyTrend] = useState<string | null>(null);
   const [selectedTechFocusArea, setSelectedTechFocusArea] = useState<string | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(true);
+  const [onboardingStep, setOnboardingStep] = useState(1);
   const [dontShowAgain, setDontShowAgain] = useState(false);
+
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      try {
+        // 1. Start app
+        const startCountStr = await AsyncStorage.getItem('appStartCount');
+        let startCount = startCountStr ? parseInt(startCountStr) : 0;
+        startCount += 1;
+        await AsyncStorage.setItem('appStartCount', startCount.toString());
+  
+        // 2. Get saved preference for "don't show again"
+        const dontShow = await AsyncStorage.getItem('dontShowOnboarding');
+  
+        // User checked "Don't show again"
+        if (dontShow === 'true') {
+          // Gebruiker heeft "Don't show again" aangevinkt
+          // Show nothing unless we are on 5th start
+          if (startCount === 5) {
+            // Mandatory onboarding on 5th start
+            setShowOnboarding(true);
+            // Set "Don't show again" back to false so popup can appear again afterwards
+            await AsyncStorage.setItem('dontShowOnboarding', 'false');
+            setDontShowAgain(false);
+          } else {
+            setShowOnboarding(false);
+          }
+        } else {
+          // If "don't show again" NOT is selected, always show onboarding
+          setShowOnboarding(true);
+        }
+  
+      } catch (e) {
+        // fallback
+        setShowOnboarding(true);
+      }
+    };
+  
+    checkOnboardingStatus();
+  }, []);
+  ;
+  
+  
+
+  const handleDontShowAgainChange = async (value: boolean) => {
+    setDontShowAgain(value);
+    try {
+      await AsyncStorage.setItem('dontShowOnboarding', value ? 'true' : 'false');
+    } catch (e) {
+      // error 
+    }
+  };
+  
+  const handleNext = () => {
+    if (onboardingStep < 3) { 
+      setOnboardingStep(onboardingStep + 1);
+    } else {
+      setShowOnboarding(false); 
+    }
+  };
 
 
 
@@ -79,12 +140,13 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <OnboardingPopup 
+      <OnboardingPopup
   visible={showOnboarding}
+  step={onboardingStep}
   onClose={() => setShowOnboarding(false)}
-  onNext={() => setShowOnboarding(false)}
+  onNext={handleNext}
   dontShowAgain={dontShowAgain}
-  setDontShowAgain={setDontShowAgain}
+  setDontShowAgain={handleDontShowAgainChange}  // gebruik hier de nieuwe functie
 />
 
         <DropdownComponent

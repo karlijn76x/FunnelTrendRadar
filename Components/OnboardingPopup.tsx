@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, View, Text, StyleSheet, TouchableOpacity, Switch } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 interface OnboardingPopupProps {
   visible: boolean;
@@ -7,6 +8,7 @@ interface OnboardingPopupProps {
   onNext: () => void;
   dontShowAgain: boolean;
   setDontShowAgain: (value: boolean) => void;
+  step: number; 
 }
 
 const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
@@ -15,22 +17,95 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
   onNext,
   dontShowAgain,
   setDontShowAgain,
+  step,
 }) => {
+  let title = '';
+  let subtitle = '';
+  let sectionTitle = '';
+  let description = '';
+  let circles = null;
+
+  switch (step) {
+    case 1:
+      title = 'Welcome to the Trend Funnel of\n Vanderlande!';
+      subtitle = 'Discover trends that could shape your work.';
+      sectionTitle = 'What you see';
+      description = 'Each bubble is a trend.\nThe color and size show the impact.\nThe lower in the funnel, the closer in time.';
+      circles = (
+        <View style={styles.circlesWrapper}>
+          <View style={styles.column}>
+            <View style={[styles.circle, { backgroundColor: '#7B3FE4', marginBottom: 20 }]} />
+            <View style={[styles.circle, { backgroundColor: '#F2994A' }]} />
+          </View>
+          <View style={[styles.circle, { backgroundColor: '#7B3FE4', marginLeft: 25, marginTop: 15 }]} />
+        </View>
+      );
+      break;
+
+      case 2:
+        title = 'How to use the Trend Funnel';
+        subtitle = 'Filter and explore the trends to find what matters to you.';
+        sectionTitle = 'Use the filters';
+        description = 'Want to see trends relevant to your department or interests? Use the filters above.';
+      
+        circles = (
+          <View style={styles.filterLinesContainer}>
+            <View style={styles.filterLine}>
+              <View style={[styles.filterDot, { left: 25, top: -8 }]} />
+            </View>
+            <View style={styles.filterLine}>
+              <View style={[styles.filterDot, { right: 20, top: -8 }]} />
+            </View>
+            <View style={styles.filterLine}>
+              <View style={[styles.filterDot, { left: '40%', top: -8 }]} />
+            </View>
+          </View>
+        );
+        break;
+      
+      
+
+        case 3:
+            title = 'Next steps'; 
+            subtitle = 'Dive deeper into trends that interest you.';
+            sectionTitle = 'Explore further';
+            description = 'Click on a bubble to learn more, or compare trends to discover new opportunities.';
+          
+            circles = (
+                <View style={styles.clickCircleWrapper}>
+                <View style={styles.clickArrowWrapper}>
+                  <View style={styles.clickArrowHead} />
+                  <View style={styles.clickArrowShaft} />
+                </View>
+                <View style={styles.clickCircle} />
+              </View>
+              
+            );
+            break; 
+          
+    default:
+      return null; 
+  }
+
+  // Adjust button text and handler when we are on the last step
+  const isLastStep = step === 3;
+  const buttonText = isLastStep ? 'Done' : 'Next';
+  const buttonAction = isLastStep ? onClose : onNext;
+
   return (
     <Modal visible={visible} transparent animationType="fade">
       <View style={styles.overlay}>
         <View style={styles.popup}>
-          <Text style={styles.title}>Welcome to the Trend Funnel of Vanderlande!</Text>
-          <Text style={styles.subtitle}>Discover trends that could shape your work.</Text>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.subtitle}>{subtitle}</Text>
 
-          <Text style={styles.sectionTitle}>What you see</Text>
-          <Text style={styles.description}>
-            Each bubble is a trend. The color and size show the impact. The lower in the funnel, the closer in time.
-          </Text>
+          <Text style={styles.sectionTitle}>{sectionTitle}</Text>
+          {circles}
+          <Text style={styles.description}>{description}</Text>
 
           <View style={styles.footer}>
-            <TouchableOpacity style={styles.button} onPress={onNext}>
-              <Text style={styles.buttonText}>Next</Text>
+            <TouchableOpacity style={styles.button} onPress={buttonAction}>
+              <Text style={styles.buttonText}>{buttonText}</Text>
             </TouchableOpacity>
 
             <View style={styles.checkboxContainer}>
@@ -49,6 +124,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
 
 export default OnboardingPopup;
 
+// Styles for the OnboardingPopup component
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
@@ -57,12 +133,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   popup: {
-    width: '85%',
+    width: '30%',
     backgroundColor: 'white',
     borderRadius: 12,
     padding: 24,
     alignItems: 'center',
     elevation: 10,
+    minHeight: 440,
   },
   title: {
     fontSize: 20,
@@ -77,15 +154,32 @@ const styles = StyleSheet.create({
   sectionTitle: {
     marginTop: 16,
     fontWeight: '600',
-    fontSize: 16,
+    fontSize: 20,
   },
   description: {
     textAlign: 'center',
     marginTop: 8,
     fontSize: 14,
   },
+  circlesWrapper: {
+    flexDirection: 'row',
+    marginTop: 16,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+  column: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
+  circle: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    borderColor: 'black',
+    borderWidth: 1,
+  },
   footer: {
-    marginTop: 20,
+    marginTop: 30,
     width: '100%',
     alignItems: 'center',
   },
@@ -108,4 +202,79 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontSize: 14,
   },
+
+  //Case 2 soecefic styles
+  filterLinesContainer: {
+    marginTop: 16,
+    width: '75%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  filterLine: {
+    height: 3,      
+    backgroundColor: 'black',
+    marginVertical: 20, 
+    width: '80%',
+    position: 'relative',
+    borderRadius: 1,
+  },
+  filterDot: {
+    position: 'absolute',
+    width: 40,      
+    height: 40,       
+    borderRadius: 20,
+    backgroundColor: '#7B3FE4', 
+    borderWidth: 1,
+    borderColor: '#4A1DAE',
+    top: -30,    
+  },
+  
+  //Case 3 specefic styles
+  clickCircleWrapper: {
+    marginVertical: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    width: 120,
+    height: 140,
+  },
+  
+  clickCircle: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: '#F2994A',
+    borderWidth: 3,
+    borderColor: 'black',
+  },
+  
+  clickArrowWrapper: {
+    position: 'absolute',
+    top: 70,
+    left: '50%',
+    transform: [{ translateX: -18 }],
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  
+  clickArrowShaft: {
+    width: 12,
+    height: 50,
+    backgroundColor: 'black',
+    
+  },
+  
+  clickArrowHead: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 24,
+    borderRightWidth: 24,
+    borderBottomWidth: 40,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: 'black',
+  },
+  
+  
+  
 });
