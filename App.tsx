@@ -8,6 +8,9 @@ import { useFonts } from 'expo-font';
 import SocialTrendCircle from './components/SocialTrendCircle';
 import TechTrendCircle from './components/TechTrendCircle';
 import Legend from './components/Legend';
+import OnboardingPopup from './components/OnboardingPopup';
+
+
 
 export default function App() {
   const [loaded, error] = useFonts({
@@ -22,6 +25,10 @@ export default function App() {
   const [selectedTimeframe, setSelectedTimeframe] = useState<string | null>(null);
   const [selectedSocialKeyTrend, setSelectedSocialKeyTrend] = useState<string | null>(null);
   const [selectedTechFocusArea, setSelectedTechFocusArea] = useState<string | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(true);
+  const [dontShowAgain, setDontShowAgain] = useState(false);
+
+
 
   const shouldShowSocial = () =>
     selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '2';
@@ -72,6 +79,14 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <OnboardingPopup 
+  visible={showOnboarding}
+  onClose={() => setShowOnboarding(false)}
+  onNext={() => setShowOnboarding(false)}
+  dontShowAgain={dontShowAgain}
+  setDontShowAgain={setDontShowAgain}
+/>
+
         <DropdownComponent
           onTrendTypeChange={setSelectedTrendType}
           onImpactChange={setSelectedImpact}
@@ -208,3 +223,4 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   }
 });
+
