@@ -16,7 +16,7 @@ interface PopupProps {
 
 const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
   return (
-    <Modal visible={visible} transparent animationType="slide">
+    <Modal visible={visible} transparent animationType="fade">
       <View style={styles.overlay}>
         <View style={styles.container}>
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
@@ -74,21 +74,23 @@ export default TrendDetail;
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.6)",
     justifyContent: "center",
     alignItems: "center",
   },
   container: {
-    backgroundColor: "white",
-    width: "90%",
-    borderRadius: 16,
+    backgroundColor: "purple",
+    width: 650,
+    height: 650,
+    borderRadius: 350,
     padding: 20,
-    position: "relative",
+    justifyContent: "center",
+    alignItems: "center", 
+    gap: 40,
   },
   closeButton: {
     position: "absolute",
-    right: 10,
-    top: 10,
+    right: 100,
+    top: 100,
     backgroundColor: "#f57c00",
     borderRadius: 20,
     padding: 4,
@@ -98,9 +100,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 22,
+    fontSize: 25,
     fontWeight: "bold",
-    color: "#f57c00",
+    color: "black",
   },
   metaRow: {
     flexDirection: "row",
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
   image: {
     marginTop: 12,
     height: 150,
-    width: "100%",
+    width: 200,
     borderRadius: 10,
   },
 });
