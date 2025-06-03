@@ -167,7 +167,7 @@ export default function App() {
           {/* 5-10 years section */}
             <View>
               <Image
-                style={{ width: 900, height: 100, resizeMode: 'cover' }}
+                style={{ width: 900, height: 105, resizeMode: 'cover' }}
                 source={require('./assets/images/funnel_top.png')}
               />
               {matchesTimeframe('5-10 years') && shouldShowTech() && matchesImpact('high') && (
