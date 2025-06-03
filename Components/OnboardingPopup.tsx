@@ -34,10 +34,11 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
       circles = (
         <View style={styles.circlesWrapper}>
           <View style={styles.column}>
-            <View style={[styles.circle, { backgroundColor: '#7B3FE4', marginBottom: 20 }]} />
-            <View style={[styles.circle, { backgroundColor: '#F2994A' }]} />
+          <View style={[styles.circle, { backgroundColor: '#5A136D', marginBottom: 20 }]} />
+          <View style={[styles.circle, { backgroundColor: '#F57523' }]} />
+
           </View>
-          <View style={[styles.circle, { backgroundColor: '#7B3FE4', marginLeft: 25, marginTop: 15 }]} />
+          <View style={[styles.circle, { backgroundColor: '#5A136D', marginLeft: 25, marginTop: 15 }]} />
         </View>
       );
       break;
@@ -184,14 +185,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    backgroundColor: '#4B9DEA',
+    backgroundColor: '#9ECEE3', // updated button color
     paddingVertical: 10,
     paddingHorizontal: 32,
     borderRadius: 8,
     marginBottom: 16,
   },
   buttonText: {
-    color: '#fff',
+    color: '#000000',
     fontWeight: '600',
   },
   checkboxContainer: {
@@ -220,13 +221,13 @@ const styles = StyleSheet.create({
   },
   filterDot: {
     position: 'absolute',
-    width: 40,      
-    height: 40,       
+    width: 40,
+    height: 40,
     borderRadius: 20,
-    backgroundColor: '#7B3FE4', 
+    backgroundColor: '#5A136D', // updated dot color
     borderWidth: 1,
-    borderColor: '#4A1DAE',
-    top: -30,    
+    borderColor: '#5A136D', // updated border color
+    top: -30,
   },
   
   //Case 3 specefic styles
@@ -243,10 +244,11 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: '#F2994A',
+    backgroundColor: '#F57523', // updated click circle color
     borderWidth: 3,
     borderColor: 'black',
   },
+
   
   clickArrowWrapper: {
     position: 'absolute',
@@ -274,7 +276,6 @@ const styles = StyleSheet.create({
     borderRightColor: 'transparent',
     borderBottomColor: 'black',
   },
-  
   
   
 });

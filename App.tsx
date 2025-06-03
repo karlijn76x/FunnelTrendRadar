@@ -29,46 +29,46 @@ export default function App() {
   const [showOnboarding, setShowOnboarding] = useState(true);
   const [onboardingStep, setOnboardingStep] = useState(1);
   const [dontShowAgain, setDontShowAgain] = useState(false);
+  const [onboardingChecked, setOnboardingChecked] = useState(false);
+
 
   useEffect(() => {
     const checkOnboardingStatus = async () => {
       try {
-        // 1. Start app
+        // Retrieve the number of times the app has been started
         const startCountStr = await AsyncStorage.getItem('appStartCount');
         let startCount = startCountStr ? parseInt(startCountStr) : 0;
         startCount += 1;
+         // Save the updated start count
         await AsyncStorage.setItem('appStartCount', startCount.toString());
-  
-        // 2. Get saved preference for "don't show again"
+         // Check if the user chose not to show onboarding again
         const dontShow = await AsyncStorage.getItem('dontShowOnboarding');
-  
-        // User checked "Don't show again"
+        // Show onboarding again on the 5th app start
         if (dontShow === 'true') {
-          // Gebruiker heeft "Don't show again" aangevinkt
-          // Show nothing unless we are on 5th start
           if (startCount === 5) {
-            // Mandatory onboarding on 5th start
+            // Reset the flag so onboarding will be shown again
             setShowOnboarding(true);
-            // Set "Don't show again" back to false so popup can appear again afterwards
             await AsyncStorage.setItem('dontShowOnboarding', 'false');
+             // Skip onboarding if it's not the 5th start
             setDontShowAgain(false);
           } else {
+             // Show onboarding if the user hasn't opted out
             setShowOnboarding(false);
           }
         } else {
-          // If "don't show again" NOT is selected, always show onboarding
           setShowOnboarding(true);
         }
   
       } catch (e) {
-        // fallback
         setShowOnboarding(true);
+      } finally {
+        setOnboardingChecked(true);
       }
     };
-  
+    // Run onboarding check on component mount
     checkOnboardingStatus();
   }, []);
-  ;
+  
   
   
 
@@ -140,14 +140,17 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <OnboardingPopup
-  visible={showOnboarding}
-  step={onboardingStep}
-  onClose={() => setShowOnboarding(false)}
-  onNext={handleNext}
-  dontShowAgain={dontShowAgain}
-  setDontShowAgain={handleDontShowAgainChange}  // gebruik hier de nieuwe functie
-/>
+      {onboardingChecked && (
+  <OnboardingPopup
+    visible={showOnboarding}
+    step={onboardingStep}
+    onClose={() => setShowOnboarding(false)}
+    onNext={handleNext}
+    dontShowAgain={dontShowAgain}
+    setDontShowAgain={handleDontShowAgainChange}
+  />
+)}
+
 
         <DropdownComponent
           onTrendTypeChange={setSelectedTrendType}
