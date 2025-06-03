@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import TrendDetail from './components/TrendDetail';
@@ -8,6 +8,10 @@ import { useFonts } from 'expo-font';
 import SocialTrendCircle from './components/SocialTrendCircle';
 import TechTrendCircle from './components/TechTrendCircle';
 import Legend from './components/Legend';
+import OnboardingPopup from './components/OnboardingPopup';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 export default function App() {
   const [loaded, error] = useFonts({
@@ -22,6 +26,70 @@ export default function App() {
   const [selectedTimeframe, setSelectedTimeframe] = useState<string | null>(null);
   const [selectedSocialKeyTrend, setSelectedSocialKeyTrend] = useState<string | null>(null);
   const [selectedTechFocusArea, setSelectedTechFocusArea] = useState<string | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(true);
+  const [onboardingStep, setOnboardingStep] = useState(1);
+  const [dontShowAgain, setDontShowAgain] = useState(false);
+  const [onboardingChecked, setOnboardingChecked] = useState(false);
+
+
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      try {
+        // Retrieve the number of times the app has been started
+        const startCountStr = await AsyncStorage.getItem('appStartCount');
+        let startCount = startCountStr ? parseInt(startCountStr) : 0;
+        startCount += 1;
+         // Save the updated start count
+        await AsyncStorage.setItem('appStartCount', startCount.toString());
+         // Check if the user chose not to show onboarding again
+        const dontShow = await AsyncStorage.getItem('dontShowOnboarding');
+        // Show onboarding again on the 5th app start
+        if (dontShow === 'true') {
+          if (startCount === 5) {
+            // Reset the flag so onboarding will be shown again
+            setShowOnboarding(true);
+            await AsyncStorage.setItem('dontShowOnboarding', 'false');
+             // Skip onboarding if it's not the 5th start
+            setDontShowAgain(false);
+          } else {
+             // Show onboarding if the user hasn't opted out
+            setShowOnboarding(false);
+          }
+        } else {
+          setShowOnboarding(true);
+        }
+  
+      } catch (e) {
+        setShowOnboarding(true);
+      } finally {
+        setOnboardingChecked(true);
+      }
+    };
+    // Run onboarding check on component mount
+    checkOnboardingStatus();
+  }, []);
+  
+  
+  
+
+  const handleDontShowAgainChange = async (value: boolean) => {
+    setDontShowAgain(value);
+    try {
+      await AsyncStorage.setItem('dontShowOnboarding', value ? 'true' : 'false');
+    } catch (e) {
+      // error 
+    }
+  };
+  
+  const handleNext = () => {
+    if (onboardingStep < 3) { 
+      setOnboardingStep(onboardingStep + 1);
+    } else {
+      setShowOnboarding(false); 
+    }
+  };
+
+
 
   const shouldShowSocial = () =>
     selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '2';
@@ -72,6 +140,18 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      {onboardingChecked && (
+  <OnboardingPopup
+    visible={showOnboarding}
+    step={onboardingStep}
+    onClose={() => setShowOnboarding(false)}
+    onNext={handleNext}
+    dontShowAgain={dontShowAgain}
+    setDontShowAgain={handleDontShowAgainChange}
+  />
+)}
+
+
         <DropdownComponent
           onTrendTypeChange={setSelectedTrendType}
           onImpactChange={setSelectedImpact}
@@ -208,3 +288,4 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   }
 });
+
