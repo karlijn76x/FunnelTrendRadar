@@ -263,7 +263,7 @@ export default function App() {
             </View>
           <TrendDetail visible={visible} onClose={() => setVisible(false)} />
         </View>
-        <View>
+        <View style={styles.controlButtons}>
           <ControlButtons />
         </View>
       </View>
@@ -290,6 +290,10 @@ const styles = StyleSheet.create({
   legend: {
     flexDirection: 'column',
     justifyContent: 'flex-end',
+  },
+  controlButtons: {
+    flexDirection: 'column',
+    justifyContent: 'flex-end'
   }
 });
 
