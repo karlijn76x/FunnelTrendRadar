@@ -1,16 +1,23 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { useFonts } from 'expo-font';
 
-const ControlButtons = () => {
+interface ControlButtonsProps {
+  onComparePress: () => void;
+  onShowTextPress: () => void;
+  showTextLabels: boolean;
+}
+
+const ControlButtons = ({ onComparePress, onShowTextPress, showTextLabels }: ControlButtonsProps) => {
   return (
     <View style={styles.container}>
-      <Pressable style={styles.button}>
+      <Pressable style={styles.button} onPress={onComparePress}>
         <Text style={styles.buttonText}>Compare</Text>
       </Pressable>
       
-      <Pressable style={styles.button}>
-        <Text style={styles.buttonText}>Show Text</Text>
+      <Pressable style={styles.button} onPress={onShowTextPress}>
+        <Text style={styles.buttonText}>
+          {showTextLabels ? 'Hide Text' : 'Show Text'}
+        </Text>
       </Pressable>
     </View>
   );
