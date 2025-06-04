@@ -265,7 +265,11 @@ export default function App() {
           <TrendDetail visible={visible} onClose={() => setVisible(false)} />
         </View>
         <View style={styles.controlButtons}>
-          <ControlButtons />
+          <ControlButtons
+          onShowTextPress={() => setShowTextLabels(!showTextLabels)}
+          onComparePress={() => {}}
+          showTextLabels={showTextLabels}
+          />
         </View>
       </View>
     </View>
