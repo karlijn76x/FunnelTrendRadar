@@ -173,34 +173,32 @@ export default function App() {
                 source={require('./assets/images/funnel_top.png')}
               />
               {matchesTimeframe('5-10 years') && shouldShowTech() && matchesImpact('high') && (
-                <>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 5, left: 100, zIndex: 1 }]}>
                   <TechTrendCircle
                     impact="high"
                     onPress={() => setVisible(true)}
-                    style={{ position: 'absolute', top: 5, left: 100, zIndex: 1 }}
                     opacity={getTechOpacity('Autonomous Systems')}
                   />
                   {showTextLabels && (
-                    <Text>
+                    <Text style={styles.labelText}>
                       Autonomous Systems
                     </Text>
                   )}
-                </>
+                </View>
               )}
               {matchesTimeframe('5-10 years') && shouldShowSocial() && matchesImpact('low') && (
-                <>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 30, left: 250, zIndex: 1 }]}>
                   <SocialTrendCircle
                     impact="low"
                     onPress={() => setVisible(true)}
-                    style={{ position: 'absolute', top: 30, left: 250, zIndex: 1 }}
                     opacity={getSocialOpacity('Sustainability')}
                   />
                   {showTextLabels && (
-                    <Text>
+                    <Text style={styles.labelText}>
                       Sustainability
                     </Text>
                   )}
-                </>
+                </View>
               )}
             </View>
 
@@ -211,34 +209,32 @@ export default function App() {
                 source={require('./assets/images/funnel_middle.png')}
               />
               {matchesTimeframe('3-5 years') && shouldShowTech() && matchesImpact('medium') && (
-                <>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: -5, left: 400, zIndex: 10 }]}>
                   <TechTrendCircle
                     impact="medium"
                     onPress={() => setVisible(true)}
-                    style={{ position: 'absolute', top: -5, left: 400, zIndex: 10 }}
                     opacity={getTechOpacity('Artificial Intelligence')}
                   />
                   {showTextLabels && (
-                    <Text>
+                    <Text style={styles.labelText}>
                       Artificial Intelligence
                     </Text>
                   )}
-                </>
+                </View>
               )}
               {matchesTimeframe('3-5 years') && shouldShowSocial() && matchesImpact('very high') && (
-                <>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: -5, left: 600, zIndex: 11 }]}>
                   <SocialTrendCircle
                     impact="veryHigh"
                     onPress={() => setVisible(true)}
-                    style={{ position: 'absolute', top: -5, left: 600, zIndex: 11 }}
                     opacity={getSocialOpacity('Digitalization')}
                   />
                   {showTextLabels && (
-                    <Text>
+                    <Text style={styles.labelText}>
                       Digitalization
                     </Text>
                   )}
-                </>
+                </View>
               )}
             </View>
 
@@ -249,79 +245,74 @@ export default function App() {
                 source={require('./assets/images/funnel_bottom.png')}
               />
               {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('medium') && (
-                <>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 10, left: 100, zIndex: 10 }]}>
                   <TechTrendCircle
                     impact="medium"
                     onPress={() => setVisible(true)}
-                    style={{ position: 'absolute', top: 10, left: 100, zIndex: 10 }}
                     opacity={getTechOpacity('Robotics')}
                   />
                   {showTextLabels && (
-                    <Text>
+                    <Text style={styles.labelText}>
                       Robotics
                     </Text>
                   )}
-                </>
+                </View>
               )}
               {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('high') && (
-                <>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 90, left: 200, zIndex: 10 }]}>
                   <SocialTrendCircle
                     impact="high"
                     onPress={() => setVisible(true)}
-                    style={{ position: 'absolute', top: 90, left: 200, zIndex: 10 }}
                     opacity={getSocialOpacity('As-A-Service')}
                   />
                   {showTextLabels && (
-                    <Text>
+                    <Text style={styles.labelText}>
                       As-A-Service
                     </Text>
                   )}
-                </>
+                </View>
               )}
               {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('low') && (
-                <>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 50, left: 350, zIndex: 10 }]}>
                   <TechTrendCircle
                     impact="low"
                     onPress={() => setVisible(true)}
-                    style={{ position: 'absolute', top: 50, left: 350, zIndex: 10 }}
                     opacity={getTechOpacity('Digital & Cloud')}
                   />
                   {showTextLabels && (
-                    <Text>
+                    <Text style={styles.labelText}>
                       Digital & Cloud
                     </Text>
                   )}
-                </>
+                </View>
               )}
               {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('medium') && (
-                <>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 150, left: 400, zIndex: 10 }]}>
                   <SocialTrendCircle
                     impact="medium"
                     onPress={() => setVisible(true)}
-                    style={{ position: 'absolute', top: 150, left: 400, zIndex: 10 }}
                     opacity={getSocialOpacity('Labor Shortage and Regulations')}
                   />
                   {showTextLabels && (
-                    <Text>
+                    <Text style={styles.labelText}>
                       Labor Shortage and Regulations
                     </Text>
                   )}
-                </>
+                </View>
               )}
               {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('very high') && (
-                <>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 5, left: 430, zIndex: 10 }]}>
                   <TechTrendCircle
                     impact="veryHigh"
                     onPress={() => setVisible(true)}
-                    style={{ position: 'absolute', top: 5, left: 430, zIndex: 10 }}
                     opacity={getTechOpacity('Other')}
                   />
                   {showTextLabels && (
-                    <Text>
+                    <Text style={styles.labelText}>
                       Other
                     </Text>
                   )}
-                </>
+                </View>
               )}
             </View>
           <TrendDetail visible={visible} onClose={() => setVisible(false)} />
@@ -362,5 +353,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
     width: 173
-  }
+  },
+  circleLabelContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  labelText: {
+    position: 'absolute',
+    bottom: -20,
+    textAlign: 'center',
+    fontFamily: 'Aptos',
+    fontSize: 12,
+    color: 'black',
+  },
 });
