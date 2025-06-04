@@ -31,6 +31,7 @@ export default function App() {
   const [onboardingStep, setOnboardingStep] = useState(1);
   const [dontShowAgain, setDontShowAgain] = useState(false);
   const [onboardingChecked, setOnboardingChecked] = useState(false);
+  const [showTextLabels, setShowTextLabels] = useState(false);
 
 
   useEffect(() => {
