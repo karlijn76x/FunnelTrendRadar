@@ -173,11 +173,10 @@ export default function App() {
                 source={require('./assets/images/funnel_top.png')}
               />
               {matchesTimeframe('5-10 years') && shouldShowTech() && matchesImpact('high') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 5, left: 100, zIndex: 1 }]}>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 5, left: 100, zIndex: 1, opacity: getTechOpacity('Autonomous Systems') }]}>
                   <TechTrendCircle
                     impact="high"
                     onPress={() => setVisible(true)}
-                    opacity={getTechOpacity('Autonomous Systems')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
@@ -189,11 +188,10 @@ export default function App() {
                 </View>
               )}
               {matchesTimeframe('5-10 years') && shouldShowSocial() && matchesImpact('low') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 30, left: 250, zIndex: 1 }]}>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 30, left: 250, zIndex: 1, opacity: getSocialOpacity('Sustainability') }]}>
                   <SocialTrendCircle
                     impact="low"
                     onPress={() => setVisible(true)}
-                    opacity={getSocialOpacity('Sustainability')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
@@ -213,11 +211,10 @@ export default function App() {
                 source={require('./assets/images/funnel_middle.png')}
               />
               {matchesTimeframe('3-5 years') && shouldShowTech() && matchesImpact('medium') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: -5, left: 400, zIndex: 10 }]}>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: -5, left: 400, zIndex: 10, opacity: getTechOpacity('Artificial Intelligence') }]}>
                   <TechTrendCircle
                     impact="medium"
                     onPress={() => setVisible(true)}
-                    opacity={getTechOpacity('Artificial Intelligence')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
@@ -229,11 +226,10 @@ export default function App() {
                 </View>
               )}
               {matchesTimeframe('3-5 years') && shouldShowSocial() && matchesImpact('very high') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: -5, left: 600, zIndex: 11 }]}>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: -5, left: 600, zIndex: 11, opacity: getSocialOpacity('Digitalization') }]}>
                   <SocialTrendCircle
                     impact="veryHigh"
                     onPress={() => setVisible(true)}
-                    opacity={getSocialOpacity('Digitalization')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
@@ -253,11 +249,10 @@ export default function App() {
                 source={require('./assets/images/funnel_bottom.png')}
               />
               {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('medium') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 10, left: 100, zIndex: 10 }]}>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 10, left: 100, zIndex: 10, opacity: getTechOpacity('Robotics') }]}>
                   <TechTrendCircle
                     impact="medium"
                     onPress={() => setVisible(true)}
-                    opacity={getTechOpacity('Robotics')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
@@ -269,11 +264,10 @@ export default function App() {
                 </View>
               )}
               {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('high') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 90, left: 200, zIndex: 10 }]}>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 90, left: 200, zIndex: 10, opacity: getSocialOpacity('As-A-Service') }]}>
                   <SocialTrendCircle
                     impact="high"
                     onPress={() => setVisible(true)}
-                    opacity={getSocialOpacity('As-A-Service')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
@@ -285,11 +279,10 @@ export default function App() {
                 </View>
               )}
               {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('low') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 50, left: 350, zIndex: 10 }]}>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 50, left: 350, zIndex: 10, opacity: getTechOpacity('Digital & Cloud') }]}>
                   <TechTrendCircle
                     impact="low"
                     onPress={() => setVisible(true)}
-                    opacity={getTechOpacity('Digital & Cloud')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
@@ -301,11 +294,10 @@ export default function App() {
                 </View>
               )}
               {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('medium') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 150, left: 400, zIndex: 10 }]}>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 150, left: 400, zIndex: 10, opacity: getSocialOpacity('Labor Shortage and Regulations') }]}>
                   <SocialTrendCircle
                     impact="medium"
                     onPress={() => setVisible(true)}
-                    opacity={getSocialOpacity('Labor Shortage and Regulations')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
@@ -317,11 +309,10 @@ export default function App() {
                 </View>
               )}
               {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('very high') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 5, left: 430, zIndex: 10 }]}>
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 5, left: 430, zIndex: 10, opacity: getTechOpacity('Other') }]}>
                   <TechTrendCircle
                     impact="veryHigh"
                     onPress={() => setVisible(true)}
-                    opacity={getTechOpacity('Other')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
