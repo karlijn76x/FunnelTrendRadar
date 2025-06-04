@@ -7,14 +7,20 @@ interface ControlButtonsProps {
   showTextLabels: boolean;
 }
 
-const ControlButtons = ({ onComparePress, onShowTextPress, showTextLabels }: ControlButtonsProps) => {
+const ControlButtons = ({ onShowTextPress, onComparePress, showTextLabels }: ControlButtonsProps) => {
   return (
     <View style={styles.container}>
       <Pressable style={styles.button} onPress={onComparePress}>
         <Text style={styles.buttonText}>Compare</Text>
       </Pressable>
       
-      <Pressable style={styles.button} onPress={onShowTextPress}>
+      <Pressable 
+        style={({ pressed }) => [
+          styles.button,
+          showTextLabels && styles.activeButton
+        ]} 
+        onPress={onShowTextPress}
+      >
         <Text style={styles.buttonText}>
           {showTextLabels ? 'Hide Text' : 'Show Text'}
         </Text>
@@ -41,6 +47,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 2,
     borderColor: '#000000',
+  },
+  activeButton: {
+    backgroundColor: '#FFD8B5',
   },
   buttonText: {
     fontSize: 18,
