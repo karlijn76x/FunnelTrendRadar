@@ -10,6 +10,7 @@ import TechTrendCircle from './components/TechTrendCircle';
 import Legend from './components/Legend';
 import OnboardingPopup from './components/OnboardingPopup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ControlButtons from './components/ControlButtons';
 
 
 
@@ -261,6 +262,9 @@ export default function App() {
               )}
             </View>
           <TrendDetail visible={visible} onClose={() => setVisible(false)} />
+        </View>
+        <View>
+          <ControlButtons />
         </View>
       </View>
     </View>
