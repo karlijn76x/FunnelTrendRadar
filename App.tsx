@@ -180,9 +180,11 @@ export default function App() {
                     opacity={getTechOpacity('Autonomous Systems')}
                   />
                   {showTextLabels && (
-                    <Text style={styles.labelText}>
-                      Autonomous Systems
-                    </Text>
+                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
+                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                        Outdoor Autonomous Systems
+                      </Text>
+                    </View>
                   )}
                 </View>
               )}
@@ -194,9 +196,11 @@ export default function App() {
                     opacity={getSocialOpacity('Sustainability')}
                   />
                   {showTextLabels && (
-                    <Text style={styles.labelText}>
-                      Sustainability
-                    </Text>
+                    <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
+                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1}>
+                        Local for Local
+                      </Text>
+                    </View>
                   )}
                 </View>
               )}
@@ -216,9 +220,11 @@ export default function App() {
                     opacity={getTechOpacity('Artificial Intelligence')}
                   />
                   {showTextLabels && (
-                    <Text style={styles.labelText}>
-                      Artificial Intelligence
-                    </Text>
+                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
+                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                        Generative AI
+                      </Text>
+                    </View>
                   )}
                 </View>
               )}
@@ -230,9 +236,11 @@ export default function App() {
                     opacity={getSocialOpacity('Digitalization')}
                   />
                   {showTextLabels && (
-                    <Text style={styles.labelText}>
-                      Digitalization
-                    </Text>
+                    <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
+                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1}>
+                        Privacy & Security
+                      </Text>
+                    </View>
                   )}
                 </View>
               )}
@@ -252,9 +260,11 @@ export default function App() {
                     opacity={getTechOpacity('Robotics')}
                   />
                   {showTextLabels && (
-                    <Text style={styles.labelText}>
-                      Robotics
-                    </Text>
+                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
+                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                        Humanoids
+                      </Text>
+                    </View>
                   )}
                 </View>
               )}
@@ -266,9 +276,11 @@ export default function App() {
                     opacity={getSocialOpacity('As-A-Service')}
                   />
                   {showTextLabels && (
-                    <Text style={styles.labelText}>
-                      As-A-Service
-                    </Text>
+                    <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
+                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1}>
+                        Everything as a Service
+                      </Text>
+                    </View>
                   )}
                 </View>
               )}
@@ -280,9 +292,11 @@ export default function App() {
                     opacity={getTechOpacity('Digital & Cloud')}
                   />
                   {showTextLabels && (
-                    <Text style={styles.labelText}>
-                      Digital & Cloud
-                    </Text>
+                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
+                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                        Cybersecurity
+                      </Text>
+                    </View>
                   )}
                 </View>
               )}
@@ -294,9 +308,11 @@ export default function App() {
                     opacity={getSocialOpacity('Labor Shortage and Regulations')}
                   />
                   {showTextLabels && (
-                    <Text style={styles.labelText}>
-                      Labor Shortage and Regulations
-                    </Text>
+                    <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
+                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1}>
+                        Changing Work
+                      </Text>
+                    </View>
                   )}
                 </View>
               )}
@@ -308,9 +324,11 @@ export default function App() {
                     opacity={getTechOpacity('Other')}
                   />
                   {showTextLabels && (
-                    <Text style={styles.labelText}>
-                      Other
-                    </Text>
+                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
+                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                        3D Printing
+                      </Text>
+                    </View>
                   )}
                 </View>
               )}
@@ -358,11 +376,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  labelText: {
+  labelContainer: {
     position: 'absolute',
-    bottom: -20,
-    textAlign: 'center',
-    fontFamily: 'Aptos',
+    bottom: -10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    paddingHorizontal: 5,
+    alignSelf: 'center',
+  },
+  labelText: {
+    fontFamily: 'Aptos_Bold',
     fontSize: 12,
     color: 'black',
   },
