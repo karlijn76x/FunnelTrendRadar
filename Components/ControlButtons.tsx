@@ -14,13 +14,7 @@ const ControlButtons = ({ onShowTextPress, onComparePress, showTextLabels }: Con
         <Text style={styles.buttonText}>Compare</Text>
       </Pressable>
       
-      <Pressable 
-        style={({ pressed }) => [
-          styles.button,
-          showTextLabels && styles.activeButton
-        ]} 
-        onPress={onShowTextPress}
-      >
+      <Pressable style={styles.button} onPress={onShowTextPress}>
         <Text style={styles.buttonText}>
           {showTextLabels ? 'Hide Text' : 'Show Text'}
         </Text>
@@ -31,11 +25,13 @@ const ControlButtons = ({ onShowTextPress, onComparePress, showTextLabels }: Con
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
+    position: 'absolute',
+    bottom: 20,
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 8,
     gap: 10,
+    width: 175
   },
   button: {
     backgroundColor: '#FFEFDF',
@@ -47,9 +43,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 2,
     borderColor: '#000000',
-  },
-  activeButton: {
-    backgroundColor: '#FFD8B5',
+    minHeight: 50
   },
   buttonText: {
     fontSize: 18,

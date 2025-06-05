@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
   controlButtons: {
     flexDirection: 'column',
     justifyContent: 'flex-end',
-    width: 173
+    width: 175
   },
   circleLabelContainer: {
     alignItems: 'center',
