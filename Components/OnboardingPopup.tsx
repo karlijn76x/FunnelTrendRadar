@@ -11,6 +11,22 @@ interface OnboardingPopupProps {
   step: number; 
 }
 
+const PaginationDots: React.FC<{ totalSteps: number; currentStep: number }> = ({ totalSteps, currentStep }) => {
+  return (
+    <View style={styles.paginationContainer}>
+      {Array.from({ length: totalSteps }, (_, i) => (
+        <View
+          key={i}
+          style={[
+            styles.dot,
+            i + 1 === currentStep ? styles.activeDot : styles.inactiveDot,
+          ]}
+        />
+      ))}
+    </View>
+  );
+};
+
 const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
   visible,
   onClose,
@@ -94,7 +110,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
     content = (
       <>
         {circles}
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title1}>{title}</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
       </>
     );
@@ -115,6 +131,12 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
       <View style={styles.overlay}>
         <View style={styles.popup}>
           {content}
+
+          {/* Pagination Dots indicator */}
+          {step >= 2 && step <= 4 && (
+          <PaginationDots totalSteps={3} currentStep={step - 1} />
+          )}
+
 
           <View style={styles.footer}>
             <TouchableOpacity style={styles.button} onPress={buttonAction}>
@@ -137,7 +159,6 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
 
 export default OnboardingPopup;
 
-// Styles for the OnboardingPopup component
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
@@ -154,8 +175,13 @@ const styles = StyleSheet.create({
     elevation: 10,
     minHeight: 440,
   },
-  title: {
+  title1: {
     fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  title: {
+    fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
   },
@@ -283,5 +309,25 @@ const styles = StyleSheet.create({
     height: 150,
     marginTop: 20,
     marginBottom: 10,
+  },
+
+  // Styles for pagination dots
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  dot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginHorizontal: 8,
+  },
+  activeDot: {
+    backgroundColor: '#555555', // donkergrijs
+  },
+  inactiveDot: {
+    backgroundColor: '#cccccc', // lichtgrijs
   },
 });
