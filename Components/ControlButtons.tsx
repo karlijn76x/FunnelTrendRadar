@@ -14,13 +14,7 @@ const ControlButtons = ({ onShowTextPress, onComparePress, showTextLabels }: Con
         <Text style={styles.buttonText}>Compare</Text>
       </Pressable>
       
-      <Pressable 
-        style={({ pressed }) => [
-          styles.button,
-          showTextLabels && styles.activeButton
-        ]} 
-        onPress={onShowTextPress}
-      >
+      <Pressable style={styles.button} onPress={onShowTextPress}>
         <Text style={styles.buttonText}>
           {showTextLabels ? 'Hide Text' : 'Show Text'}
         </Text>
@@ -50,9 +44,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#000000',
     minHeight: 50
-  },
-  activeButton: {
-    backgroundColor: '#FFD8B5',
   },
   buttonText: {
     fontSize: 18,
