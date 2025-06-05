@@ -68,7 +68,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
       break;
     case 3:
       title = 'Use the filters';
-      description = 'Want to see trends relevant to your department or interests? Use the filters above.';
+      description = 'Want to see trends relevant to your\n department or interests? \nUse the filters above.';
       circles = (
         <View style={styles.filterLinesContainer}>
           <View style={styles.filterLine}>
@@ -85,7 +85,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
       break;
     case 4:
       title = 'Explore further';
-      description = 'Click on a bubble to learn more, or compare trends to discover new opportunities.';
+      description = 'Click on a bubble to learn more, or\n compare trends to discover new \nopportunities.';
       circles = (
         <View style={styles.clickCircleWrapper}>
           <View style={styles.clickArrowWrapper}>
@@ -197,9 +197,10 @@ const styles = StyleSheet.create({
   },
   description: {
     textAlign: 'center',
-    marginTop: 8,
+    marginTop: 30,    
     fontSize: 14,
   },
+  
   circlesWrapper: {
     flexDirection: 'row',
     marginTop: 16,
@@ -315,19 +316,20 @@ const styles = StyleSheet.create({
   paginationContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 20,
-    marginBottom: 10,
+    marginBottom: -8,
+    marginTop: 10
   },
+  
   dot: {
-    width: 12,
-    height: 12,
+    width: 9,
+    height: 9,
     borderRadius: 6,
     marginHorizontal: 8,
   },
   activeDot: {
-    backgroundColor: '#555555', // donkergrijs
+    backgroundColor: '#555555', 
   },
   inactiveDot: {
-    backgroundColor: '#cccccc', // lichtgrijs
+    backgroundColor: '#cccccc', 
   },
 });
