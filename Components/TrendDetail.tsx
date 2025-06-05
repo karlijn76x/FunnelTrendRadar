@@ -8,6 +8,7 @@ import {
   Modal,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface PopupProps {
   visible: boolean;
@@ -18,7 +19,13 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
   return (
     <Modal visible={visible} transparent animationType="fade">
       <View style={styles.overlay}>
-        <View style={styles.container}>
+        <LinearGradient
+          colors={['#FFFFFF', '#000000', '#5A136D']}
+          locations={[0.37, 0.37, 0.374]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={styles.container}
+        >
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <MaterialIcons name="close" size={24} color="white" />
           </TouchableOpacity>
@@ -27,6 +34,7 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
             <Text style={styles.title}>Circular Economy</Text>
           </View>
 
+        <View style={styles.wholeMeta}>
           <View style={styles.metaRow}>
             <View style={styles.metaItem}>
               <View style={[styles.iconCircle, { backgroundColor: "#f57c00" }]} />
@@ -51,6 +59,7 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
               <Text style={styles.metaText}>91</Text>
             </View>
           </View>
+        </View>
 
           <Text style={styles.description}>
             Circularity aims to create a closed-loop system where resources are
@@ -63,7 +72,7 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
             style={styles.image}
             resizeMode="cover"
           />
-        </View>
+        </LinearGradient>
       </View>
     </Modal>
   );
@@ -76,22 +85,23 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   container: {
-    backgroundColor: "purple",
     width: 650,
     height: 650,
     borderRadius: 350,
     padding: 20,
     justifyContent: "center",
     alignItems: "center", 
-    gap: 40,
+    gap: 20,
+    borderWidth:2,
   },
   closeButton: {
     position: "absolute",
     right: 100,
     top: 100,
-    backgroundColor: "#f57c00",
+    backgroundColor: "#5A136D",
     borderRadius: 20,
     padding: 4,
     zIndex: 1,
@@ -100,23 +110,30 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 25,
+    fontSize: 30,
     fontWeight: "bold",
     color: "black",
+  },
+  wholeMeta:{
+    marginBottom: 30,
   },
   metaRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginVertical: 4,
+    gap: 80,
+    paddingHorizontal: 40,
   },
   metaItem: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
+    flex: 1,
+    justifyContent: 'flex-start',
   },
   metaText: {
-    fontSize: 14,
-    color: "#333",
+    fontSize: 18,
+    color: "black",
   },
   iconCircle: {
     width: 14,
@@ -135,14 +152,16 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
   },
   description: {
-    marginTop: 12,
-    fontSize: 15,
-    color: "#444",
+    width: 400,
+    fontSize: 18,
+    color: "white",
+    textAlign: "center",
   },
   image: {
     marginTop: 12,
     height: 150,
     width: 200,
     borderRadius: 10,
+    borderWidth: 2,
   },
 });
