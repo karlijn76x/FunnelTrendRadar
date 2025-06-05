@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import TrendDetail from './components/TrendDetail';
@@ -8,6 +8,11 @@ import { useFonts } from 'expo-font';
 import SocialTrendCircle from './components/SocialTrendCircle';
 import TechTrendCircle from './components/TechTrendCircle';
 import Legend from './components/Legend';
+import OnboardingPopup from './components/OnboardingPopup';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ControlButtons from './components/ControlButtons';
+
+
 
 export default function App() {
   const [loaded, error] = useFonts({
@@ -22,6 +27,71 @@ export default function App() {
   const [selectedTimeframe, setSelectedTimeframe] = useState<string | null>(null);
   const [selectedSocialKeyTrend, setSelectedSocialKeyTrend] = useState<string | null>(null);
   const [selectedTechFocusArea, setSelectedTechFocusArea] = useState<string | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(true);
+  const [onboardingStep, setOnboardingStep] = useState(1);
+  const [dontShowAgain, setDontShowAgain] = useState(false);
+  const [onboardingChecked, setOnboardingChecked] = useState(false);
+  const [showTextLabels, setShowTextLabels] = useState(false);
+
+
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      try {
+        // Retrieve the number of times the app has been started
+        const startCountStr = await AsyncStorage.getItem('appStartCount');
+        let startCount = startCountStr ? parseInt(startCountStr) : 0;
+        startCount += 1;
+         // Save the updated start count
+        await AsyncStorage.setItem('appStartCount', startCount.toString());
+         // Check if the user chose not to show onboarding again
+        const dontShow = await AsyncStorage.getItem('dontShowOnboarding');
+        // Show onboarding again on the 5th app start
+        if (dontShow === 'true') {
+          if (startCount === 5) {
+            // Reset the flag so onboarding will be shown again
+            setShowOnboarding(true);
+            await AsyncStorage.setItem('dontShowOnboarding', 'false');
+             // Skip onboarding if it's not the 5th start
+            setDontShowAgain(false);
+          } else {
+             // Show onboarding if the user hasn't opted out
+            setShowOnboarding(false);
+          }
+        } else {
+          setShowOnboarding(true);
+        }
+  
+      } catch (e) {
+        setShowOnboarding(true);
+      } finally {
+        setOnboardingChecked(true);
+      }
+    };
+    // Run onboarding check on component mount
+    checkOnboardingStatus();
+  }, []);
+  
+  
+  
+
+  const handleDontShowAgainChange = async (value: boolean) => {
+    setDontShowAgain(value);
+    try {
+      await AsyncStorage.setItem('dontShowOnboarding', value ? 'true' : 'false');
+    } catch (e) {
+      // error 
+    }
+  };
+  
+  const handleNext = () => {
+    if (onboardingStep < 4) { 
+      setOnboardingStep(onboardingStep + 1);
+    } else {
+      setShowOnboarding(false); 
+    }
+  };
+
+
 
   const shouldShowSocial = () =>
     selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '2';
@@ -72,6 +142,18 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      {onboardingChecked && (
+  <OnboardingPopup
+    visible={showOnboarding}
+    step={onboardingStep}
+    onClose={() => setShowOnboarding(false)}
+    onNext={handleNext}
+    dontShowAgain={dontShowAgain}
+    setDontShowAgain={handleDontShowAgainChange}
+  />
+)}
+
+
         <DropdownComponent
           onTrendTypeChange={setSelectedTrendType}
           onImpactChange={setSelectedImpact}
@@ -87,24 +169,38 @@ export default function App() {
           {/* 5-10 years section */}
             <View>
               <Image
-                style={{ width: 900, height: 100, resizeMode: 'cover' }}
+                style={{ width: 900, height: 105, resizeMode: 'cover' }}
                 source={require('./assets/images/funnel_top.png')}
               />
               {matchesTimeframe('5-10 years') && shouldShowTech() && matchesImpact('high') && (
-                <TechTrendCircle
-                  impact="high"
-                  onPress={() => setVisible(true)}
-                  style={{ position: 'absolute', top: 5, left: 100, zIndex: 1 }}
-                  opacity={getTechOpacity('Autonomous Systems')}
-                />
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 5, left: 100, zIndex: 1, opacity: getTechOpacity('Autonomous Systems') }]}>
+                  <TechTrendCircle
+                    impact="high"
+                    onPress={() => setVisible(true)}
+                  />
+                  {showTextLabels && (
+                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
+                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                        Outdoor Autonomous Systems
+                      </Text>
+                    </View>
+                  )}
+                </View>
               )}
               {matchesTimeframe('5-10 years') && shouldShowSocial() && matchesImpact('low') && (
-                <SocialTrendCircle
-                  impact="low"
-                  onPress={() => setVisible(true)}
-                  style={{ position: 'absolute', top: 30, left: 250, zIndex: 1 }}
-                  opacity={getSocialOpacity('Sustainability')}
-                />
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 30, left: 250, zIndex: 1, opacity: getSocialOpacity('Sustainability') }]}>
+                  <SocialTrendCircle
+                    impact="low"
+                    onPress={() => setVisible(true)}
+                  />
+                  {showTextLabels && (
+                    <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
+                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1}>
+                        Local for Local
+                      </Text>
+                    </View>
+                  )}
+                </View>
               )}
             </View>
 
@@ -115,22 +211,35 @@ export default function App() {
                 source={require('./assets/images/funnel_middle.png')}
               />
               {matchesTimeframe('3-5 years') && shouldShowTech() && matchesImpact('medium') && (
-                <TechTrendCircle
-                  impact="medium"
-                  onPress={() => setVisible(true)}
-                  style={{ position: 'absolute', top: -5, left: 400, zIndex: 10 }}
-                  opacity={getTechOpacity('Artificial Intelligence')}
-                />
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: -5, left: 400, zIndex: 10, opacity: getTechOpacity('Artificial Intelligence') }]}>
+                  <TechTrendCircle
+                    impact="medium"
+                    onPress={() => setVisible(true)}
+                  />
+                  {showTextLabels && (
+                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
+                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                        Generative AI
+                      </Text>
+                    </View>
+                  )}
+                </View>
               )}
               {matchesTimeframe('3-5 years') && shouldShowSocial() && matchesImpact('very high') && (
-              <SocialTrendCircle
-                impact="veryHigh"
-                onPress={() => setVisible(true)}
-                style={{ position: 'absolute', top: -5, left: 600, zIndex: 11 }}
-                opacity={getSocialOpacity('Digitalization')}
-                />
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: -5, left: 600, zIndex: 11, opacity: getSocialOpacity('Digitalization') }]}>
+                  <SocialTrendCircle
+                    impact="veryHigh"
+                    onPress={() => setVisible(true)}
+                  />
+                  {showTextLabels && (
+                    <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
+                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1}>
+                        Privacy & Security
+                      </Text>
+                    </View>
+                  )}
+                </View>
               )}
-
             </View>
 
           {/* 0-3 years section */}
@@ -140,47 +249,89 @@ export default function App() {
                 source={require('./assets/images/funnel_bottom.png')}
               />
               {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('medium') && (
-                <TechTrendCircle
-                  impact="medium"
-                  onPress={() => setVisible(true)}
-                  style={{ position: 'absolute', top: 10, left: 100, zIndex: 10 }}
-                  opacity={getTechOpacity('Robotics')}
-                />
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 10, left: 100, zIndex: 10, opacity: getTechOpacity('Robotics') }]}>
+                  <TechTrendCircle
+                    impact="medium"
+                    onPress={() => setVisible(true)}
+                  />
+                  {showTextLabels && (
+                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
+                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                        Humanoids
+                      </Text>
+                    </View>
+                  )}
+                </View>
               )}
               {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('high') && (
-                <SocialTrendCircle
-                  impact="high"
-                  onPress={() => setVisible(true)}
-                  style={{ position: 'absolute', top: 90, left: 200, zIndex: 10 }}
-                  opacity={getSocialOpacity('As-A-Service')}
-                />
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 90, left: 200, zIndex: 10, opacity: getSocialOpacity('As-A-Service') }]}>
+                  <SocialTrendCircle
+                    impact="high"
+                    onPress={() => setVisible(true)}
+                  />
+                  {showTextLabels && (
+                    <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
+                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1}>
+                        Everything as a Service
+                      </Text>
+                    </View>
+                  )}
+                </View>
               )}
               {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('low') && (
-                <TechTrendCircle
-                  impact="low"
-                  onPress={() => setVisible(true)}
-                  style={{ position: 'absolute', top: 50, left: 350, zIndex: 10 }}
-                  opacity={getTechOpacity('Digital & Cloud')}
-                />
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 50, left: 350, zIndex: 10, opacity: getTechOpacity('Digital & Cloud') }]}>
+                  <TechTrendCircle
+                    impact="low"
+                    onPress={() => setVisible(true)}
+                  />
+                  {showTextLabels && (
+                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
+                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                        Cybersecurity
+                      </Text>
+                    </View>
+                  )}
+                </View>
               )}
               {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('medium') && (
-                <SocialTrendCircle
-                  impact="medium"
-                  onPress={() => setVisible(true)}
-                  style={{ position: 'absolute', top: 150, left: 400, zIndex: 10 }}
-                  opacity={getSocialOpacity('Labor Shortage and Regulations')}
-                />
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 150, left: 400, zIndex: 10, opacity: getSocialOpacity('Labor Shortage and Regulations') }]}>
+                  <SocialTrendCircle
+                    impact="medium"
+                    onPress={() => setVisible(true)}
+                  />
+                  {showTextLabels && (
+                    <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
+                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1}>
+                        Changing Work
+                      </Text>
+                    </View>
+                  )}
+                </View>
               )}
               {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('very high') && (
-                <TechTrendCircle
-                  impact="veryHigh"
-                  onPress={() => setVisible(true)}
-                  style={{ position: 'absolute', top: 5, left: 430, zIndex: 10 }}
-                  opacity={getTechOpacity('Other')}
-                />
+                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 5, left: 430, zIndex: 10, opacity: getTechOpacity('Other') }]}>
+                  <TechTrendCircle
+                    impact="veryHigh"
+                    onPress={() => setVisible(true)}
+                  />
+                  {showTextLabels && (
+                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
+                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                        3D Printing
+                      </Text>
+                    </View>
+                  )}
+                </View>
               )}
             </View>
           <TrendDetail visible={visible} onClose={() => setVisible(false)} />
+        </View>
+        <View style={styles.controlButtons}>
+          <ControlButtons
+          onShowTextPress={() => setShowTextLabels(!showTextLabels)}
+          onComparePress={() => {}}
+          showTextLabels={showTextLabels}
+          />
         </View>
       </View>
     </View>
@@ -206,5 +357,28 @@ const styles = StyleSheet.create({
   legend: {
     flexDirection: 'column',
     justifyContent: 'flex-end',
-  }
+  },
+  controlButtons: {
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    width: 173
+  },
+  circleLabelContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  labelContainer: {
+    position: 'absolute',
+    bottom: -10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    paddingHorizontal: 5,
+    alignSelf: 'center',
+  },
+  labelText: {
+    fontFamily: 'Aptos_Bold',
+    fontSize: 12,
+    color: 'black',
+  },
 });
