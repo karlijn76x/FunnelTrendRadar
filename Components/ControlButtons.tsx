@@ -31,11 +31,13 @@ const ControlButtons = ({ onShowTextPress, onComparePress, showTextLabels }: Con
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
+    position: 'absolute',
+    bottom: 20,
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 8,
     gap: 10,
+    width: 175
   },
   button: {
     backgroundColor: '#FFEFDF',
@@ -47,6 +49,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 2,
     borderColor: '#000000',
+    minHeight: 50
   },
   activeButton: {
     backgroundColor: '#FFD8B5',
