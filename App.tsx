@@ -82,7 +82,7 @@ export default function App() {
   };
   
   const handleNext = () => {
-    if (onboardingStep < 3) { 
+    if (onboardingStep < 4) { 
       setOnboardingStep(onboardingStep + 1);
     } else {
       setShowOnboarding(false); 

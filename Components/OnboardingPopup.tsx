@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, View, Text, StyleSheet, TouchableOpacity, Switch } from 'react-native';
+import { Modal, View, Text, Image, StyleSheet, TouchableOpacity, Switch } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 interface OnboardingPopupProps {
@@ -27,82 +27,94 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
 
   switch (step) {
     case 1:
-      title = 'Welcome to the Trend Funnel of\n Vanderlande!';
+      title = 'Welcome to the Trend Funnel of\nVanderlande!';
       subtitle = 'Discover trends that could shape your work.';
-      sectionTitle = 'What you see';
+      circles = (
+        <Image
+          source={require('../assets/images/vanderlande_logo.png')} 
+          resizeMode="contain"
+          style={styles.image}
+        />
+      );
+      break;
+    case 2:
+      title = 'What you see';
       description = 'Each bubble is a trend.\nThe color and size show the impact.\nThe lower in the funnel, the closer in time.';
       circles = (
         <View style={styles.circlesWrapper}>
           <View style={styles.column}>
-          <View style={[styles.circle, { backgroundColor: '#5A136D', marginBottom: 20 }]} />
-          <View style={[styles.circle, { backgroundColor: '#F57523' }]} />
-
+            <View style={[styles.circle, { backgroundColor: '#5A136D', marginBottom: 20 }]} />
+            <View style={[styles.circle, { backgroundColor: '#F57523' }]} />
           </View>
           <View style={[styles.circle, { backgroundColor: '#5A136D', marginLeft: 25, marginTop: 15 }]} />
         </View>
       );
       break;
-
-      case 2:
-        title = 'How to use the Trend Funnel';
-        subtitle = 'Filter and explore the trends to find what matters to you.';
-        sectionTitle = 'Use the filters';
-        description = 'Want to see trends relevant to your department or interests? Use the filters above.';
-      
-        circles = (
-          <View style={styles.filterLinesContainer}>
-            <View style={styles.filterLine}>
-              <View style={[styles.filterDot, { left: 25, top: -8 }]} />
-            </View>
-            <View style={styles.filterLine}>
-              <View style={[styles.filterDot, { right: 20, top: -8 }]} />
-            </View>
-            <View style={styles.filterLine}>
-              <View style={[styles.filterDot, { left: '40%', top: -8 }]} />
-            </View>
+    case 3:
+      title = 'Use the filters';
+      description = 'Want to see trends relevant to your department or interests? Use the filters above.';
+      circles = (
+        <View style={styles.filterLinesContainer}>
+          <View style={styles.filterLine}>
+            <View style={[styles.filterDot, { left: 25, top: -8 }]} />
           </View>
-        );
-        break;
-      
-      
-
-        case 3:
-            title = 'Next steps'; 
-            subtitle = 'Dive deeper into trends that interest you.';
-            sectionTitle = 'Explore further';
-            description = 'Click on a bubble to learn more, or compare trends to discover new opportunities.';
-          
-            circles = (
-                <View style={styles.clickCircleWrapper}>
-                <View style={styles.clickArrowWrapper}>
-                  <View style={styles.clickArrowHead} />
-                  <View style={styles.clickArrowShaft} />
-                </View>
-                <View style={styles.clickCircle} />
-              </View>
-              
-            );
-            break; 
-          
+          <View style={styles.filterLine}>
+            <View style={[styles.filterDot, { right: 20, top: -8 }]} />
+          </View>
+          <View style={styles.filterLine}>
+            <View style={[styles.filterDot, { left: '40%', top: -8 }]} />
+          </View>
+        </View>
+      );
+      break;
+    case 4:
+      title = 'Explore further';
+      description = 'Click on a bubble to learn more, or compare trends to discover new opportunities.';
+      circles = (
+        <View style={styles.clickCircleWrapper}>
+          <View style={styles.clickArrowWrapper}>
+            <View style={styles.clickArrowHead} />
+            <View style={styles.clickArrowShaft} />
+          </View>
+          <View style={styles.clickCircle} />
+        </View>
+      );
+      break;
     default:
-      return null; 
+      return null;
   }
 
-  // Adjust button text and handler when we are on the last step
-  const isLastStep = step === 3;
-  const buttonText = isLastStep ? 'Done' : 'Next';
+  const isLastStep = step === 4;
+  const buttonText = step === 1 ? 'Start' : isLastStep ? 'Done' : 'Next';
   const buttonAction = isLastStep ? onClose : onNext;
+
+  // Hier bepalen we de volgorde van content
+  let content;
+  if (step === 1) {
+    content = (
+      <>
+        {circles}
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.subtitle}>{subtitle}</Text>
+      </>
+    );
+  } else {
+    content = (
+      <>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.subtitle}>{subtitle}</Text>
+        <Text style={styles.sectionTitle}>{sectionTitle}</Text>
+        {circles}
+        <Text style={styles.description}>{description}</Text>
+      </>
+    );
+  }
 
   return (
     <Modal visible={visible} transparent animationType="fade">
       <View style={styles.overlay}>
         <View style={styles.popup}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.subtitle}>{subtitle}</Text>
-
-          <Text style={styles.sectionTitle}>{sectionTitle}</Text>
-          {circles}
-          <Text style={styles.description}>{description}</Text>
+          {content}
 
           <View style={styles.footer}>
             <TouchableOpacity style={styles.button} onPress={buttonAction}>
@@ -185,7 +197,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    backgroundColor: '#9ECEE3', // updated button color
+    backgroundColor: '#9ECEE3',
     paddingVertical: 10,
     paddingHorizontal: 32,
     borderRadius: 8,
@@ -203,8 +215,6 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontSize: 14,
   },
-
-  //Case 2 soecefic styles
   filterLinesContainer: {
     marginTop: 16,
     width: '75%',
@@ -212,9 +222,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   filterLine: {
-    height: 3,      
+    height: 3,
     backgroundColor: 'black',
-    marginVertical: 20, 
+    marginVertical: 20,
     width: '80%',
     position: 'relative',
     borderRadius: 1,
@@ -224,13 +234,11 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#5A136D', // updated dot color
+    backgroundColor: '#5A136D',
     borderWidth: 1,
-    borderColor: '#5A136D', // updated border color
+    borderColor: '#5A136D',
     top: -30,
   },
-  
-  //Case 3 specefic styles
   clickCircleWrapper: {
     marginVertical: 20,
     alignItems: 'center',
@@ -239,17 +247,14 @@ const styles = StyleSheet.create({
     width: 120,
     height: 140,
   },
-  
   clickCircle: {
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: '#F57523', // updated click circle color
+    backgroundColor: '#F57523',
     borderWidth: 3,
     borderColor: 'black',
   },
-
-  
   clickArrowWrapper: {
     position: 'absolute',
     top: 70,
@@ -258,14 +263,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 10,
   },
-  
   clickArrowShaft: {
     width: 12,
     height: 50,
     backgroundColor: 'black',
-    
   },
-  
   clickArrowHead: {
     width: 0,
     height: 0,
@@ -276,6 +278,10 @@ const styles = StyleSheet.create({
     borderRightColor: 'transparent',
     borderBottomColor: 'black',
   },
-  
-  
+  image: {
+    width: 300,
+    height: 150,
+    marginTop: 20,
+    marginBottom: 10,
+  },
 });
