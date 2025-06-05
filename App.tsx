@@ -11,6 +11,7 @@ import Legend from './components/Legend';
 import OnboardingPopup from './components/OnboardingPopup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ControlButtons from './components/ControlButtons';
+import trendsApi from './apis/TrendsApi';
 
 
 
@@ -21,6 +22,7 @@ export default function App() {
     Aptos_ExtraBold: require("./assets/fonts/Aptos-ExtraBold.ttf")
   });
 
+  const [trends, setTrends] = useState([]);
   const [visible, setVisible] = useState(false);
   const [selectedTrendType, setSelectedTrendType] = useState<string | null>(null);
   const [selectedImpact, setSelectedImpact] = useState<string | null>(null);
@@ -35,6 +37,12 @@ export default function App() {
 
 
   useEffect(() => {
+    const retrieveTrends = async () => {
+        await trendsApi.getAllTrends()
+            .then(data => setTrends(data))
+            .catch(error => console.log(error));
+    };
+    retrieveTrends();
     const checkOnboardingStatus = async () => {
       try {
         // Retrieve the number of times the app has been started
@@ -172,36 +180,40 @@ export default function App() {
                 style={{ width: 900, height: 105, resizeMode: 'cover' }}
                 source={require('./assets/images/funnel_top.png')}
               />
-              {matchesTimeframe('5-10 years') && shouldShowTech() && matchesImpact('high') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 5, left: 100, zIndex: 1, opacity: getTechOpacity('Autonomous Systems') }]}>
-                  <TechTrendCircle
-                    impact="high"
-                    onPress={() => setVisible(true)}
-                  />
-                  {showTextLabels && (
-                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
-                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
-                        Outdoor Autonomous Systems
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              )}
-              {matchesTimeframe('5-10 years') && shouldShowSocial() && matchesImpact('low') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 30, left: 250, zIndex: 1, opacity: getSocialOpacity('Sustainability') }]}>
-                  <SocialTrendCircle
-                    impact="low"
-                    onPress={() => setVisible(true)}
-                  />
-                  {showTextLabels && (
-                    <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
-                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1}>
-                        Local for Local
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              )}
+              {trends.map(trend => (
+                  <View>
+                      {matchesTimeframe('5-10 years') && shouldShowTech() && matchesImpact('high') && (
+                        <View style={[styles.circleLabelContainer, { position: 'absolute', top: 5, left: 100, zIndex: 1, opacity: getTechOpacity('Autonomous Systems') }]}>
+                          <TechTrendCircle
+                            impact="high"
+                            onPress={() => setVisible(true)}
+                          />
+                          {showTextLabels && (
+                            <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
+                              <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                                Outdoor Autonomous Systems
+                              </Text>
+                            </View>
+                          )}
+                        </View>
+                      )}
+                      {matchesTimeframe('5-10 years') && shouldShowSocial() && matchesImpact('low') && (
+                        <View style={[styles.circleLabelContainer, { position: 'absolute', top: 30, left: 250, zIndex: 1, opacity: getSocialOpacity('Sustainability') }]}>
+                          <SocialTrendCircle
+                            impact="low"
+                            onPress={() => setVisible(true)}
+                          />
+                          {showTextLabels && (
+                            <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
+                              <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1}>
+                                Local for Local
+                              </Text>
+                            </View>
+                          )}
+                        </View>
+                      )}
+                  </View>
+              ))}
             </View>
 
           {/* 3-5 years section */}
