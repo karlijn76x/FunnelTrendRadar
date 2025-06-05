@@ -104,7 +104,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
   const buttonText = step === 1 ? 'Start' : isLastStep ? 'Done' : 'Next';
   const buttonAction = isLastStep ? onClose : onNext;
 
-  // Hier bepalen we de volgorde van content
+  // Position pages 
   let content;
   if (step === 1) {
     content = (
@@ -160,6 +160,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
 export default OnboardingPopup;
 
 const styles = StyleSheet.create({
+  // General
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
     marginTop: 30,    
     fontSize: 14,
   },
-  
+  //Case 1 styling
   circlesWrapper: {
     flexDirection: 'row',
     marginTop: 16,
@@ -234,6 +235,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontWeight: '600',
   },
+  //Case 2 styling
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -266,6 +268,7 @@ const styles = StyleSheet.create({
     borderColor: '#5A136D',
     top: -30,
   },
+  //Case 3 styling
   clickCircleWrapper: {
     marginVertical: 20,
     alignItems: 'center',
@@ -282,6 +285,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: 'black',
   },
+  //Case 4 styling
   clickArrowWrapper: {
     position: 'absolute',
     top: 70,
