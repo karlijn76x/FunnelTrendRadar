@@ -80,7 +80,7 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
 
               <View style={styles.metaRow}>
                 <View style={styles.metaItem}>
-                  <View style={[styles.iconCircle, { backgroundColor: "#f57c00" }]} />
+                  <View style={[styles.iconRectangle, { backgroundColor: "#f57c00" }]} />
                   <Text style={styles.metaText}>Social</Text>
                 </View>
                 <View style={styles.metaItem}>
@@ -91,9 +91,17 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
 
               <View style={styles.metaRow}>
                 <View style={styles.metaItem}>
-                  <View style={styles.impactDots}>
-                    <View style={styles.dot} />
-                    <View style={styles.dot} />
+                  <View style={[styles.impactDots, { flexDirection: 'row', alignItems: 'center', gap: 8 }]}>
+                    <View style={{ flexDirection: 'column', gap: 4 }}>
+                      <View style={{ flexDirection: 'row', gap: 4 }}>
+                        <View style={styles.dot} />
+                        <View style={styles.dot} />
+                      </View>
+                      <View style={{ flexDirection: 'row', gap: 4 }}>
+                        <View style={styles.dot} />
+                        <View style={styles.dot} />
+                      </View>
+                    </View>
                     <Text style={styles.metaText}>Very High Impact</Text>
                   </View>
                 </View>
@@ -165,30 +173,31 @@ const styles = StyleSheet.create({
   },
   metaRow: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
-    width: '100%',
-    gap: 20,
-    marginVertical: -7,
+    width: '50%',
+    marginVertical: -15,
   },
   metaItem: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   metaText: {
     fontSize: 18,
     color: "black",
     textAlign: 'center',
   },
-  iconCircle: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
+  iconRectangle: {
+    width: 40,
+    height: 30,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'black',
   },
   impactDots: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     gap: 4,
   },
