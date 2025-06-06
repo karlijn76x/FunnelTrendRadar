@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -6,8 +6,10 @@ import {
   Image,
   TouchableOpacity,
   Modal,
+  Animated,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface PopupProps {
   visible: boolean;
@@ -15,56 +17,108 @@ interface PopupProps {
 }
 
 const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
+  const scaleAnim = useRef(new Animated.Value(0)).current;
+  const opacityAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (visible) {
+      Animated.parallel([
+        Animated.spring(scaleAnim, {
+          toValue: 1,
+          useNativeDriver: true,
+          tension: 50,
+          friction: 7,
+        }),
+        Animated.timing(opacityAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    } else {
+      Animated.parallel([
+        Animated.spring(scaleAnim, {
+          toValue: 0,
+          useNativeDriver: true,
+          tension: 50,
+          friction: 7,
+        }),
+        Animated.timing(opacityAnim, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  }, [visible]);
+
   return (
-    <Modal visible={visible} transparent animationType="slide">
-      <View style={styles.overlay}>
-        <View style={styles.container}>
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <MaterialIcons name="close" size={24} color="white" />
-          </TouchableOpacity>
+    <Modal visible={visible} transparent animationType="none">
+      <Animated.View style={[styles.overlay, { opacity: opacityAnim }]}>
+        <Animated.View
+          style={[
+            styles.container,
+            {
+              transform: [{ scale: scaleAnim }],
+            },
+          ]}
+        >
+          <LinearGradient
+            colors={['#FFFFFF', '#000000', '#5A136D']}
+            locations={[0.37, 0.37, 0.374]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={styles.gradient}
+          >
+            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+              <MaterialIcons name="close" size={24} color="white" />
+            </TouchableOpacity>
 
-          <View style={styles.header}>
-            <Text style={styles.title}>Circular Economy</Text>
-          </View>
-
-          <View style={styles.metaRow}>
-            <View style={styles.metaItem}>
-              <View style={[styles.iconCircle, { backgroundColor: "#f57c00" }]} />
-              <Text style={styles.metaText}>Social</Text>
+            <View style={styles.header}>
+              <Text style={styles.title}>Circular Economy</Text>
             </View>
-            <View style={styles.metaItem}>
-              <MaterialIcons name="schedule" size={16} color="#000" />
-              <Text style={styles.metaText}>3-5 years</Text>
-            </View>
-          </View>
 
-          <View style={styles.metaRow}>
-            <View style={styles.metaItem}>
-              <View style={styles.impactDots}>
-                <View style={styles.dot} />
-                <View style={styles.dot} />
-                <Text style={styles.metaText}>Very High Impact</Text>
+            <View style={styles.wholeMeta}>
+              <View style={styles.metaRow}>
+                <View style={styles.metaItem}>
+                  <View style={[styles.iconCircle, { backgroundColor: "#f57c00" }]} />
+                  <Text style={styles.metaText}>Social</Text>
+                </View>
+                <View style={styles.metaItem}>
+                  <MaterialIcons name="schedule" size={16} color="#000" />
+                  <Text style={styles.metaText}>3-5 years</Text>
+                </View>
+              </View>
+
+              <View style={styles.metaRow}>
+                <View style={styles.metaItem}>
+                  <View style={styles.impactDots}>
+                    <View style={styles.dot} />
+                    <View style={styles.dot} />
+                    <Text style={styles.metaText}>Very High Impact</Text>
+                  </View>
+                </View>
+                <View style={styles.metaItem}>
+                  <MaterialIcons name="visibility" size={16} color="#000" />
+                  <Text style={styles.metaText}>91</Text>
+                </View>
               </View>
             </View>
-            <View style={styles.metaItem}>
-              <MaterialIcons name="visibility" size={16} color="#000" />
-              <Text style={styles.metaText}>91</Text>
-            </View>
-          </View>
 
-          <Text style={styles.description}>
-            Circularity aims to create a closed-loop system where resources are
-            reused, recycled, and repurposed, minimizing waste and environmental
-            impact.
-          </Text>
+            <Text style={styles.description}>
+              Circularity aims to create a closed-loop system where resources are
+              reused, recycled, and repurposed, minimizing waste and environmental
+              impact.
+            </Text>
 
-          <Image
-            source={require("../assets/images/Circular-economy.jpg")}
-            style={styles.image}
-            resizeMode="cover"
-          />
-        </View>
-      </View>
+            <Image
+              source={require("../assets/images/Circular-economy.jpg")}
+              style={styles.image}
+              resizeMode="cover"
+            />
+          </LinearGradient>
+        </Animated.View>
+      </Animated.View>
     </Modal>
   );
 };
@@ -74,22 +128,31 @@ export default TrendDetail;
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.6)",
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   container: {
-    backgroundColor: "white",
-    width: "90%",
-    borderRadius: 16,
+    width: 650,
+    height: 650,
+    borderRadius: 350,
+    overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: 'black',
+  },
+  gradient: {
+    width: '100%',
+    height: '100%',
     padding: 20,
-    position: "relative",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 20,
   },
   closeButton: {
     position: "absolute",
-    right: 10,
-    top: 10,
-    backgroundColor: "#f57c00",
+    right: 100,
+    top: 100,
+    backgroundColor: "#5A136D",
     borderRadius: 20,
     padding: 4,
     zIndex: 1,
@@ -98,23 +161,30 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 22,
+    fontSize: 30,
     fontWeight: "bold",
-    color: "#f57c00",
+    color: "black",
+  },
+  wholeMeta:{
+    marginBottom: 30,
   },
   metaRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginVertical: 4,
+    gap: 80,
+    paddingHorizontal: 40,
   },
   metaItem: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
+    flex: 1,
+    justifyContent: 'flex-start',
   },
   metaText: {
-    fontSize: 14,
-    color: "#333",
+    fontSize: 18,
+    color: "black",
   },
   iconCircle: {
     width: 14,
@@ -133,14 +203,16 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
   },
   description: {
-    marginTop: 12,
-    fontSize: 15,
-    color: "#444",
+    width: 400,
+    fontSize: 18,
+    color: "white",
+    textAlign: "center",
   },
   image: {
     marginTop: 12,
     height: 150,
-    width: "100%",
+    width: 200,
     borderRadius: 10,
+    borderWidth: 2,
   },
 });
