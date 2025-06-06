@@ -78,7 +78,6 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
               <Text style={styles.title}>Circular Economy</Text>
             </View>
 
-            <View style={styles.wholeMeta}>
               <View style={styles.metaRow}>
                 <View style={styles.metaItem}>
                   <View style={[styles.iconCircle, { backgroundColor: "#f57c00" }]} />
@@ -103,7 +102,6 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
                   <Text style={styles.metaText}>91</Text>
                 </View>
               </View>
-            </View>
 
             <Text style={styles.description}>
               Circularity aims to create a closed-loop system where resources are
@@ -146,7 +144,7 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
-    gap: 20,
+    gap: 40,
   },
   closeButton: {
     position: "absolute",
@@ -158,33 +156,31 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   header: {
-    marginBottom: 10,
+    marginBottom: 2,
   },
   title: {
     fontSize: 30,
     fontWeight: "bold",
     color: "black",
   },
-  wholeMeta:{
-    marginBottom: 30,
-  },
   metaRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 4,
-    gap: 80,
-    paddingHorizontal: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    width: '100%',
+    gap: 20,
+    marginVertical: -7,
   },
   metaItem: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
   },
   metaText: {
     fontSize: 18,
     color: "black",
+    textAlign: 'center',
   },
   iconCircle: {
     width: 14,
