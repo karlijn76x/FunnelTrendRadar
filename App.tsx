@@ -36,40 +36,42 @@ export default function App() {
 
   useEffect(() => {
     const checkOnboardingStatus = async () => {
+      if (__DEV__) {
+        // In development aalways resert (temperary)
+        await AsyncStorage.removeItem('dontShowOnboarding');
+        await AsyncStorage.setItem('appStartCount', '0');
+      }
+  
+      // check if onboarding has been checked before
       try {
-        // Retrieve the number of times the app has been started
         const startCountStr = await AsyncStorage.getItem('appStartCount');
         let startCount = startCountStr ? parseInt(startCountStr) : 0;
         startCount += 1;
-         // Save the updated start count
         await AsyncStorage.setItem('appStartCount', startCount.toString());
-         // Check if the user chose not to show onboarding again
+  
         const dontShow = await AsyncStorage.getItem('dontShowOnboarding');
-        // Show onboarding again on the 5th app start
+  
         if (dontShow === 'true') {
           if (startCount === 5) {
-            // Reset the flag so onboarding will be shown again
             setShowOnboarding(true);
             await AsyncStorage.setItem('dontShowOnboarding', 'false');
-             // Skip onboarding if it's not the 5th start
             setDontShowAgain(false);
           } else {
-             // Show onboarding if the user hasn't opted out
             setShowOnboarding(false);
           }
         } else {
           setShowOnboarding(true);
         }
-  
       } catch (e) {
         setShowOnboarding(true);
       } finally {
         setOnboardingChecked(true);
       }
     };
-    // Run onboarding check on component mount
+  
     checkOnboardingStatus();
   }, []);
+  
   
   
   

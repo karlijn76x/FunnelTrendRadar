@@ -1,6 +1,8 @@
 import React from 'react';
 import { Modal, View, Text, Image, StyleSheet, TouchableOpacity, Switch } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useFonts } from 'expo-font';
+
 
 interface OnboardingPopupProps {
   visible: boolean;
@@ -104,7 +106,6 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
   const buttonText = step === 1 ? 'Start' : isLastStep ? 'Done' : 'Next';
   const buttonAction = isLastStep ? onClose : onNext;
 
-  // Position pages 
   let content;
   if (step === 1) {
     content = (
@@ -132,27 +133,40 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
         <View style={styles.popup}>
           {content}
 
-          {/* Pagination Dots indicator */}
           {step >= 2 && step <= 4 && (
-          <PaginationDots totalSteps={3} currentStep={step - 1} />
+            <PaginationDots totalSteps={3} currentStep={step - 1} />
           )}
-
 
           <View style={styles.footer}>
             <TouchableOpacity style={styles.button} onPress={buttonAction}>
               <Text style={styles.buttonText}>{buttonText}</Text>
             </TouchableOpacity>
 
-            <View style={styles.checkboxContainer}>
-            <Switch
-             value={dontShowAgain}
-             onValueChange={setDontShowAgain}
-             trackColor={{ false: '#ccc', true: '#FBA96B' }} // lichte oranje track
-             thumbColor={dontShowAgain ? '#F57523' : '#f4f3f4'} // oranje bol als aan
-            />
+            {/* Skip button alleen bij step 1 */}
+            {step === 1 && (
+             <TouchableOpacity
+               style={[styles.button, { backgroundColor: '#FBA96B', marginTop: 10 }]}
+               onPress={onClose}
+              >
+                <Text style={[styles.buttonText, { color: 'black' }]}>Skip Info</Text>
+             </TouchableOpacity>
+           )}
 
-              <Text style={styles.checkboxLabel}>Don't show this again</Text>
+            {/* Don't show again switch vanaf step 2 */}
+            {step >= 2 && (
+            <View style={styles.checkboxContainer}>
+             <Switch
+               value={dontShowAgain}
+               onValueChange={setDontShowAgain}
+               trackColor={{ false: '#ccc', true: '#FBA96B' }}
+               thumbColor={dontShowAgain ? '#F57523' : '#f4f3f4'}
+             />
+             <Text style={[styles.checkboxLabel, { fontFamily: 'Aptos' }]}>
+             Don't show this again
+             </Text>
             </View>
+            )}
+
           </View>
         </View>
       </View>
@@ -162,8 +176,11 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
 
 export default OnboardingPopup;
 
+
+
+
 const styles = StyleSheet.create({
-  // General
+  // General popup styling
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
@@ -183,26 +200,31 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'Aptos_Bold',
   },
   title: {
     fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'Aptos_Bold',
   },
   subtitle: {
     marginTop: 8,
     fontStyle: 'italic',
     textAlign: 'center',
+    fontFamily: 'Aptos',
   },
   sectionTitle: {
     marginTop: 16,
     fontWeight: '600',
     fontSize: 20,
+    fontFamily: 'Aptos_Bold',
   },
   description: {
     textAlign: 'center',
     marginTop: 30,    
     fontSize: 14,
+    fontFamily: 'Aptos',
   },
   //Case 1 styling
   circlesWrapper: {
@@ -237,6 +259,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#000000',
     fontWeight: '600',
+    fontFamily: 'Aptos',
   },
   //Case 2 styling
   checkboxContainer: {
