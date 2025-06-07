@@ -26,12 +26,12 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
         Animated.spring(scaleAnim, {
           toValue: 1,
           useNativeDriver: true,
-          tension: 50,
-          friction: 7,
+          tension: 30,
+          friction: 8,
         }),
         Animated.timing(opacityAnim, {
           toValue: 1,
-          duration: 300,
+          duration: 400,
           useNativeDriver: true,
         }),
       ]).start();
@@ -40,12 +40,12 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
         Animated.spring(scaleAnim, {
           toValue: 0,
           useNativeDriver: true,
-          tension: 50,
-          friction: 7,
+          tension: 30,
+          friction: 8,
         }),
         Animated.timing(opacityAnim, {
           toValue: 0,
-          duration: 200,
+          duration: 400,
           useNativeDriver: true,
         }),
       ]).start();
@@ -175,14 +175,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: '50%',
+    width: '60%',
     marginVertical: -15,
+    marginLeft: '10%',
   },
   metaItem: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
     justifyContent: 'flex-start',
+    width: '45%',
   },
   metaText: {
     fontSize: 18,
