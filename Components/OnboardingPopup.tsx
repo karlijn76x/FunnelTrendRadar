@@ -55,7 +55,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
       break;
     case 2:
       title = 'What you see';
-      description = 'Each bubble is a trend.\nThe color and size show the impact.\nThe lower in the funnel, the closer in time.';
+      description = 'Each bubble’s size reflects its impact, \nwhile its color reveals the type of trend. \nThe lower in the funnel, the closer it is in time.';
       circles = (
         <View style={styles.circlesWrapper}>
           <View style={styles.column}>
@@ -144,10 +144,13 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
             </TouchableOpacity>
 
             <View style={styles.checkboxContainer}>
-              <Switch
-                value={dontShowAgain}
-                onValueChange={setDontShowAgain}
-              />
+            <Switch
+             value={dontShowAgain}
+             onValueChange={setDontShowAgain}
+             trackColor={{ false: '#ccc', true: '#FBA96B' }} // lichte oranje track
+             thumbColor={dontShowAgain ? '#F57523' : '#f4f3f4'} // oranje bol als aan
+            />
+
               <Text style={styles.checkboxLabel}>Don't show this again</Text>
             </View>
           </View>
