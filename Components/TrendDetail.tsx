@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Modal,
   Animated,
+  StatusBar,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -22,6 +23,7 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
 
   useEffect(() => {
     if (visible) {
+      StatusBar.setHidden(true);
       Animated.parallel([
         Animated.spring(scaleAnim, {
           toValue: 1,
@@ -36,6 +38,7 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
         }),
       ]).start();
     } else {
+      StatusBar.setHidden(false);
       Animated.parallel([
         Animated.spring(scaleAnim, {
           toValue: 0,
