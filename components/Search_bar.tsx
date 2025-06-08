@@ -11,38 +11,45 @@ const handleSearch = (query:string) => {
 }
 
   return (
+    <View style={styles.searchBarAndEditIcon}>
     <View style={styles.searchBar}>
+      <Image source={require('../assets/images/search_icon.png')}/>
         <TextInput 
-          style={styles.input}
           placeholder='Type to search'
           placeholderTextColor='black'
           autoCapitalize='none'
           autoCorrect={false}
           value={searchQuery}
           onChangeText={(query) => handleSearch(query)}
+          style={{ outlineColor: 'transparent'}}
         />
-        <Image style={styles.editImg} source={require('../assets/images/edit_icon.png')}/>
+    </View>
+      <Image style={styles.editImg} source={require('../assets/images/edit_icon.png')}/>
     </View>
   )
 }
 
 //Style of search bar
 const styles = StyleSheet.create({
-    searchBar: {
+    searchBarAndEditIcon: {
       flexDirection: 'row',
       alignItems: 'center',
       gap: 10,
       marginTop: 16,
     },
-    input: {
-        height: 50,
-        borderWidth: 2,
-        borderColor: 'black',
-        borderRadius: 8,
-        paddingLeft: 10,
-        backgroundColor: 'white',
-        fontSize: 14,
-        width: 200,
+    searchBar:{
+      flexDirection:'row',
+      height: 50,
+      borderWidth: 2,
+      borderColor: 'black',
+      borderRadius: 8,
+      paddingLeft: 10,
+      paddingRight: 10,
+      backgroundColor: 'white',
+      width: 200,
+      alignItems:'center',
+      fontSize:14,
+      gap:3,
     },
     editImg: {
       width: 30,
