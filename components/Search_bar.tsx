@@ -12,7 +12,6 @@ const handleSearch = (query:string) => {
 
   return (
     <View style={styles.searchBar}>
-        
         <TextInput 
           style={styles.input}
           placeholder='Type to search'
