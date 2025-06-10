@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, Dimensions, StyleSheet } from 'react-native';
+import { Animated, Dimensions } from 'react-native';
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 interface FallingAnimationProps {
   targetX: number;
@@ -19,12 +19,14 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
   delay, 
   children,
   fallDirection,
+  shouldShow,
+  filterKey,
 }) => {
   const position = useRef(new Animated.ValueXY()).current;
-  const opacity = useRef(new Animated.Value(0)).current;
-  const prevFilterKey = useRef(filterKey);
+  const opacity = useRef(new Animated.Value(1)).current;
+  const previousFilterKey = useRef(filterKey);
   const isInitialMount = useRef(true);
-
+  
   const isLeftSide = fallDirection ? fallDirection === 'left' : targetX < screenWidth / 2;
   
   const getStartPosition = () => {
@@ -40,50 +42,80 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
     };
   };
 
-  useEffect(() => {
+  const getFallDownPosition = () => {
+    return {
+      x: targetX + (Math.random() - 0.5) * 100,
+      y: screenHeight + 100
+    };
+  };
+
+  const animateToTarget = (animationDelay = 0) => {
     const { x: startX, y: startY } = getStartPosition();
     
     position.setValue({ x: startX, y: startY });
+    opacity.setValue(shouldShow ? 1 : 0);
     
-    Animated.sequence([
-      Animated.delay(delay),
-      Animated.parallel([
-        Animated.timing(position.x, {
-          toValue: targetX,
-          duration: 2500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(position.y, {
-          toValue: targetY,
-          duration: 2500,
-          useNativeDriver: true,
-        }),
-      ]),
+    if (shouldShow) {
+      Animated.sequence([
+        Animated.delay(animationDelay),
+        Animated.parallel([
+          Animated.timing(position.x, {
+            toValue: targetX,
+            duration: 2500,
+            useNativeDriver: true,
+          }),
+          Animated.timing(position.y, {
+            toValue: targetY,
+            duration: 2500,
+            useNativeDriver: true,
+          }),
+          Animated.timing(opacity, {
+            toValue: 1,
+            duration: 2500,
+            useNativeDriver: true,
+          }),
+        ]),
+      ]).start();
+    }
+  };
+
+  const animateFallDown = () => {
+    const { x: fallX, y: fallY } = getFallDownPosition();
+    
+    Animated.parallel([
+      Animated.timing(position.x, {
+        toValue: fallX,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.timing(position.y, {
+        toValue: fallY,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 800,
+        useNativeDriver: true,
+      }),
     ]).start();
-  }, []);
+  };
 
   return (
     <Animated.View
-      style={[
-        styles.container,
-        {
-          transform: [
-            { translateX: position.x },
-            { translateY: position.y },
-          ],
-        },
-      ]}
+      style={{
+        position: 'absolute',
+        zIndex: 1000,
+        transform: [
+          { translateX: position.x },
+          { translateY: position.y },
+        ],
+        opacity: opacity,
+      }}
     >
       {children}
     </Animated.View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    zIndex: 1000,
-  },
-});
 
 export default FallingAnimation;
