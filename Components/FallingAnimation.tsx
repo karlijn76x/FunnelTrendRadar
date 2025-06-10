@@ -44,7 +44,7 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
 
   const getFallDownPosition = () => {
     return {
-      x: targetX + (Math.random() - 0.5) * 100,
+      x: 350,
       y: screenHeight + 100
     };
   };
