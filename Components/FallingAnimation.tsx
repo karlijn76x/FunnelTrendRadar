@@ -1,11 +1,14 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, StyleSheet } from 'react-native';
+import { Animated, Dimensions, StyleSheet } from 'react-native';
+
+const { width: screenWidth } = Dimensions.get('window');
 
 interface FallingAnimationProps {
   targetX: number;
   targetY: number;
   delay: number;
   children: React.ReactNode;
+  fallDirection?: 'left' | 'right';
 }
 
 const FallingAnimation: React.FC<FallingAnimationProps> = ({ 
@@ -13,24 +16,44 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
   targetY, 
   delay, 
   children,
+  fallDirection,
 }) => {
   const position = useRef(new Animated.ValueXY()).current;
+  const isLeftSide = fallDirection ? fallDirection === 'left' : targetX < screenWidth / 2;
 
   useEffect(() => {
-    position.setValue({ x: targetX - 100, y: -100 });
+    const startX = isLeftSide ? targetX - 150 : targetX + 150;
+    position.setValue({ x: startX, y: -200 });
     
     Animated.sequence([
       Animated.delay(delay),
-      Animated.timing(position, {
-        toValue: { x: targetX, y: targetY },
-        duration: 2000,
-        useNativeDriver: true,
-      }),
+      Animated.parallel([
+        Animated.timing(position.x, {
+          toValue: targetX,
+          duration: 2500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(position.y, {
+          toValue: targetY,
+          duration: 2500,
+          useNativeDriver: true,
+        }),
+      ]),
     ]).start();
   }, []);
 
   return (
-    <Animated.View style={[styles.container, position.getLayout()]}>
+    <Animated.View
+      style={[
+        styles.container,
+        {
+          transform: [
+            { translateX: position.x },
+            { translateY: position.y },
+          ],
+        },
+      ]}
+    >
       {children}
     </Animated.View>
   );
@@ -39,6 +62,7 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
+    zIndex: 1000,
   },
 });
 
