@@ -20,10 +20,24 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
 }) => {
   const position = useRef(new Animated.ValueXY()).current;
   const isLeftSide = fallDirection ? fallDirection === 'left' : targetX < screenWidth / 2;
+  
+  const getStartPosition = () => {
+    const verticalStart = -360;
+    
+    const horizontalStart = isLeftSide 
+      ? targetX - 150
+      : targetX + 150;
+    
+    return {
+      x: horizontalStart,
+      y: verticalStart
+    };
+  };
 
   useEffect(() => {
-    const startX = isLeftSide ? targetX - 150 : targetX + 150;
-    position.setValue({ x: startX, y: -200 });
+    const { x: startX, y: startY } = getStartPosition();
+    
+    position.setValue({ x: startX, y: startY });
     
     Animated.sequence([
       Animated.delay(delay),
