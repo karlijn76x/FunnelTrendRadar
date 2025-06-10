@@ -9,6 +9,8 @@ interface FallingAnimationProps {
   delay: number;
   children: React.ReactNode;
   fallDirection?: 'left' | 'right';
+  shouldShow: boolean;
+  filterKey: string;
 }
 
 const FallingAnimation: React.FC<FallingAnimationProps> = ({ 
