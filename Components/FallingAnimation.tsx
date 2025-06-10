@@ -21,6 +21,10 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
   fallDirection,
 }) => {
   const position = useRef(new Animated.ValueXY()).current;
+  const opacity = useRef(new Animated.Value(0)).current;
+  const prevFilterKey = useRef(filterKey);
+  const isInitialMount = useRef(true);
+
   const isLeftSide = fallDirection ? fallDirection === 'left' : targetX < screenWidth / 2;
   
   const getStartPosition = () => {
