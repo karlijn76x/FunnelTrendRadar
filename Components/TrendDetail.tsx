@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Modal,
   Animated,
+  StatusBar,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -22,30 +23,32 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
 
   useEffect(() => {
     if (visible) {
+      StatusBar.setHidden(true);
       Animated.parallel([
         Animated.spring(scaleAnim, {
           toValue: 1,
           useNativeDriver: true,
-          tension: 50,
-          friction: 7,
+          tension: 30,
+          friction: 8,
         }),
         Animated.timing(opacityAnim, {
           toValue: 1,
-          duration: 300,
+          duration: 400,
           useNativeDriver: true,
         }),
       ]).start();
     } else {
+      StatusBar.setHidden(false);
       Animated.parallel([
         Animated.spring(scaleAnim, {
           toValue: 0,
           useNativeDriver: true,
-          tension: 50,
-          friction: 7,
+          tension: 30,
+          friction: 8,
         }),
         Animated.timing(opacityAnim, {
           toValue: 0,
-          duration: 200,
+          duration: 400,
           useNativeDriver: true,
         }),
       ]).start();
@@ -78,10 +81,9 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
               <Text style={styles.title}>Circular Economy</Text>
             </View>
 
-            <View style={styles.wholeMeta}>
               <View style={styles.metaRow}>
                 <View style={styles.metaItem}>
-                  <View style={[styles.iconCircle, { backgroundColor: "#f57c00" }]} />
+                  <View style={[styles.iconRectangle, { backgroundColor: "#f57c00" }]} />
                   <Text style={styles.metaText}>Social</Text>
                 </View>
                 <View style={styles.metaItem}>
@@ -92,9 +94,17 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
 
               <View style={styles.metaRow}>
                 <View style={styles.metaItem}>
-                  <View style={styles.impactDots}>
-                    <View style={styles.dot} />
-                    <View style={styles.dot} />
+                  <View style={[styles.impactDots, { flexDirection: 'row', alignItems: 'center', gap: 8 }]}>
+                    <View style={{ flexDirection: 'column', gap: 4 }}>
+                      <View style={{ flexDirection: 'row', gap: 4 }}>
+                        <View style={styles.dot} />
+                        <View style={styles.dot} />
+                      </View>
+                      <View style={{ flexDirection: 'row', gap: 4 }}>
+                        <View style={styles.dot} />
+                        <View style={styles.dot} />
+                      </View>
+                    </View>
                     <Text style={styles.metaText}>Very High Impact</Text>
                   </View>
                 </View>
@@ -103,7 +113,6 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
                   <Text style={styles.metaText}>91</Text>
                 </View>
               </View>
-            </View>
 
             <Text style={styles.description}>
               Circularity aims to create a closed-loop system where resources are
@@ -146,7 +155,7 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
-    gap: 20,
+    gap: 40,
   },
   closeButton: {
     position: "absolute",
@@ -158,41 +167,42 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   header: {
-    marginBottom: 10,
+    marginBottom: 2,
   },
   title: {
     fontSize: 30,
     fontWeight: "bold",
     color: "black",
   },
-  wholeMeta:{
-    marginBottom: 30,
-  },
   metaRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 4,
-    gap: 80,
-    paddingHorizontal: 40,
+    alignItems: "center",
+    width: '60%',
+    marginVertical: -15,
+    marginLeft: '10%',
   },
   metaItem: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    flex: 1,
     justifyContent: 'flex-start',
+    width: '45%',
   },
   metaText: {
     fontSize: 18,
     color: "black",
+    textAlign: 'center',
   },
-  iconCircle: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
+  iconRectangle: {
+    width: 40,
+    height: 30,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'black',
   },
   impactDots: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     gap: 4,
   },
