@@ -101,6 +101,36 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
     ]).start();
   };
 
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      animateToTarget(delay);
+    } else if (previousFilterKey.current !== filterKey) {
+      previousFilterKey.current = filterKey;
+      
+      if (shouldShow) {
+        animateFallDown();
+        setTimeout(() => {
+          animateToTarget(200);
+        }, 1200);
+      } else {
+        animateFallDown();
+      }
+    } else if (!shouldShow) {
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [shouldShow, filterKey]);
+
   return (
     <Animated.View
       style={{
