@@ -137,6 +137,18 @@ const CreateTrend = () => {
                 </View>
             </View>
         </View>
+
+        <View style={styles.section}>
+            <Text style={styles.label}>Description *</Text>
+            <TextInput
+            style={[styles.input, styles.multilineInput]}
+            placeholder="Description"
+            placeholderTextColor="#727272"
+            multiline={true}
+            numberOfLines={10}
+            textAlignVertical="top"
+            />
+        </View>
       </View>
     </View>
   )
@@ -190,6 +202,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Aptos',
     color: '#000',
     backgroundColor: '#FFEFDF',
+  },
+  multilineInput: {
+    height: 130,
+    textAlignVertical: 'top',
   },
   dropdown: {
     height: 50,
