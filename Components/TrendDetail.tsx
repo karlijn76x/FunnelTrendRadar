@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     color: "black",
+    fontFamily:'Aptos',
   },
   metaRow: {
     flexDirection: "row",
@@ -193,6 +194,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "black",
     textAlign: 'center',
+    fontFamily:'Aptos'
   },
   iconRectangle: {
     width: 40,
@@ -217,6 +219,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "white",
     textAlign: "center",
+    fontFamily:'Aptos',
   },
   image: {
     marginTop: 12,

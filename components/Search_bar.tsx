@@ -1,13 +1,25 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, Image } from 'react-native';
+import { StyleSheet, View, TextInput, Image, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type RootStackParamList = {
+  ManageTrends: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 //Search bar
 const SearchBar = () => {
-
+const navigation = useNavigation<NavigationProp>();
 const [searchQuery,setSearchQuery] = useState("");
 
 const handleSearch = (query:string) => {
     setSearchQuery(query);
+}
+
+const handleEditPress = () => {
+    navigation.navigate('ManageTrends');
 }
 
   return (
@@ -24,7 +36,9 @@ const handleSearch = (query:string) => {
           style={{ outlineColor: 'transparent'}}
         />
     </View>
-      <Image style={styles.editImg} source={require('../assets/images/edit_icon.png')}/>
+      <Pressable onPress={handleEditPress}>
+        <Image style={styles.editImg} source={require('../assets/images/edit_icon.png')}/>
+      </Pressable>
     </View>
   )
 }
