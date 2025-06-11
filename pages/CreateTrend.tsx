@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import NavBarEdit from '../components/NavBarEditTrends'
@@ -12,6 +12,7 @@ const CreateTrend = () => {
     const [isImpactFocus, setIsImpactFocus] = useState(false);
     const [isCategoryFocus, setIsCategoryFocus] = useState(false);
     const [isTimeframeFocus, setIsTimeframeFocus] = useState(false);
+    const [categoryOptions, setCategoryOptions] = useState<{ label: string; value: string }[]>([]);
     
     const trendType = [
         { label: 'Social & Business Trends', value: '1'},
@@ -30,6 +31,33 @@ const CreateTrend = () => {
         { label: '3-5 years', value: '2' },
         { label: '5-10 years', value: '3' }
     ];
+
+    const socialKeyTrends = [
+        { label: 'Labor Shortage and Regulations', value: '1' },
+        { label: 'Digitalization', value: '2' },
+        { label: 'As-A-Service', value: '3' },
+        { label: 'Sustainability', value: '4' }
+    ];
+
+    const techFocusArea = [
+        { label: 'Autonomous Systems', value: '1' },
+        { label: 'Artificial Intelligence', value: '2' },
+        { label: 'Robotics', value: '3' },
+        { label: 'Digital & Cloud', value: '4' },
+        { label: 'Other', value: '5' }
+    ];
+    
+    useEffect(() => {
+        setSelectedCategory(null);
+        
+        if (selectedTrendType === '1') {
+            setCategoryOptions(socialKeyTrends);
+        } else if (selectedTrendType === '2') {
+            setCategoryOptions(techFocusArea);
+        } else {
+            setCategoryOptions([]);
+        }
+    }, [selectedTrendType]);
 
   return (
     <View style={styles.container}>
@@ -97,21 +125,22 @@ const CreateTrend = () => {
                 <View style={styles.dropdownContainer}>
                     <Text style={styles.label}>Category *</Text>
                     <Dropdown
-                    style={[styles.dropdown, isCategoryFocus  && { borderColor: '#000', borderWidth: 2 }]}
+                    style={[styles.dropdown, isCategoryFocus && { borderColor: '#000', borderWidth: 2 }, !selectedTrendType && { backgroundColor: '#F0F0F0' }]}
                     placeholderStyle={styles.placeholderStyle}
                     selectedTextStyle={styles.selectedTextStyle}
-                    data={[]}
+                    data={categoryOptions}
                     maxHeight={300}
                     labelField="label"
                     valueField="value"
-                    placeholder={'-Select-'}
+                    placeholder={selectedTrendType ? '-Select-' : '-Select Trend Type First-'}
                     value={selectedCategory}
-                    onFocus={() => setIsCategoryFocus(true)}
+                    onFocus={() => selectedTrendType && setIsCategoryFocus(true)}
                     onBlur={() => setIsCategoryFocus(false)}
                     onChange={item => {
-                      setSelectedCategory(item.value);
-                      setIsCategoryFocus(false);
+                        setSelectedCategory(item.value);
+                        setIsCategoryFocus(false);
                     }}
+                    disable={!selectedTrendType}
                     />
                 </View>
                 
