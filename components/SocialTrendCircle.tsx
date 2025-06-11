@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, StyleProp, ViewStyle } from 'react-native';
 
-type ImpactLevel = 'low' | 'medium' | 'high' | 'veryHigh'; // Nieuw type toegevoegd
+type ImpactLevel = 'low impact' | 'medium impact' | 'high impact' | 'very high impact'; // Nieuw type toegevoegd
 
 type Props = {
   impact: ImpactLevel;
@@ -10,15 +10,23 @@ type Props = {
   opacity?: number;
 };
 
-const impactSizes = {
-  low: 35,
-  medium: 55,
-  high: 75,
-  veryHigh: 90, 
+const getSize = (impact: ImpactLevel): number => {
+  switch (impact.toLowerCase()) {
+    case 'low impact':
+      return 15;
+    case 'medium impact':
+      return 25;
+    case 'high impact':
+      return 35;
+    case 'very high impact':
+      return 45;
+    default:
+      return 50;
+  }
 };
 
 const SocialTrendCircle: React.FC<Props> = ({ impact, onPress, style, opacity = 1 }) => {
-  const size = impactSizes[impact];
+  const size = getSize(impact);
 
   return (
     <Pressable onPress={onPress} style={[style, { opacity }]} disabled={opacity < 1}>
@@ -42,7 +50,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#F57523',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
     borderWidth: 1,
     borderColor: '#000',
   },
