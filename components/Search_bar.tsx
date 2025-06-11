@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type RootStackParamList = {
-  ManageTrends: undefined;
+  CreateTrend: undefined;
 };
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -19,7 +19,7 @@ const handleSearch = (query:string) => {
 }
 
 const handleEditPress = () => {
-    navigation.navigate('ManageTrends');
+    navigation.navigate('CreateTrend');
 }
 
   return (
