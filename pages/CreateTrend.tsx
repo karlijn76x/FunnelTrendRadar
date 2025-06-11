@@ -4,8 +4,11 @@ import NavBarEdit from '../components/NavBarEditTrends'
 
 const CreateTrend = () => {
   return (
-    <View>
+    <View style={styles.container}>
       <NavBarEdit />
+      <View style={styles.content}>
+        <Text style={styles.title}>Create a Trend</Text>
+      </View>
     </View>
   )
 }
@@ -16,5 +19,17 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     flex: 1
-  }
+  },
+  content: {
+    paddingHorizontal: 16,
+    paddingTop: 32,
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: 48,
+    fontFamily: 'Aptos_Bold',
+    color: '#000',
+    marginBottom: 4,
+    textAlign: 'center',
+  },
 })
