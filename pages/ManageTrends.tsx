@@ -1,12 +1,17 @@
-import React from 'react'
-import { StyleSheet, Text, View, Button, Image } from 'react-native';
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, Button, Image, TextInput } from 'react-native';
 import NavBarEdit from '../components/NavBarEditTrends';
-
+import SearchBar from '../components/Search_bar';
 
 function ManageTrends() {
+
   return (
     <View style={styles.container}>
       <NavBarEdit/>
+      <View>
+        <Text>Manage Trends</Text>
+        <SearchBar />
+      </View>
     </View>
   )
 }

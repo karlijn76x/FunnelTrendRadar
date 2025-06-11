@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import { useFonts } from 'expo-font';
 import SearchBar from './Search_bar';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type RootStackParamList = {
+  ManageTrends: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 interface DropdownComponentProps {
   onTrendTypeChange: (value: string | null) => void;
@@ -87,6 +95,7 @@ const techFocusArea = [
   ];
 
 const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange, onImpactChange, onTimeframeChange, onSocialKeyTrendChange, onTechFocusAreaChange }) => {
+  const navigation = useNavigation<NavigationProp>();
   const [trendValue, setTrendValue] = useState<string | null>(null);
   const [impactValue, setImpactValue] = useState<string | null>(null);
   const [timeframeValue, setTimeframeValue] = useState<string | null>(null);
@@ -151,6 +160,10 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
     );
   };
 
+  const handleEditPress = () => {
+    navigation.navigate('ManageTrends');
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
@@ -166,7 +179,12 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
         {renderDropdown('Social Key Trend', socialKeyTrends, socialKeyTrendsValue, setSocialKeyTrendsValue, onSocialKeyTrendChange)}
         {renderDropdown('Tech Focus Area', techFocusArea, techFocusAreaValue, setTechFocusAreaValue, onTechFocusAreaChange)}
       </View>
-      <SearchBar/>
+      <View style={styles.searchAndEditContainer}>
+        <SearchBar/>
+        <Pressable onPress={handleEditPress}>
+          <Image style={styles.editImg} source={require('../assets/images/edit_icon.png')}/>
+        </Pressable>
+      </View>
     </View>
   );
 };
@@ -241,6 +259,15 @@ const styles = StyleSheet.create({
   },
   selectedItemText: {
     fontWeight: 'bold',
+  },
+  searchAndEditContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  editImg: {
+    width: 30,
+    height: 30,
   },
 });
 
