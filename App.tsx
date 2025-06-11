@@ -11,6 +11,7 @@ import Legend from './components/Legend';
 import OnboardingPopup from './components/OnboardingPopup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ControlButtons from './components/ControlButtons';
+import ViewHistory from './components/ViewHistory';
 
 
 
@@ -333,6 +334,7 @@ export default function App() {
           showTextLabels={showTextLabels}
           />
         </View>
+        <ViewHistory/>
       </View>
     </View>
   );
