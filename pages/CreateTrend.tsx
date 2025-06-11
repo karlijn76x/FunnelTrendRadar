@@ -6,8 +6,12 @@ import NavBarEdit from '../components/NavBarEditTrends'
 const CreateTrend = () => {
     const [selectedTrendType, setSelectedTrendType] = useState(null);
     const [selectedImpact, setSelectedImpact] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedTimeframe, setSelectedTimeframe] = useState(null);
     const [isTrendTypeFocus, setTrendTypeFocus] = useState(false);
     const [isImpactFocus, setIsImpactFocus] = useState(false);
+    const [isCategoryFocus, setIsCategoryFocus] = useState(false);
+    const [isTimeframeFocus, setIsTimeframeFocus] = useState(false);
     
     const trendType = [
         { label: 'Social & Business Trends', value: '1'},
@@ -19,6 +23,12 @@ const CreateTrend = () => {
         { label: 'Medium', value: '2' },
         { label: 'High', value: '3' },
         { label: 'Very High', value: '4' }
+    ];
+    
+    const timeframe = [
+        { label: '0-3 years', value: '1' },
+        { label: '3-5 years', value: '2' },
+        { label: '5-10 years', value: '3' }
     ];
 
   return (
@@ -76,6 +86,52 @@ const CreateTrend = () => {
                     onChange={item => {
                       setSelectedImpact(item.value);
                       setIsImpactFocus(false);
+                    }}
+                    />
+                </View>
+            </View>
+        </View>
+
+        <View style={styles.section}>
+            <View style={styles.rowContainer}>
+                <View style={styles.dropdownContainer}>
+                    <Text style={styles.label}>Category *</Text>
+                    <Dropdown
+                    style={[styles.dropdown, isCategoryFocus  && { borderColor: '#000', borderWidth: 2 }]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    data={[]}
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={'-Select-'}
+                    value={selectedCategory}
+                    onFocus={() => setIsCategoryFocus(true)}
+                    onBlur={() => setIsCategoryFocus(false)}
+                    onChange={item => {
+                      setSelectedCategory(item.value);
+                      setIsCategoryFocus(false);
+                    }}
+                    />
+                </View>
+                
+                <View style={[styles.dropdownContainer, {marginLeft: 32}]}>
+                    <Text style={styles.label}>Timeframe *</Text>
+                    <Dropdown
+                    style={[styles.dropdown, isTimeframeFocus && { borderColor: '#000', borderWidth: 2 }]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    data={timeframe}
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={'-Select-'}
+                    value={selectedTimeframe}
+                    onFocus={() => setIsTimeframeFocus(true)}
+                    onBlur={() => setIsTimeframeFocus(false)}
+                    onChange={item => {
+                      setSelectedTimeframe(item.value);
+                      setIsTimeframeFocus(false);
                     }}
                     />
                 </View>
