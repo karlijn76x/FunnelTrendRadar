@@ -333,8 +333,8 @@ export default function App() {
           onComparePress={() => {}}
           showTextLabels={showTextLabels}
           />
+          <ViewHistory/>
         </View>
-        <ViewHistory/>
       </View>
     </View>
   );
@@ -363,7 +363,8 @@ const styles = StyleSheet.create({
   controlButtons: {
     flexDirection: 'column',
     justifyContent: 'flex-end',
-    width: 175
+    width: 175,
+    height: 600,
   },
   circleLabelContainer: {
     alignItems: 'center',

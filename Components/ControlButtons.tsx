@@ -26,7 +26,7 @@ const ControlButtons = ({ onShowTextPress, onComparePress, showTextLabels }: Con
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 200,
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 8,
