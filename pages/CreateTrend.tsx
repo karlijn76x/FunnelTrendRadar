@@ -120,7 +120,9 @@ const CreateTrend = () => {
           <Text style={styles.title}>Create a Trend</Text>
 
           <View style={styles.section}>
-              <Text style={styles.label}>Title *</Text>
+              <Text style={styles.label}>
+                Title <Text style={styles.requiredAsterisk}>*</Text>
+              </Text>
               <TextInput
               style={[styles.input, errors.title && styles.inputError]}
               placeholder="Title"
@@ -137,7 +139,9 @@ const CreateTrend = () => {
           <View style={styles.section}>
               <View style={styles.rowContainer}>
                   <View style={styles.dropdownContainer}>
-                      <Text style={styles.label}>Trend Type *</Text>
+                      <Text style={styles.label}>
+                        Trend Type <Text style={styles.requiredAsterisk}>*</Text>
+                      </Text>
                       <Dropdown
                       style={[
                         styles.dropdown, 
@@ -164,7 +168,9 @@ const CreateTrend = () => {
                   </View>
                   
                   <View style={[styles.dropdownContainer, {marginLeft: 32}]}>
-                      <Text style={styles.label}>Impact *</Text>
+                      <Text style={styles.label}>
+                        Impact <Text style={styles.requiredAsterisk}>*</Text>
+                      </Text>
                       <Dropdown
                       style={[
                         styles.dropdown, 
@@ -194,7 +200,9 @@ const CreateTrend = () => {
           <View style={styles.section}>
               <View style={styles.rowContainer}>
                   <View style={styles.dropdownContainer}>
-                      <Text style={styles.label}>Category *</Text>
+                      <Text style={styles.label}>
+                        Category <Text style={styles.requiredAsterisk}>*</Text>
+                      </Text>
                       <Dropdown
                       style={[
                         styles.dropdown, 
@@ -222,7 +230,9 @@ const CreateTrend = () => {
                   </View>
                   
                   <View style={[styles.dropdownContainer, {marginLeft: 32}]}>
-                      <Text style={styles.label}>Timeframe *</Text>
+                      <Text style={styles.label}>
+                        Timeframe <Text style={styles.requiredAsterisk}>*</Text>
+                      </Text>
                       <Dropdown
                       style={[
                         styles.dropdown, 
@@ -250,7 +260,9 @@ const CreateTrend = () => {
           </View>
 
           <View style={styles.section}>
-              <Text style={styles.label}>Description *</Text>
+              <Text style={styles.label}>
+                Description <Text style={styles.requiredAsterisk}>*</Text>
+              </Text>
               <TextInput
               style={[styles.input, styles.multilineInput, errors.description && styles.inputError]}
               placeholder="Description"
@@ -335,6 +347,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#000',
     marginBottom: 8,
+  },
+  requiredAsterisk: {
+    color: '#FF0000',
   },
   input: {
     borderWidth: 2,
