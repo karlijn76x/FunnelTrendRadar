@@ -14,8 +14,8 @@ const MyStack = () => {
       screenOptions={{
         headerShown:false,
       }}>
-        <Stack.Screen name='MainPage' component={MainPage}/>
-        <Stack.Screen name='ManageTrends' component={ManageTrends}/>
+        <Stack.Screen name='Vanderlande Trends' component={MainPage}/>
+        <Stack.Screen name='Manage Trends' component={ManageTrends}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
