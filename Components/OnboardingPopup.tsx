@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, View, Text, Image, StyleSheet, TouchableOpacity, Switch } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useFonts } from 'expo-font';
+
 
 
 interface OnboardingPopupProps {
@@ -161,7 +161,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
                trackColor={{ false: '#ccc', true: '#FBA96B' }}
                thumbColor={dontShowAgain ? '#F57523' : '#f4f3f4'}
              />
-             <Text style={[styles.checkboxLabel, { fontFamily: 'Aptos' }]}>
+             <Text style={[styles.checkboxLabel, { fontFamily: 'Aptos_Bold' }]}>
              Don't show this again
              </Text>
             </View>
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontStyle: 'italic',
     textAlign: 'center',
-    fontFamily: 'Aptos',
+    fontFamily: 'Aptos_Bold',
   },
   sectionTitle: {
     marginTop: 16,
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 30,    
     fontSize: 14,
-    fontFamily: 'Aptos',
+    fontFamily: 'Aptos_Bold',
   },
   //Case 1 styling
   circlesWrapper: {
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#000000',
     fontWeight: '600',
-    fontFamily: 'Aptos',
+    fontFamily: 'Aptos_Bold',
   },
   //Case 2 styling
   checkboxContainer: {
