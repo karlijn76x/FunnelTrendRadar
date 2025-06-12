@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Pressable, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, Alert } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import NavBarEdit from '../components/NavBarEditTrends'
 
 const CreateTrend = () => {
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [selectedTrendType, setSelectedTrendType] = useState(null);
     const [selectedImpact, setSelectedImpact] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -13,6 +15,15 @@ const CreateTrend = () => {
     const [isCategoryFocus, setIsCategoryFocus] = useState(false);
     const [isTimeframeFocus, setIsTimeframeFocus] = useState(false);
     const [categoryOptions, setCategoryOptions] = useState<{ label: string; value: string }[]>([]);
+    
+    const [errors, setErrors] = useState({
+        title: false,
+        trendType: false,
+        impact: false,
+        category: false,
+        timeframe: false,
+        description: false
+    });
     
     const trendType = [
         { label: 'Social & Business Trends', value: '1'},
@@ -49,6 +60,7 @@ const CreateTrend = () => {
     
     useEffect(() => {
         setSelectedCategory(null);
+        setErrors(prev => ({ ...prev, category: false }));
         
         if (selectedTrendType === '1') {
             setCategoryOptions(socialKeyTrends);
@@ -58,6 +70,47 @@ const CreateTrend = () => {
             setCategoryOptions([]);
         }
     }, [selectedTrendType]);
+
+    const clearError = (field: keyof typeof errors) => {
+        if (errors[field]) {
+            setErrors(prev => ({ ...prev, [field]: false }));
+        }
+    };
+
+    const validateForm = () => {
+        const newErrors = {
+            title: !title.trim(),
+            trendType: !selectedTrendType,
+            impact: !selectedImpact,
+            category: !selectedCategory,
+            timeframe: !selectedTimeframe,
+            description: !description.trim()
+        };
+
+        setErrors(newErrors);
+        return !Object.values(newErrors).some(error => error);
+    };
+
+    const handleCreate = () => {
+        if (validateForm()) {}
+    };
+
+    const handleCancel = () => {
+        setTitle('');
+        setDescription('');
+        setSelectedTrendType(null);
+        setSelectedImpact(null);
+        setSelectedCategory(null);
+        setSelectedTimeframe(null);
+        setErrors({
+            title: false,
+            trendType: false,
+            impact: false,
+            category: false,
+            timeframe: false,
+            description: false
+        });
+    };
 
   return (
     <View style={styles.container}>
@@ -69,10 +122,16 @@ const CreateTrend = () => {
           <View style={styles.section}>
               <Text style={styles.label}>Title *</Text>
               <TextInput
-              style={styles.input}
+              style={[styles.input, errors.title && styles.inputError]}
               placeholder="Title"
               placeholderTextColor="#727272"
-              />
+              value={title}
+              onChangeText={(text) => {
+                setTitle(text);
+                clearError('title');
+            }}
+            />
+            {errors.title && <Text style={styles.errorText}>Title is Required</Text>}
           </View>
 
           <View style={styles.section}>
@@ -80,7 +139,11 @@ const CreateTrend = () => {
                   <View style={styles.dropdownContainer}>
                       <Text style={styles.label}>Trend Type *</Text>
                       <Dropdown
-                      style={[styles.dropdown, isTrendTypeFocus  && { borderColor: '#000', borderWidth: 2 }]}
+                      style={[
+                        styles.dropdown, 
+                        isTrendTypeFocus && { borderColor: '#000', borderWidth: 2 },
+                        errors.trendType && styles.dropdownError
+                    ]}
                       placeholderStyle={styles.placeholderStyle}
                       selectedTextStyle={styles.selectedTextStyle}
                       data={trendType}
@@ -94,14 +157,20 @@ const CreateTrend = () => {
                       onChange={item => {
                         setSelectedTrendType(item.value);
                         setTrendTypeFocus(false);
-                      }}
-                      />
+                        clearError('trendType');
+                    }}
+                    />
+                    {errors.trendType && <Text style={styles.errorText}>Trend Type is Required</Text>}
                   </View>
                   
                   <View style={[styles.dropdownContainer, {marginLeft: 32}]}>
                       <Text style={styles.label}>Impact *</Text>
                       <Dropdown
-                      style={[styles.dropdown, isImpactFocus && { borderColor: '#000', borderWidth: 2 }]}
+                      style={[
+                        styles.dropdown, 
+                        isImpactFocus && { borderColor: '#000', borderWidth: 2 },
+                        errors.impact && styles.dropdownError
+                    ]}
                       placeholderStyle={styles.placeholderStyle}
                       selectedTextStyle={styles.selectedTextStyle}
                       data={impact}
@@ -117,6 +186,7 @@ const CreateTrend = () => {
                         setIsImpactFocus(false);
                       }}
                       />
+                      {errors.impact && <Text style={styles.errorText}>Impact is Required</Text>}
                   </View>
               </View>
           </View>
@@ -126,7 +196,12 @@ const CreateTrend = () => {
                   <View style={styles.dropdownContainer}>
                       <Text style={styles.label}>Category *</Text>
                       <Dropdown
-                      style={[styles.dropdown, isCategoryFocus && { borderColor: '#000', borderWidth: 2 }, !selectedTrendType && { backgroundColor: '#F0F0F0' }]}
+                      style={[
+                        styles.dropdown, 
+                        isCategoryFocus && { borderColor: '#000', borderWidth: 2 }, 
+                        !selectedTrendType && { backgroundColor: '#F0F0F0' },
+                        errors.category && styles.dropdownError
+                    ]}
                       placeholderStyle={styles.placeholderStyle}
                       selectedTextStyle={styles.selectedTextStyle}
                       data={categoryOptions}
@@ -143,12 +218,17 @@ const CreateTrend = () => {
                       }}
                       disable={!selectedTrendType}
                       />
+                      {errors.category && <Text style={styles.errorText}>Category is Required</Text>}
                   </View>
                   
                   <View style={[styles.dropdownContainer, {marginLeft: 32}]}>
                       <Text style={styles.label}>Timeframe *</Text>
                       <Dropdown
-                      style={[styles.dropdown, isTimeframeFocus && { borderColor: '#000', borderWidth: 2 }]}
+                      style={[
+                        styles.dropdown, 
+                        isTimeframeFocus && { borderColor: '#000', borderWidth: 2 },
+                        errors.timeframe && styles.dropdownError
+                    ]}
                       placeholderStyle={styles.placeholderStyle}
                       selectedTextStyle={styles.selectedTextStyle}
                       data={timeframe}
@@ -164,6 +244,7 @@ const CreateTrend = () => {
                         setIsTimeframeFocus(false);
                       }}
                       />
+                      {errors.timeframe && <Text style={styles.errorText}>Timeframe is Required</Text>}
                   </View>
               </View>
           </View>
@@ -171,13 +252,19 @@ const CreateTrend = () => {
           <View style={styles.section}>
               <Text style={styles.label}>Description *</Text>
               <TextInput
-              style={[styles.input, styles.multilineInput]}
+              style={[styles.input, styles.multilineInput, errors.description && styles.inputError]}
               placeholder="Description"
               placeholderTextColor="#727272"
               multiline={true}
               numberOfLines={10}
               textAlignVertical="top"
-              />
+              value={description}
+              onChangeText={(text) => {
+                setDescription(text);
+                clearError('description');
+            }}
+            />
+            {errors.description && <Text style={styles.errorText}>Description is Required</Text>}
           </View>
 
           <View style={styles.buttonContainer}>
@@ -186,6 +273,7 @@ const CreateTrend = () => {
                 styles.cancelButton,
                 { opacity: pressed ? 0.8 : 1 }
               ]}
+              onPress={handleCancel}
             >
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </Pressable>
@@ -194,6 +282,7 @@ const CreateTrend = () => {
                 styles.createButton,
                 { opacity: pressed ? 0.8 : 1 }
               ]}
+              onPress={handleCreate}
             >
               <Text style={styles.createButtonText}>Create</Text>
             </Pressable>
@@ -259,6 +348,10 @@ const styles = StyleSheet.create({
     color: '#000',
     backgroundColor: '#FFEFDF',
   },
+  inputError: {
+    borderColor: '#FF4444',
+    backgroundColor: '#FFE6E6',
+  },
   multilineInput: {
     height: 130,
     textAlignVertical: 'top',
@@ -272,6 +365,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#FFEFDF',
   },
+  dropdownError: {
+    borderColor: '#FF4444',
+    backgroundColor: '#FFE6E6',
+  },
   placeholderStyle: {
     fontSize: 20,
     fontFamily: 'Aptos',
@@ -281,6 +378,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Aptos',
     color: '#000',
+  },
+  errorText: {
+    color: '#FF4444',
+    fontSize: 16,
+    fontFamily: 'Aptos',
+    marginTop: 4,
+    marginLeft: 4,
   },
   buttonContainer: {
     flexDirection: 'row',
