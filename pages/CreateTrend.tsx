@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, Alert } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, Image } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import NavBarEdit from '../components/NavBarEditTrends'
 
@@ -26,15 +26,15 @@ const CreateTrend = () => {
     });
     
     const trendType = [
-        { label: 'Social & Business Trends', value: '1'},
-        { label: 'Technology Trends', value: '2'}
+        { label: 'Social & Business Trends', value: '1', image: require('../assets/images/social_trends.png') },
+        { label: 'Technology Trends', value: '2', image: require('../assets/images/tech_trends.png') }
     ];
     
     const impact = [
-        { label: 'Low', value: '1' },
-        { label: 'Medium', value: '2' },
-        { label: 'High', value: '3' },
-        { label: 'Very High', value: '4' }
+        { label: 'Low', value: '1', image: require('../assets/images/low_impact.png') },
+        { label: 'Medium', value: '2', image: require('../assets/images/mid_impact.png') },
+        { label: 'High', value: '3', image: require('../assets/images/high_impact.png') },
+        { label: 'Very High', value: '4', image: require('../assets/images/very_high_impact.png') }
     ];
     
     const timeframe = [
@@ -131,7 +131,7 @@ const CreateTrend = () => {
               onChangeText={(text) => {
                 setTitle(text);
                 clearError('title');
-            }}
+              }}
             />
             {errors.title && <Text style={styles.errorText}>Title is Required</Text>}
           </View>
@@ -147,7 +147,7 @@ const CreateTrend = () => {
                         styles.dropdown, 
                         isTrendTypeFocus && { borderColor: '#000', borderWidth: 2 },
                         errors.trendType && styles.dropdownError
-                    ]}
+                      ]}
                       placeholderStyle={styles.placeholderStyle}
                       selectedTextStyle={styles.selectedTextStyle}
                       data={trendType}
@@ -162,7 +162,25 @@ const CreateTrend = () => {
                         setSelectedTrendType(item.value);
                         setTrendTypeFocus(false);
                         clearError('trendType');
-                    }}
+                      }}
+                      renderItem={(item) => (
+                      <View style={styles.item}>
+                        <Image source={item.image} style={styles.image} />
+                        <Text style={styles.textItem}>{item.label}</Text>
+                      </View>
+                      )}
+                      renderLeftIcon={() => {
+                        if (selectedTrendType) {
+                            const selectedItem = trendType.find(item => item.value === selectedTrendType);
+                            return (
+                            <Image 
+                            source={selectedItem?.image} 
+                            style={styles.selectedImage}
+                            />
+                            );
+                        }
+                        return null;
+                      }}
                     />
                     {errors.trendType && <Text style={styles.errorText}>Trend Type is Required</Text>}
                   </View>
@@ -176,7 +194,7 @@ const CreateTrend = () => {
                         styles.dropdown, 
                         isImpactFocus && { borderColor: '#000', borderWidth: 2 },
                         errors.impact && styles.dropdownError
-                    ]}
+                      ]}
                       placeholderStyle={styles.placeholderStyle}
                       selectedTextStyle={styles.selectedTextStyle}
                       data={impact}
@@ -190,7 +208,26 @@ const CreateTrend = () => {
                       onChange={item => {
                         setSelectedImpact(item.value);
                         setIsImpactFocus(false);
+                        clearError('impact');
                       }}
+                      renderItem={(item) => (
+                      <View style={styles.item}>
+                        <Image source={item.image} style={styles.image} />
+                        <Text style={styles.textItem}>{item.label}</Text>
+                      </View>
+                      )}
+                      renderLeftIcon={() => {
+                        if (selectedImpact) {
+                            const selectedItem = impact.find(item => item.value === selectedImpact);
+                            return (
+                            <Image 
+                            source={selectedItem?.image} 
+                            style={styles.selectedImage}
+                            />
+                            );
+                        }
+                        return null;
+                    }}
                       />
                       {errors.impact && <Text style={styles.errorText}>Impact is Required</Text>}
                   </View>
@@ -209,7 +246,7 @@ const CreateTrend = () => {
                         isCategoryFocus && { borderColor: '#000', borderWidth: 2 }, 
                         !selectedTrendType && { backgroundColor: '#F0F0F0' },
                         errors.category && styles.dropdownError
-                    ]}
+                      ]}
                       placeholderStyle={styles.placeholderStyle}
                       selectedTextStyle={styles.selectedTextStyle}
                       data={categoryOptions}
@@ -221,8 +258,9 @@ const CreateTrend = () => {
                       onFocus={() => selectedTrendType && setIsCategoryFocus(true)}
                       onBlur={() => setIsCategoryFocus(false)}
                       onChange={item => {
-                          setSelectedCategory(item.value);
-                          setIsCategoryFocus(false);
+                        setSelectedCategory(item.value);
+                        setIsCategoryFocus(false);
+                        clearError('category');
                       }}
                       disable={!selectedTrendType}
                       />
@@ -238,7 +276,7 @@ const CreateTrend = () => {
                         styles.dropdown, 
                         isTimeframeFocus && { borderColor: '#000', borderWidth: 2 },
                         errors.timeframe && styles.dropdownError
-                    ]}
+                      ]}
                       placeholderStyle={styles.placeholderStyle}
                       selectedTextStyle={styles.selectedTextStyle}
                       data={timeframe}
@@ -252,6 +290,7 @@ const CreateTrend = () => {
                       onChange={item => {
                         setSelectedTimeframe(item.value);
                         setIsTimeframeFocus(false);
+                        clearError('timeframe');
                       }}
                       />
                       {errors.timeframe && <Text style={styles.errorText}>Timeframe is Required</Text>}
@@ -274,7 +313,7 @@ const CreateTrend = () => {
               onChangeText={(text) => {
                 setDescription(text);
                 clearError('description');
-            }}
+              }}
             />
             {errors.description && <Text style={styles.errorText}>Description is Required</Text>}
           </View>
@@ -416,7 +455,7 @@ const styles = StyleSheet.create({
     minWidth: 120,
     alignItems: 'center',
     marginRight: 16,
-},
+  },
   cancelButtonText: {
     color: '#000',
     fontSize: 24,
@@ -433,11 +472,33 @@ const styles = StyleSheet.create({
     minWidth: 120,
     alignItems: 'center',
     marginLeft: 16,
-},
+  },
   createButtonText: {
     color: '#000',
     fontSize: 24,
     fontFamily: 'Aptos',
     fontWeight: '600',
+  },
+  item: {
+    flexDirection: 'row',
+    padding: 17,
+    alignItems: 'center',
+  },
+  image: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+    resizeMode: 'contain',
+  },
+  selectedImage: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+    marginLeft: 5,
+    resizeMode: 'contain',
+  },
+  textItem: {
+    flex: 1,
+    fontSize: 16,
   },
 })
