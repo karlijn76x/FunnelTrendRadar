@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import NavBarEdit from '../components/NavBarEditTrends'
 
@@ -178,6 +178,25 @@ const CreateTrend = () => {
             textAlignVertical="top"
             />
         </View>
+
+        <View style={styles.buttonContainer}>
+          <Pressable 
+            style={({ pressed }) => [
+              styles.cancelButton,
+              { opacity: pressed ? 0.8 : 1 }
+            ]}
+          >
+            <Text style={styles.cancelButtonText}>Cancel</Text>
+          </Pressable>
+          <Pressable 
+            style={({ pressed }) => [
+              styles.createButton,
+              { opacity: pressed ? 0.8 : 1 }
+            ]}
+          >
+            <Text style={styles.createButtonText}>Create</Text>
+          </Pressable>
+        </View>
       </View>
     </View>
   )
@@ -254,5 +273,44 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Aptos',
     color: '#000',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 16,
+  },
+  cancelButton: {
+    backgroundColor: '#9ECEE3',
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    borderColor: '#000',
+    borderWidth: 1,
+    borderRadius: 10,
+    minWidth: 120,
+    alignItems: 'center',
+    marginRight: 16,
+},
+  cancelButtonText: {
+    color: '#000',
+    fontSize: 24,
+    fontFamily: 'Aptos',
+    fontWeight: '600',
+  },
+  createButton: {
+    backgroundColor: '#FFB469',
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    borderColor: '#000',
+    borderWidth: 1,
+    borderRadius: 10,
+    minWidth: 120,
+    alignItems: 'center',
+    marginLeft: 16,
+},
+  createButtonText: {
+    color: '#000',
+    fontSize: 24,
+    fontFamily: 'Aptos',
+    fontWeight: '600',
   },
 })
