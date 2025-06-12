@@ -32,6 +32,35 @@ export default function App() {
   const [dontShowAgain, setDontShowAgain] = useState(false);
   const [onboardingChecked, setOnboardingChecked] = useState(false);
   const [showTextLabels, setShowTextLabels] = useState(false);
+  const [compareMode, setCompareMode] = useState(false);
+  const [selectedCircles, setSelectedCircles] = useState<string[]>([]);
+  
+
+  const handleCirclePress = (circleName: string) => {
+    if (compareMode) {
+      setSelectedCircles((prev) => {
+        if (prev.includes(circleName)) {
+          console.log(`Deselecting circle: ${circleName}`);
+          return prev.filter((name) => name !== circleName);
+        } else if (prev.length < 2) {
+          console.log(`Selecting circle: ${circleName}`);
+          return [...prev, circleName];
+        }
+        console.log(`Cannot select more than two circles`);
+        return prev;
+      });
+    } else {
+      console.log(`Opening detail view for: ${circleName}`);
+      setVisible(true);
+    }
+  };
+ 
+
+  const handleComparePress = () => {
+    setCompareMode(!compareMode);
+    setSelectedCircles([]); // Reset selected circles when toggling compare mode
+  };
+  
 
 
   useEffect(() => {
@@ -178,7 +207,8 @@ export default function App() {
                 <View style={[styles.circleLabelContainer, { position: 'absolute', top: 5, left: 100, zIndex: 1, opacity: getTechOpacity('Autonomous Systems') }]}>
                   <TechTrendCircle
                     impact="high"
-                    onPress={() => setVisible(true)}
+                    onPress={() => handleCirclePress('Outdoor Autonomous Systems')}
+                    selected={selectedCircles.includes('Outdoor Autonomous Systems')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
@@ -216,7 +246,8 @@ export default function App() {
                 <View style={[styles.circleLabelContainer, { position: 'absolute', top: -5, left: 400, zIndex: 10, opacity: getTechOpacity('Artificial Intelligence') }]}>
                   <TechTrendCircle
                     impact="medium"
-                    onPress={() => setVisible(true)}
+                    onPress={() => handleCirclePress('Generative AI')}
+                    selected={selectedCircles.includes('Generative AI')} 
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
@@ -254,7 +285,8 @@ export default function App() {
                 <View style={[styles.circleLabelContainer, { position: 'absolute', top: 10, left: 100, zIndex: 10, opacity: getTechOpacity('Robotics') }]}>
                   <TechTrendCircle
                     impact="medium"
-                    onPress={() => setVisible(true)}
+                    onPress={() => handleCirclePress('Humanoids')}
+                    selected={selectedCircles.includes('Humanoids')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
@@ -284,7 +316,8 @@ export default function App() {
                 <View style={[styles.circleLabelContainer, { position: 'absolute', top: 50, left: 350, zIndex: 10, opacity: getTechOpacity('Digital & Cloud') }]}>
                   <TechTrendCircle
                     impact="low"
-                    onPress={() => setVisible(true)}
+                    onPress={() => handleCirclePress('Cybersecurity')}
+                    selected={selectedCircles.includes('Cybersecurity')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
@@ -314,7 +347,8 @@ export default function App() {
                 <View style={[styles.circleLabelContainer, { position: 'absolute', top: 5, left: 430, zIndex: 10, opacity: getTechOpacity('Other') }]}>
                   <TechTrendCircle
                     impact="veryHigh"
-                    onPress={() => setVisible(true)}
+                    onPress={() => handleCirclePress('3D Printing')}
+                    selected={selectedCircles.includes('3D Printing')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
@@ -326,14 +360,38 @@ export default function App() {
                 </View>
               )}
             </View>
-          <TrendDetail visible={visible} onClose={() => setVisible(false)} />
+          
+            {compareMode && selectedCircles.length === 2 ? (
+            <View style={styles.compareTrendDetailsContainer}>
+            {selectedCircles.map((circleName, index) => {
+            console.log(`Rendering TrendDetail for: ${circleName}`);
+          return (
+           <TrendDetail
+            key={index}
+            visible={true}
+            onClose={() => {
+            setSelectedCircles((prev) => prev.filter((name) => name !== circleName));
+           }}
+           circleName={circleName}
+           useModal={false}
+      
+          />
+          );
+          })}
+
+  </View>
+  ) : (
+  <TrendDetail visible={visible} onClose={() => setVisible(false)} circleName="Cybersecurity" />
+)}
         </View>
         <View style={styles.controlButtons}>
-          <ControlButtons
-          onShowTextPress={() => setShowTextLabels(!showTextLabels)}
-          onComparePress={() => {}}
-          showTextLabels={showTextLabels}
-          />
+        <ControlButtons
+         onShowTextPress={() => setShowTextLabels(!showTextLabels)}
+         onComparePress={handleComparePress}
+         showTextLabels={showTextLabels}
+         compareMode={compareMode} 
+       />
+
         </View>
       </View>
     </View>
@@ -368,7 +426,10 @@ const styles = StyleSheet.create({
   circleLabelContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'absolute',
+    top: -10, 
   },
+
   labelContainer: {
     position: 'absolute',
     bottom: -10,
@@ -382,5 +443,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Aptos_Bold',
     fontSize: 12,
     color: 'black',
+  },
+  compareTrendDetailsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    flex: 1,
+    marginTop: -500, 
   },
 });

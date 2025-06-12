@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Pressable, Text, StyleProp, ViewStyle } from 'react-native';
+import { View, StyleSheet, Pressable, StyleProp, ViewStyle } from 'react-native';
 
 type Impact = 'low' | 'medium' | 'high' | 'veryHigh'; 
 
@@ -8,6 +8,7 @@ type Props = {
   onPress: () => void;
   style?: StyleProp<ViewStyle>;
   opacity?: number;
+  selected?: boolean; 
 };
 
 const getSize = (impact: Impact): number => {
@@ -25,7 +26,7 @@ const getSize = (impact: Impact): number => {
   }
 };
 
-const TechTrendCircle: React.FC<Props> = ({ impact, onPress, style, opacity = 1 }) => {
+const TechTrendCircle: React.FC<Props> = ({ impact, onPress, style, opacity = 1, selected = false }) => {
   const size = getSize(impact);
 
   return (
@@ -38,6 +39,7 @@ const TechTrendCircle: React.FC<Props> = ({ impact, onPress, style, opacity = 1 
             height: size,
             borderRadius: size / 2,
           },
+          selected ? styles.selectedCircle : styles.defaultCircle, // Apply selected or default style
         ]}
       >
       </View>
@@ -47,17 +49,17 @@ const TechTrendCircle: React.FC<Props> = ({ impact, onPress, style, opacity = 1 
 
 const styles = StyleSheet.create({
   circle: {
-    backgroundColor: '#5A136D',
     borderWidth: 1,
     borderColor: '#000',
     margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  label: {
-    color: '#fff',
-    fontSize: 10,
-    fontWeight: 'bold',
+  defaultCircle: {
+    backgroundColor: '#5A136D', // Default color
+  },
+  selectedCircle: {
+    backgroundColor: '#D8BFD8', // Light purple for selected state
   },
 });
 
