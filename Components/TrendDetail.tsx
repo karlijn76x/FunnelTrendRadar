@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -12,14 +12,57 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
 
+interface Trend {
+  title: string;
+  category: string;
+  timeframe: string;
+  impact: number;
+  views: number;
+  description: string;
+  image: any;
+}
+
 interface PopupProps {
   visible: boolean;
   onClose: () => void;
+  initialTrendIndex?: number;
 }
 
-const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
+const trends: Trend[] = [
+  {
+    title: "Circular Economy",
+    category: "Technology",
+    timeframe: "3-5 years",
+    impact: 4,
+    views: 91,
+    description: "Circularity aims to create a closed-loop system where resources are reused, recycled, and repurposed, minimizing waste and environmental impact.",
+    image: require("../assets/images/Circular-economy.jpg")
+  },
+  {
+    title: "Sustainable Energy",
+    category: "Technology",
+    timeframe: "5-10 years",
+    impact: 4,
+    views: 85,
+    description: "The transition to renewable energy sources accelerates as solar, wind, and other sustainable technologies become more efficient and cost-effective.",
+    image: require("../assets/images/Circular-economy.jpg") 
+  }
+];
+
+const TrendDetail: React.FC<PopupProps> = ({ visible, onClose, initialTrendIndex = 0 }) => {
+  const [currentIndex, setCurrentIndex] = useState(initialTrendIndex);
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
+
+  const currentTrend = trends[currentIndex];
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % trends.length);
+  };
+
+  const handlePrevious = () => {
+    setCurrentIndex((prev) => (prev - 1 + trends.length) % trends.length);
+  };
 
   useEffect(() => {
     if (visible) {
@@ -77,51 +120,55 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose }) => {
               <MaterialIcons name="close" size={24} color="white" />
             </TouchableOpacity>
 
+            <TouchableOpacity style={styles.navButton} onPress={handlePrevious}>
+              <MaterialIcons name="arrow-back-ios" size={30} color="white" />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.navButton, styles.rightNavButton]} onPress={handleNext}>
+              <MaterialIcons name="arrow-forward-ios" size={30} color="white" />
+            </TouchableOpacity>
+
             <View style={styles.header}>
-              <Text style={styles.title}>Circular Economy</Text>
+              <Text style={styles.title}>{currentTrend.title}</Text>
             </View>
 
-              <View style={styles.metaRow}>
-                <View style={styles.metaItem}>
-                  <View style={[styles.iconRectangle, { backgroundColor: "#f57c00" }]} />
-                  <Text style={styles.metaText}>Social</Text>
-                </View>
-                <View style={styles.metaItem}>
-                  <MaterialIcons name="schedule" size={16} color="#000" />
-                  <Text style={styles.metaText}>3-5 years</Text>
-                </View>
+            <View style={styles.metaRow}>
+              <View style={styles.metaItem}>
+                <View style={[styles.iconRectangle, { backgroundColor: "#5A136D" }]} />
+                <Text style={styles.metaText}>{currentTrend.category}</Text>
               </View>
+              <View style={styles.metaItem}>
+                <MaterialIcons name="schedule" size={16} color="#000" />
+                <Text style={styles.metaText}>{currentTrend.timeframe}</Text>
+              </View>
+            </View>
 
-              <View style={styles.metaRow}>
-                <View style={styles.metaItem}>
-                  <View style={[styles.impactDots, { flexDirection: 'row', alignItems: 'center', gap: 8 }]}>
-                    <View style={{ flexDirection: 'column', gap: 4 }}>
-                      <View style={{ flexDirection: 'row', gap: 4 }}>
+            <View style={styles.metaRow}>
+              <View style={styles.metaItem}>
+                <View style={[styles.impactDots, { flexDirection: 'row', alignItems: 'center', gap: 8 }]}>
+                  <View style={{ flexDirection: 'column', gap: 4 }}>
+                    {[...Array(Math.ceil(currentTrend.impact / 2))].map((_, i) => (
+                      <View key={i} style={{ flexDirection: 'row', gap: 4 }}>
                         <View style={styles.dot} />
                         <View style={styles.dot} />
                       </View>
-                      <View style={{ flexDirection: 'row', gap: 4 }}>
-                        <View style={styles.dot} />
-                        <View style={styles.dot} />
-                      </View>
-                    </View>
-                    <Text style={styles.metaText}>Very High Impact</Text>
+                    ))}
                   </View>
-                </View>
-                <View style={styles.metaItem}>
-                  <MaterialIcons name="visibility" size={16} color="#000" />
-                  <Text style={styles.metaText}>91</Text>
+                  <Text style={styles.metaText}>Very High Impact</Text>
                 </View>
               </View>
+              <View style={styles.metaItem}>
+                <MaterialIcons name="visibility" size={16} color="#000" />
+                <Text style={styles.metaText}>{currentTrend.views}</Text>
+              </View>
+            </View>
 
             <Text style={styles.description}>
-              Circularity aims to create a closed-loop system where resources are
-              reused, recycled, and repurposed, minimizing waste and environmental
-              impact.
+              {currentTrend.description}
             </Text>
 
             <Image
-              source={require("../assets/images/Circular-economy.jpg")}
+              source={currentTrend.image}
               style={styles.image}
               resizeMode="cover"
             />
@@ -227,5 +274,19 @@ const styles = StyleSheet.create({
     width: 200,
     borderRadius: 10,
     borderWidth: 2,
+  },
+  navButton: {
+    position: "absolute",
+    left: 20,
+    top: '50%',
+    transform: [{ translateY: -20 }],
+    backgroundColor: "#5A136D",
+    borderRadius: 25,
+    padding: 10,
+    zIndex: 1,
+  },
+  rightNavButton: {
+    left: 'auto',
+    right: 20,
   },
 });
