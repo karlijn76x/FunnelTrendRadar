@@ -9,6 +9,7 @@ import Legend from '../components/Legend';
 import OnboardingPopup from '../components/OnboardingPopup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ControlButtons from '../components/ControlButtons';
+import FallingAnimation from '../components/FallingAnimation';
 import ViewHistory from '../components/ViewHistory';
 
 
@@ -31,6 +32,7 @@ export default function MainPage() {
   const [dontShowAgain, setDontShowAgain] = useState(false);
   const [onboardingChecked, setOnboardingChecked] = useState(false);
   const [showTextLabels, setShowTextLabels] = useState(false);
+  const [animationFilterKey, setAnimationFilterKey] = useState(0);
 
 
   useEffect(() => {
@@ -69,9 +71,10 @@ export default function MainPage() {
     // Run onboarding check on component mount
     checkOnboardingStatus();
   }, []);
-  
-  
-  
+
+  useEffect(() => {
+    setAnimationFilterKey(prev => prev + 1);
+  }, [selectedTrendType, selectedImpact, selectedTimeframe]);
 
   const handleDontShowAgainChange = async (value: boolean) => {
     setDontShowAgain(value);
@@ -136,6 +139,10 @@ export default function MainPage() {
     matchesSocialKeyTrend(trendName) ? 1 : 0.15;
   const getTechOpacity = (areaName: string) =>
     matchesTechFocusArea(areaName) ? 1 : 0.15;
+  const shouldShowItem = (timeframe: string, trendType: 'social' | 'tech', impact: string) => {
+    const typeMatch = trendType === 'social' ? shouldShowSocial() : shouldShowTech();
+    return typeMatch && matchesTimeframe(timeframe) && matchesImpact(impact);
+  };
 
   if (!loaded) return null;
 
@@ -171,8 +178,15 @@ export default function MainPage() {
                 style={{ width: 900, height: 105, resizeMode: 'cover' }}
                 source={require('../assets/images/funnel_top.png')}
               />
-              {matchesTimeframe('5-10 years') && shouldShowTech() && matchesImpact('high') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 5, left: 100, zIndex: 1, opacity: getTechOpacity('Autonomous Systems') }]}>
+              <FallingAnimation 
+                delay={0} 
+                targetX={100} 
+                targetY={5} 
+                fallDirection="left"
+                shouldShow={shouldShowItem('5-10 years', 'tech', 'high')}
+                filterKey={`${animationFilterKey}`}
+              >
+                <View style={[styles.circleLabelContainer, { zIndex: 1, opacity: getTechOpacity('Autonomous Systems') }]}>
                   <TechTrendCircle
                     impact="high"
                     onPress={() => setVisible(true)}
@@ -185,9 +199,16 @@ export default function MainPage() {
                     </View>
                   )}
                 </View>
-              )}
-              {matchesTimeframe('5-10 years') && shouldShowSocial() && matchesImpact('low') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 30, left: 250, zIndex: 1, opacity: getSocialOpacity('Sustainability') }]}>
+              </FallingAnimation>
+              <FallingAnimation 
+                delay={0} 
+                targetX={250} 
+                targetY={30} 
+                fallDirection="left"
+                shouldShow={shouldShowItem('5-10 years', 'social', 'low')}
+                filterKey={`${animationFilterKey}`}
+              >
+                <View style={[styles.circleLabelContainer, { zIndex: 1, opacity: getSocialOpacity('Sustainability') }]}>
                   <SocialTrendCircle
                     impact="low"
                     onPress={() => setVisible(true)}
@@ -200,7 +221,7 @@ export default function MainPage() {
                     </View>
                   )}
                 </View>
-              )}
+              </FallingAnimation>
             </View>
 
           {/* 3-5 years section */}
@@ -209,8 +230,15 @@ export default function MainPage() {
                 style={{ width: 800, height: 100, resizeMode: 'cover' }}
                 source={require('../assets/images/funnel_middle.png')}
               />
-              {matchesTimeframe('3-5 years') && shouldShowTech() && matchesImpact('medium') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: -5, left: 400, zIndex: 10, opacity: getTechOpacity('Artificial Intelligence') }]}>
+              <FallingAnimation 
+                delay={0} 
+                targetX={400} 
+                targetY={-5} 
+                fallDirection="right"
+                shouldShow={shouldShowItem('3-5 years', 'tech', 'medium')}
+                filterKey={`${animationFilterKey}`}
+              >
+                <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Artificial Intelligence') }]}>
                   <TechTrendCircle
                     impact="medium"
                     onPress={() => setVisible(true)}
@@ -223,9 +251,16 @@ export default function MainPage() {
                     </View>
                   )}
                 </View>
-              )}
-              {matchesTimeframe('3-5 years') && shouldShowSocial() && matchesImpact('very high') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: -5, left: 600, zIndex: 11, opacity: getSocialOpacity('Digitalization') }]}>
+              </FallingAnimation>
+              <FallingAnimation 
+                delay={0} 
+                targetX={600} 
+                targetY={-5} 
+                fallDirection="right"
+                shouldShow={shouldShowItem('3-5 years', 'social', 'very high')}
+                filterKey={`${animationFilterKey}`}
+              >
+                <View style={[styles.circleLabelContainer, { zIndex: 11, opacity: getSocialOpacity('Digitalization') }]}>
                   <SocialTrendCircle
                     impact="veryHigh"
                     onPress={() => setVisible(true)}
@@ -238,7 +273,7 @@ export default function MainPage() {
                     </View>
                   )}
                 </View>
-              )}
+              </FallingAnimation>
             </View>
 
           {/* 0-3 years section */}
@@ -247,8 +282,15 @@ export default function MainPage() {
                 style={{ width: 700, height: 250, resizeMode: 'cover', zIndex: 0 }}
                 source={require('../assets/images/funnel_bottom.png')}
               />
-              {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('medium') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 10, left: 100, zIndex: 10, opacity: getTechOpacity('Robotics') }]}>
+              <FallingAnimation 
+                delay={0} 
+                targetX={100} 
+                targetY={10} 
+                fallDirection="left"
+                shouldShow={shouldShowItem('0-3 years', 'tech', 'medium')}
+                filterKey={`${animationFilterKey}`}
+              >
+                <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Robotics') }]}>
                   <TechTrendCircle
                     impact="medium"
                     onPress={() => setVisible(true)}
@@ -261,9 +303,16 @@ export default function MainPage() {
                     </View>
                   )}
                 </View>
-              )}
-              {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('high') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 90, left: 200, zIndex: 10, opacity: getSocialOpacity('As-A-Service') }]}>
+              </FallingAnimation>
+              <FallingAnimation 
+                delay={0} 
+                targetX={200} 
+                targetY={90} 
+                fallDirection="left"
+                shouldShow={shouldShowItem('0-3 years', 'social', 'high')}
+                filterKey={`${animationFilterKey}`}
+              >
+                <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getSocialOpacity('As-A-Service') }]}>
                   <SocialTrendCircle
                     impact="high"
                     onPress={() => setVisible(true)}
@@ -276,9 +325,16 @@ export default function MainPage() {
                     </View>
                   )}
                 </View>
-              )}
-              {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('low') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 50, left: 350, zIndex: 10, opacity: getTechOpacity('Digital & Cloud') }]}>
+              </FallingAnimation>
+              <FallingAnimation 
+                delay={0} 
+                targetX={350} 
+                targetY={50} 
+                fallDirection="right"
+                shouldShow={shouldShowItem('0-3 years', 'tech', 'low')}
+                filterKey={`${animationFilterKey}`}
+              >
+                <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Digital & Cloud') }]}>
                   <TechTrendCircle
                     impact="low"
                     onPress={() => setVisible(true)}
@@ -291,9 +347,16 @@ export default function MainPage() {
                     </View>
                   )}
                 </View>
-              )}
-              {matchesTimeframe('0-3 years') && shouldShowSocial() && matchesImpact('medium') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 150, left: 400, zIndex: 10, opacity: getSocialOpacity('Labor Shortage and Regulations') }]}>
+              </FallingAnimation>
+              <FallingAnimation 
+                delay={0} 
+                targetX={400} 
+                targetY={150} 
+                fallDirection="right"
+                shouldShow={shouldShowItem('0-3 years', 'social', 'medium')}
+                filterKey={`${animationFilterKey}`}
+              >
+                <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getSocialOpacity('Labor Shortage and Regulations') }]}>
                   <SocialTrendCircle
                     impact="medium"
                     onPress={() => setVisible(true)}
@@ -306,9 +369,16 @@ export default function MainPage() {
                     </View>
                   )}
                 </View>
-              )}
-              {matchesTimeframe('0-3 years') && shouldShowTech() && matchesImpact('very high') && (
-                <View style={[styles.circleLabelContainer, { position: 'absolute', top: 5, left: 430, zIndex: 10, opacity: getTechOpacity('Other') }]}>
+              </FallingAnimation>
+              <FallingAnimation 
+                delay={0} 
+                targetX={430} 
+                targetY={5} 
+                fallDirection="right"
+                shouldShow={shouldShowItem('0-3 years', 'tech', 'very high')}
+                filterKey={`${animationFilterKey}`}
+              >
+                <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Other') }]}>
                   <TechTrendCircle
                     impact="veryHigh"
                     onPress={() => setVisible(true)}
@@ -321,7 +391,7 @@ export default function MainPage() {
                     </View>
                   )}
                 </View>
-              )}
+              </FallingAnimation>
             </View>
           <TrendDetail visible={visible} onClose={() => setVisible(false)} />
         </View>
