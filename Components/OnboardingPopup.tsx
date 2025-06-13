@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, View, Text, Image, StyleSheet, TouchableOpacity, Switch } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
+
 interface OnboardingPopupProps {
   visible: boolean;
   onClose: () => void;
@@ -55,7 +56,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
       break;
     case 2:
       title = 'What you see';
-      description = 'Each bubble is a trend.\nThe color and size show the impact.\nThe lower in the funnel, the closer in time.';
+      description = 'Each bubble’s size reflects its impact, \nwhile its color reveals the type of trend. \nThe lower in the funnel, the closer it is in time.';
       circles = (
         <View style={styles.circlesWrapper}>
           <View style={styles.column}>
@@ -143,13 +144,30 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
               <Text style={styles.buttonText}>{buttonText}</Text>
             </TouchableOpacity>
 
+            {/* Skip button alleen bij step 1 */}
+            {step === 1 && (
+             <TouchableOpacity
+               style={[styles.button, { backgroundColor: '#FBA96B', marginTop: 10 }]}
+               onPress={onClose}
+              >
+                <Text style={[styles.buttonText, { color: 'black' }]}>Skip Info</Text>
+             </TouchableOpacity>
+           )}
+              {/* Don't show again switch vanaf step 2 */}
+            {step >= 2 && (
             <View style={styles.checkboxContainer}>
-              <Switch
-                value={dontShowAgain}
-                onValueChange={setDontShowAgain}
-              />
-              <Text style={styles.checkboxLabel}>Don't show this again</Text>
+             <Switch
+               value={dontShowAgain}
+               onValueChange={setDontShowAgain}
+               trackColor={{ false: '#ccc', true: '#FBA96B' }}
+               thumbColor={dontShowAgain ? '#F57523' : '#f4f3f4'}
+             />
+             <Text style={[styles.checkboxLabel, { fontFamily: 'Aptos_Bold' }]}>
+             Don't show this again
+             </Text>
             </View>
+            )}
+
           </View>
         </View>
       </View>
@@ -160,7 +178,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
 export default OnboardingPopup;
 
 const styles = StyleSheet.create({
-  // General
+  // General popup styling
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
@@ -180,26 +198,31 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'Aptos_Bold',
   },
   title: {
     fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'Aptos_Bold',
   },
   subtitle: {
     marginTop: 8,
     fontStyle: 'italic',
     textAlign: 'center',
+    fontFamily: 'Aptos_Bold',
   },
   sectionTitle: {
     marginTop: 16,
     fontWeight: '600',
     fontSize: 20,
+    fontFamily: 'Aptos_Bold',
   },
   description: {
     textAlign: 'center',
     marginTop: 30,    
     fontSize: 14,
+    fontFamily: 'Aptos_Bold',
   },
   //Case 1 styling
   circlesWrapper: {
@@ -234,6 +257,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#000000',
     fontWeight: '600',
+    fontFamily: 'Aptos_Bold',
   },
   //Case 2 styling
   checkboxContainer: {

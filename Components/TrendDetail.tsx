@@ -10,7 +10,7 @@ import {
   StatusBar,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 
 interface Trend {
   title: string;
@@ -25,6 +25,8 @@ interface Trend {
 interface PopupProps {
   visible: boolean;
   onClose: () => void;
+  circleName: string;
+  useModal?: boolean;
   initialTrendIndex?: number;
 }
 
@@ -49,7 +51,15 @@ const trends: Trend[] = [
   }
 ];
 
-const TrendDetail: React.FC<PopupProps> = ({ visible, onClose, initialTrendIndex = 0 }) => {
+const TrendDetail: React.FC<PopupProps> = ({
+  visible,
+  onClose,
+  circleName,
+  initialTrendIndex = 0,
+  useModal = true, // Default to Modal behavior
+  
+
+}) => {
   const [currentIndex, setCurrentIndex] = useState(initialTrendIndex);
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
@@ -98,17 +108,17 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose, initialTrendIndex
     }
   }, [visible]);
 
-  return (
-    <Modal visible={visible} transparent animationType="none">
-      <Animated.View style={[styles.overlay, { opacity: opacityAnim }]}>
-        <Animated.View
-          style={[
-            styles.container,
-            {
-              transform: [{ scale: scaleAnim }],
-            },
-          ]}
-        >
+
+  const content = (
+    <Animated.View
+      style={[
+        styles.container,
+        {
+          transform: [{ scale: scaleAnim }],
+        },
+      ]}
+    >
+  
           <LinearGradient
             colors={['#FFFFFF', '#000000', '#5A136D']}
             locations={[0.37, 0.37, 0.374]}
@@ -129,7 +139,7 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose, initialTrendIndex
             </TouchableOpacity>
 
             <View style={styles.header}>
-              <Text style={styles.title}>{currentTrend.title}</Text>
+            <Text style={styles.title}>{circleName}</Text>
             </View>
 
             <View style={styles.metaRow}>
@@ -174,9 +184,19 @@ const TrendDetail: React.FC<PopupProps> = ({ visible, onClose, initialTrendIndex
             />
           </LinearGradient>
         </Animated.View>
-      </Animated.View>
-    </Modal>
   );
+  if (useModal) {
+    return (
+      <Modal visible={visible} transparent animationType="none">
+        <Animated.View style={[styles.overlay, { opacity: opacityAnim }]}>
+          {content}
+        </Animated.View>
+      </Modal>
+    );
+  }
+
+  // Inline rendering for compare mode
+  return <View style={styles.inlineContainer}>{content}</View>;
 };
 
 export default TrendDetail;
@@ -192,13 +212,16 @@ const styles = StyleSheet.create({
     width: 650,
     height: 650,
     borderRadius: 350,
-    overflow: 'hidden',
+    overflow: "hidden",
     borderWidth: 2,
-    borderColor: 'black',
+    borderColor: "black",
+  },
+  inlineContainer: {
+    margin: 10, 
   },
   gradient: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
