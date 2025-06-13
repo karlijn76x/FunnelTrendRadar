@@ -5,12 +5,16 @@ interface ControlButtonsProps {
   onComparePress: () => void;
   onShowTextPress: () => void;
   showTextLabels: boolean;
+  compareMode: boolean;
 }
 
-const ControlButtons = ({ onShowTextPress, onComparePress, showTextLabels }: ControlButtonsProps) => {
+const ControlButtons = ({ onShowTextPress, onComparePress, showTextLabels, compareMode }: ControlButtonsProps) => {
   return (
     <View style={styles.container}>
-      <Pressable style={styles.button} onPress={onComparePress}>
+      <Pressable
+       style={[styles.button, compareMode && styles.activeCompareButton]}
+       onPress={onComparePress}
+     >
         <Text style={styles.buttonText}>Compare</Text>
       </Pressable>
       
@@ -44,6 +48,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#000000',
     minHeight: 50
+  },
+  activeCompareButton: {
+    borderColor: 'purple',
+    borderWidth: 3,
   },
   buttonText: {
     fontSize: 18,

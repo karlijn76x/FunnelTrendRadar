@@ -33,29 +33,61 @@ export default function MainPage() {
   const [onboardingChecked, setOnboardingChecked] = useState(false);
   const [showTextLabels, setShowTextLabels] = useState(false);
   const [animationFilterKey, setAnimationFilterKey] = useState(0);
+  const [compareMode, setCompareMode] = useState(false);
+  const [selectedCircles, setSelectedCircles] = useState<string[]>([]);
+  
+
+  const handleCirclePress = (circleName: string) => {
+    if (compareMode) {
+      setSelectedCircles((prev) => {
+        if (prev.includes(circleName)) {
+          console.log(`Deselecting circle: ${circleName}`);
+          return prev.filter((name) => name !== circleName);
+        } else if (prev.length < 2) {
+          console.log(`Selecting circle: ${circleName}`);
+          return [...prev, circleName];
+        }
+        console.log(`Cannot select more than two circles`);
+        return prev;
+      });
+    } else {
+      console.log(`Opening detail view for: ${circleName}`);
+      setVisible(true);
+    }
+  };
+ 
+
+  const handleComparePress = () => {
+    setCompareMode(!compareMode);
+    setSelectedCircles([]); // Reset selected circles when toggling compare mode
+  };
+  
 
 
   useEffect(() => {
     const checkOnboardingStatus = async () => {
+      if (__DEV__) {
+        // In development aalways resert (temperary)
+        await AsyncStorage.removeItem('dontShowOnboarding');
+        await AsyncStorage.setItem('appStartCount', '0');
+      }
       try {
-        // Retrieve the number of times the app has been started
+        // check if onboarding has been checked befor
         const startCountStr = await AsyncStorage.getItem('appStartCount');
         let startCount = startCountStr ? parseInt(startCountStr) : 0;
         startCount += 1;
-         // Save the updated start count
         await AsyncStorage.setItem('appStartCount', startCount.toString());
-         // Check if the user chose not to show onboarding again
+
         const dontShow = await AsyncStorage.getItem('dontShowOnboarding');
-        // Show onboarding again on the 5th app start
+
         if (dontShow === 'true') {
           if (startCount === 5) {
-            // Reset the flag so onboarding will be shown again
+            
             setShowOnboarding(true);
             await AsyncStorage.setItem('dontShowOnboarding', 'false');
-             // Skip onboarding if it's not the 5th start
+
             setDontShowAgain(false);
           } else {
-             // Show onboarding if the user hasn't opted out
             setShowOnboarding(false);
           }
         } else {
@@ -68,10 +100,10 @@ export default function MainPage() {
         setOnboardingChecked(true);
       }
     };
-    // Run onboarding check on component mount
     checkOnboardingStatus();
   }, []);
 
+  
   useEffect(() => {
     setAnimationFilterKey(prev => prev + 1);
   }, [selectedTrendType, selectedImpact, selectedTimeframe]);
@@ -189,7 +221,8 @@ export default function MainPage() {
                 <View style={[styles.circleLabelContainer, { zIndex: 1, opacity: getTechOpacity('Autonomous Systems') }]}>
                   <TechTrendCircle
                     impact="high"
-                    onPress={() => setVisible(true)}
+                    onPress={() => handleCirclePress('Outdoor Autonomous Systems')}
+                    selected={selectedCircles.includes('Outdoor Autonomous Systems')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
@@ -241,7 +274,8 @@ export default function MainPage() {
                 <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Artificial Intelligence') }]}>
                   <TechTrendCircle
                     impact="medium"
-                    onPress={() => setVisible(true)}
+                    onPress={() => handleCirclePress('Generative AI')}
+                    selected={selectedCircles.includes('Generative AI')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
@@ -293,7 +327,8 @@ export default function MainPage() {
                 <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Robotics') }]}>
                   <TechTrendCircle
                     impact="medium"
-                    onPress={() => setVisible(true)}
+                    onPress={() => handleCirclePress('Humanoids')}
+                    selected={selectedCircles.includes('Humanoids')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
@@ -337,7 +372,8 @@ export default function MainPage() {
                 <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Digital & Cloud') }]}>
                   <TechTrendCircle
                     impact="low"
-                    onPress={() => setVisible(true)}
+                    onPress={() => handleCirclePress('Cybersecurity')}
+                    selected={selectedCircles.includes('Cybersecurity')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
@@ -381,7 +417,8 @@ export default function MainPage() {
                 <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Other') }]}>
                   <TechTrendCircle
                     impact="veryHigh"
-                    onPress={() => setVisible(true)}
+                    onPress={() => handleCirclePress('3D Printing')}
+                    selected={selectedCircles.includes('3D Printing')}
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
@@ -393,14 +430,38 @@ export default function MainPage() {
                 </View>
               </FallingAnimation>
             </View>
-          <TrendDetail visible={visible} onClose={() => setVisible(false)} />
+          
+            {compareMode && selectedCircles.length === 2 ? (
+            <View style={styles.compareTrendDetailsContainer}>
+            {selectedCircles.map((circleName, index) => {
+            console.log(`Rendering TrendDetail for: ${circleName}`);
+          return (
+           <TrendDetail
+            key={index}
+            visible={true}
+            onClose={() => {
+            setSelectedCircles((prev) => prev.filter((name) => name !== circleName));
+           }}
+           circleName={circleName}
+           useModal={false}
+      
+          />
+          );
+          })}
+
+  </View>
+  ) : (
+  <TrendDetail visible={visible} onClose={() => setVisible(false)} circleName="Cybersecurity" />
+)}
+
         </View>
         <View style={styles.controlButtons}>
-          <ControlButtons
-          onShowTextPress={() => setShowTextLabels(!showTextLabels)}
-          onComparePress={() => {}}
-          showTextLabels={showTextLabels}
-          />
+        <ControlButtons
+         onShowTextPress={() => setShowTextLabels(!showTextLabels)}
+         onComparePress={handleComparePress}
+         showTextLabels={showTextLabels}
+         compareMode={compareMode} 
+       />
           <ViewHistory/>
         </View>
       </View>
@@ -437,6 +498,8 @@ const styles = StyleSheet.create({
   circleLabelContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'absolute',
+    top: -10,
   },
   labelContainer: {
     position: 'absolute',
@@ -451,5 +514,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Aptos_Bold',
     fontSize: 12,
     color: 'black',
+  },
+  compareTrendDetailsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    flex: 1,
+    marginTop: -500, 
   },
 });
