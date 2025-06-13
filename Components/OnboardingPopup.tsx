@@ -208,9 +208,8 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     marginTop: 8,
-    fontStyle: 'italic',
     textAlign: 'center',
-    fontFamily: 'Aptos_Bold',
+    fontFamily: 'Aptos_Italic',
   },
   sectionTitle: {
     marginTop: 16,
