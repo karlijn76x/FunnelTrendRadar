@@ -18,7 +18,8 @@ export default function MainPage() {
   const [loaded, error] = useFonts({
     Aptos: require("../assets/fonts/Aptos.ttf"),
     Aptos_Bold: require("../assets/fonts/Aptos-Bold.ttf"),
-    Aptos_ExtraBold: require("../assets/fonts/Aptos-ExtraBold.ttf")
+    Aptos_ExtraBold: require("../assets/fonts/Aptos-ExtraBold.ttf"),
+    Aptos_Italic: require("../assets/fonts/Aptos-Italic.ttf")
   });
 
   const [visible, setVisible] = useState(false);
@@ -455,7 +456,7 @@ export default function MainPage() {
 )}
 
         </View>
-        <View style={styles.controlButtons}>
+        <View style={styles.rightColumn}>
         <ControlButtons
          onShowTextPress={() => setShowTextLabels(!showTextLabels)}
          onComparePress={handleComparePress}
@@ -489,11 +490,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
   },
-  controlButtons: {
+  rightColumn: {
     flexDirection: 'column',
     justifyContent: 'flex-end',
-    width: 175,
-    height: 600,
+    alignItems: 'flex-end',
+    gap: 15
   },
   circleLabelContainer: {
     alignItems: 'center',

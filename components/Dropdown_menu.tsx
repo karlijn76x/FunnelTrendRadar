@@ -161,7 +161,7 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
   };
 
   const handleEditPress = () => {
-    navigation.navigate('ManageTrends');
+    navigation.navigate('Manage Trends');
   }
 
   return (
