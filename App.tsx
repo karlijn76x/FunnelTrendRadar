@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MainPage from './pages/MainPage'
 import ManageTrends from './pages/ManageTrends';
+import CreateTrend from './pages/CreateTrend';
 
 
 const Stack = createNativeStackNavigator();
@@ -14,8 +15,9 @@ const MyStack = () => {
       screenOptions={{
         headerShown:false,
       }}>
-        <Stack.Screen name='Vanderlande Trends' component={MainPage}/>
-        <Stack.Screen name='Manage Trends' component={ManageTrends}/>
+        <Stack.Screen name='MainPage' component={MainPage}/>
+        <Stack.Screen name='ManageTrends' component={ManageTrends}/>
+        <Stack.Screen name='CreateTrend' component={CreateTrend}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
