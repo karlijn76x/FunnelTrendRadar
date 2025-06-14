@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     flex: 1,
-    padding: 20
+    padding: 10
   },
   legend: {
     flexDirection: 'column',
