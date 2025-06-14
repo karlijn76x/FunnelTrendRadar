@@ -6,21 +6,23 @@ const ManagementTable = () => {
         return (
             <View style={styles.headerRow}>
                 <Text style={styles.headerCell}>Title</Text>
-                <Text style={styles.headerCell}>Category</Text>
+                <Text style={styles.headerCell}>Trend Type</Text>
                 <Text style={styles.headerCell}>Timeframe</Text>
                 <Text style={styles.headerCell}>Impact</Text>
+                <Text style={styles.headerCell}>Description</Text>
                 <Text style={styles.headerCell}>Actions</Text>
             </View>
         );
     };
 
-    const renderRow = (item: any) => {
+    const renderRow = (item: any, isLast: boolean) => {
         return (
-            <View style={styles.row} key={item.id}>
+            <View style={[styles.row, isLast && styles.lastRow]} key={item.id}>
                 <Text style={styles.cell}>{item.title}</Text>
                 <Text style={styles.cell}>{item.category}</Text>
                 <Text style={styles.cell}>{item.timeframe}</Text>
                 <Text style={styles.cell}>{item.impact}</Text>
+                <Text style={styles.cell}>{item.descr}</Text>
                 <View style={styles.actionsCell}>
                     <TouchableOpacity style={styles.actionButton}>
                         <Image 
@@ -47,6 +49,7 @@ const ManagementTable = () => {
             category: "Technology",
             timeframe: "3-5 years",
             impact: "High",
+            descr:"Descr",
             actions: "Delete"
         },
         {
@@ -55,6 +58,7 @@ const ManagementTable = () => {
             category: "Technology",
             timeframe: "5-10 years",
             impact: "Very High",
+            descr:"Descr",
             actions: "Delete"
         },
         {
@@ -63,6 +67,7 @@ const ManagementTable = () => {
             category: "Technology",
             timeframe: "5-10 years",
             impact: "High",
+            descr:"Descr",
             actions: "Delete"
         }
     ];
@@ -70,7 +75,7 @@ const ManagementTable = () => {
     return (
         <View style={styles.container}>
             {renderHeader()}
-            {data.map(item => renderRow(item))}
+            {data.map((item, index) => renderRow(item, index === data.length - 1))}
         </View>
     );
 };
@@ -96,6 +101,17 @@ const styles = StyleSheet.create({
         borderBottomWidth:2,
         borderLeftWidth:2,
         borderRightWidth:2,
+        alignItems:'center'
+    },
+    lastRow: {
+        flexDirection: 'row',
+        padding: 15,
+        backgroundColor: '#FFFCF6',
+        borderBottomWidth:2,
+        borderLeftWidth:2,
+        borderRightWidth:2,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
         alignItems:'center'
     },
     headerCell: {
