@@ -28,14 +28,14 @@ function ManageTrends() {
           </View>
         </View>
 
-        <View style={styles.mainContent}>
-          <Pressable 
+        <Pressable 
             style={styles.addButton}
             onPress={() => navigation.navigate('Create Trend')}
           >
             <Image style={styles.addImg} source={require('../assets/images/add_icon.png')}/>
           </Pressable>
 
+        <View style={styles.mainContent}>
           <View style={styles.tableContainer}>
             <ManagementTable/>
           </View>
@@ -44,19 +44,24 @@ function ManageTrends() {
         <View style={styles.align}>
           <View style={styles.legend}>
             <Text style={styles.legendTitle}>Legend:</Text>
-            <View style={styles.legendItems}>
-              <View style={styles.legendItem}>
-                <Image source={require('../assets/images/edit_icon.png')} style={styles.legendIcon}/>
-                <Text style={styles.legendText}>= Edit</Text>
+            <View style={styles.legendContainer}>
+              <View style={styles.columnLegend}>
+                <View style={styles.legendItem}>
+                  <Image source={require('../assets/images/edit_icon.png')} style={styles.legendIcon}/>
+                  <Text style={styles.legendText}>= Edit</Text>
+                </View>
+                <View style={styles.legendItem}>
+                  <Image source={require('../assets/images/delete_icon.png')} style={styles.legendIcon}/>
+                  <Text style={styles.legendText}>= Delete</Text>
+                </View>
               </View>
-              <View style={styles.legendItem}>
-                <Image source={require('../assets/images/delete_icon.png')} style={styles.legendIcon}/>
-                <Text style={styles.legendText}>= Delete</Text>
-              </View>
-              <View style={styles.legendItem}>
+              <Pressable 
+                style={styles.legendItem}
+                onPress={() => navigation.navigate('Create Trend')}
+              >
                 <Image source={require('../assets/images/add_icon.png')} style={styles.legendIcon}/>
                 <Text style={styles.legendText}>= Add</Text>
-              </View>
+              </Pressable>
             </View>
           </View>
 
@@ -92,6 +97,15 @@ const styles = StyleSheet.create({
     position: 'relative',
     zIndex: 1000,
   },
+  addButton: {
+    alignSelf: 'flex-end',
+    marginRight: 60,
+    marginBottom: 10,
+  },
+  addImg: {
+    width: 40,
+    height: 40,
+  },
   mainContent: {
     position: 'relative',
     zIndex: 1,
@@ -113,15 +127,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 40,
     position: 'relative',
   },
-  addButton: {
-    alignSelf: 'flex-end',
-    marginRight: 60,
-    marginBottom: 10,
-  },
-  addImg: {
-    width: 40,
-    height: 40,
-  },
   align:{
     justifyContent: "space-between",
     flexDirection: "row",
@@ -139,7 +144,12 @@ const styles = StyleSheet.create({
     fontSize:16,
     marginBottom: 10,
   },
-  legendItems: {
+  legendContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 40,
+  },
+  columnLegend: {
     flexDirection: 'column',
     gap: 8,
   },
