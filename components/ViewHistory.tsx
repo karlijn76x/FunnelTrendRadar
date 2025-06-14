@@ -19,12 +19,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   historyText: {
-    fontSize: 16,
+    fontSize: 14,
     borderBottomWidth: 1,
     padding: 10,
   },
   historyData: {
     fontSize: 14,
-    padding: 30,
+    padding: 10,
   }
 });
