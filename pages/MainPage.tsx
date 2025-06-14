@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ControlButtons from '../components/ControlButtons';
 import FallingAnimation from '../components/FallingAnimation';
 import ViewHistory from '../components/ViewHistory';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
@@ -180,7 +181,7 @@ export default function MainPage() {
   if (!loaded) return null;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {onboardingChecked && (
   <OnboardingPopup
     visible={showOnboarding}
@@ -466,7 +467,7 @@ export default function MainPage() {
           <ViewHistory/>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
