@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, Image } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import NavBarEdit from '../components/NavBarEditTrends'
+import { useNavigation } from '@react-navigation/native';
 
 const CreateTrend = () => {
+    const navigation = useNavigation();
+
     // Form input states
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -110,7 +113,7 @@ const CreateTrend = () => {
         if (validateForm()) {}
     };
 
-    // Reset form to initial state
+    // Reset form to initial state and go back
     const handleCancel = () => {
         setTitle('');
         setDescription('');
@@ -126,6 +129,7 @@ const CreateTrend = () => {
             timeframe: false,
             description: false
         });
+        navigation.goBack();
     };
 
   return (
