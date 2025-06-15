@@ -102,7 +102,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
   }
 
   const isLastStep = step === 4;
-  const buttonText = step === 1 ? 'Start' : isLastStep ? 'Done' : 'Next';
+  const buttonText = step === 1 ? 'Start Tutorial' : isLastStep ? 'Done' : 'Next';
   const buttonAction = isLastStep ? onClose : onNext;
 
   // Position pages 
@@ -150,7 +150,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
                style={[styles.button, { backgroundColor: '#FBA96B', marginTop: 10 }]}
                onPress={onClose}
               >
-                <Text style={[styles.buttonText, { color: 'black' }]}>Skip Info</Text>
+                <Text style={[styles.buttonText, { color: 'black' }]}>Skip Tutorial</Text>
              </TouchableOpacity>
            )}
               {/* Don't show again switch vanaf step 2 */}
@@ -252,6 +252,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 8,
     marginBottom: 16,
+    borderWidth: 2,
+    borderColor: '#000000',
   },
   buttonText: {
     color: '#000000',
