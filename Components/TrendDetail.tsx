@@ -118,72 +118,71 @@ const TrendDetail: React.FC<PopupProps> = ({
         },
       ]}
     >
-  
-          <LinearGradient
-            colors={['#FFFFFF', '#000000', '#5A136D']}
-            locations={[0.37, 0.37, 0.374]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={styles.gradient}
-          >
-            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-              <MaterialIcons name="close" size={24} color="white" />
-            </TouchableOpacity>
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.navButton} onPress={handlePrevious}>
+          <MaterialIcons name="arrow-back-ios" size={30} color="white" />
+        </TouchableOpacity>
 
-            <TouchableOpacity style={styles.navButton} onPress={handlePrevious}>
-              <MaterialIcons name="arrow-back-ios" size={30} color="white" />
-            </TouchableOpacity>
+        <TouchableOpacity style={[styles.navButton, styles.rightNavButton]} onPress={handleNext}>
+          <MaterialIcons name="arrow-forward-ios" size={30} color="white" />
+        </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.navButton, styles.rightNavButton]} onPress={handleNext}>
-              <MaterialIcons name="arrow-forward-ios" size={30} color="white" />
-            </TouchableOpacity>
+        <View style={styles.whiteSection}>
+          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <MaterialIcons name="close" size={24} color="white" />
+          </TouchableOpacity>
 
-            <View style={styles.header}>
+          <View style={styles.header}>
             <Text style={styles.title}>{circleName}</Text>
-            </View>
+          </View>
 
-            <View style={styles.metaRow}>
-              <View style={styles.metaItem}>
-                <View style={[styles.iconRectangle, { backgroundColor: "#5A136D" }]} />
-                <Text style={styles.metaText}>{currentTrend.category}</Text>
-              </View>
-              <View style={styles.metaItem}>
-                <MaterialIcons name="schedule" size={16} color="#000" />
-                <Text style={styles.metaText}>{currentTrend.timeframe}</Text>
-              </View>
+          <View style={styles.metaRow}>
+            <View style={styles.metaItem}>
+              <View style={[styles.iconRectangle, { backgroundColor: "#5A136D" }]} />
+              <Text style={styles.metaText}>{currentTrend.category}</Text>
             </View>
+            <View style={styles.metaItem}>
+              <MaterialIcons name="schedule" size={16} color="#000" />
+              <Text style={styles.metaText}>{currentTrend.timeframe}</Text>
+            </View>
+          </View>
 
-            <View style={styles.metaRow}>
-              <View style={styles.metaItem}>
-                <View style={[styles.impactDots, { flexDirection: 'row', alignItems: 'center', gap: 8 }]}>
-                  <View style={{ flexDirection: 'column', gap: 4 }}>
-                    {[...Array(Math.ceil(currentTrend.impact / 2))].map((_, i) => (
-                      <View key={i} style={{ flexDirection: 'row', gap: 4 }}>
-                        <View style={styles.dot} />
-                        <View style={styles.dot} />
-                      </View>
-                    ))}
-                  </View>
-                  <Text style={styles.metaText}>Very High Impact</Text>
+          <View style={styles.metaRow}>
+            <View style={styles.metaItem}>
+              <View style={[styles.impactDots, { flexDirection: 'row', alignItems: 'center', gap: 8 }]}>
+                <View style={{ flexDirection: 'column', gap: 4 }}>
+                  {[...Array(Math.ceil(currentTrend.impact / 2))].map((_, i) => (
+                    <View key={i} style={{ flexDirection: 'row', gap: 4 }}>
+                      <View style={styles.dot} />
+                      <View style={styles.dot} />
+                    </View>
+                  ))}
                 </View>
-              </View>
-              <View style={styles.metaItem}>
-                <MaterialIcons name="visibility" size={16} color="#000" />
-                <Text style={styles.metaText}>{currentTrend.views}</Text>
+                <Text style={styles.metaText}>Very High Impact</Text>
               </View>
             </View>
+            <View style={styles.metaItem}>
+              <MaterialIcons name="visibility" size={16} color="#000" />
+              <Text style={styles.metaText}>{currentTrend.views}</Text>
+            </View>
+          </View>
+        </View>
 
-            <Text style={styles.description}>
-              {currentTrend.description}
-            </Text>
+        <View style={styles.border} />
 
-            <Image
-              source={currentTrend.image}
-              style={styles.image}
-              resizeMode="cover"
-            />
-          </LinearGradient>
-        </Animated.View>
+        <View style={styles.purpleSection}>
+          <Text style={styles.description}>
+            {currentTrend.description}
+          </Text>
+
+          <Image
+            source={currentTrend.image}
+            style={styles.image}
+            resizeMode="cover"
+          />
+        </View>
+      </View>
+    </Animated.View>
   );
   if (useModal) {
     return (
@@ -215,13 +214,27 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderWidth: 2,
     borderColor: "black",
+    position: 'relative',
   },
   inlineContainer: {
     margin: 10, 
   },
-  gradient: {
-    width: "100%",
-    height: "100%",
+  whiteSection: {
+    height: '37%',
+    backgroundColor: '#FFFFFF',
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+  },
+  border: {
+    width: '100%',
+    height: 2,
+    backgroundColor: 'black',
+  },
+  purpleSection: {
+    height: '63%',
+    backgroundColor: '#5A136D',
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
@@ -237,7 +250,8 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   header: {
-    marginBottom: 2,
+    marginTop:60,
+    marginBottom:45,
   },
   title: {
     fontSize: 30,
@@ -250,7 +264,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: '60%',
-    marginVertical: -15,
     marginLeft: '10%',
   },
   metaItem: {
@@ -306,7 +319,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#5A136D",
     borderRadius: 25,
     padding: 10,
-    zIndex: 1,
+    zIndex: 2,
   },
   rightNavButton: {
     left: 'auto',
