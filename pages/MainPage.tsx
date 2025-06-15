@@ -33,7 +33,7 @@ export default function MainPage() {
   const [onboardingStep, setOnboardingStep] = useState(1);
   const [dontShowAgain, setDontShowAgain] = useState(false);
   const [onboardingChecked, setOnboardingChecked] = useState(false);
-  const [showTextLabels, setShowTextLabels] = useState(false);
+  const [showTextLabels, setShowTextLabels] = useState(true);
   const [animationFilterKey, setAnimationFilterKey] = useState(0);
   const [compareMode, setCompareMode] = useState(false);
   const [selectedCircles, setSelectedCircles] = useState<string[]>([]);
