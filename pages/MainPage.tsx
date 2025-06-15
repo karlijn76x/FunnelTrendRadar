@@ -23,17 +23,21 @@ export default function MainPage() {
     Aptos_Italic: require("../assets/fonts/Aptos-Italic.ttf")
   });
 
+  // UI state
   const [visible, setVisible] = useState(false);
+  const [showTextLabels, setShowTextLabels] = useState(true); // Toggle for circle labels
+  // Filter states
   const [selectedTrendType, setSelectedTrendType] = useState<string | null>(null);
   const [selectedImpact, setSelectedImpact] = useState<string | null>(null);
   const [selectedTimeframe, setSelectedTimeframe] = useState<string | null>(null);
   const [selectedSocialKeyTrend, setSelectedSocialKeyTrend] = useState<string | null>(null);
   const [selectedTechFocusArea, setSelectedTechFocusArea] = useState<string | null>(null);
+  // Onboarding states
   const [showOnboarding, setShowOnboarding] = useState(true);
   const [onboardingStep, setOnboardingStep] = useState(1);
   const [dontShowAgain, setDontShowAgain] = useState(false);
   const [onboardingChecked, setOnboardingChecked] = useState(false);
-  const [showTextLabels, setShowTextLabels] = useState(true);
+  // Animation and interaction states
   const [animationFilterKey, setAnimationFilterKey] = useState(0);
   const [compareMode, setCompareMode] = useState(false);
   const [selectedCircles, setSelectedCircles] = useState<string[]>([]);
@@ -69,12 +73,12 @@ export default function MainPage() {
   useEffect(() => {
     const checkOnboardingStatus = async () => {
       if (__DEV__) {
-        // In development aalways resert (temperary)
+        // In development always resert (temperary)
         await AsyncStorage.removeItem('dontShowOnboarding');
         await AsyncStorage.setItem('appStartCount', '0');
       }
       try {
-        // check if onboarding has been checked befor
+        // Check if onboarding has been checked before
         const startCountStr = await AsyncStorage.getItem('appStartCount');
         let startCount = startCountStr ? parseInt(startCountStr) : 0;
         startCount += 1;
@@ -106,6 +110,7 @@ export default function MainPage() {
   }, []);
 
   
+  // Refresh animations when filters change
   useEffect(() => {
     setAnimationFilterKey(prev => prev + 1);
   }, [selectedTrendType, selectedImpact, selectedTimeframe]);
@@ -115,7 +120,7 @@ export default function MainPage() {
     try {
       await AsyncStorage.setItem('dontShowOnboarding', value ? 'true' : 'false');
     } catch (e) {
-      // error 
+      // Error 
     }
   };
   
@@ -129,10 +134,27 @@ export default function MainPage() {
 
 
 
+  // Filter logic functions
+
+  /**
+   * Checks if social trends should be shown
+   * @returns {boolean} True if social trends should be shown
+   */
   const shouldShowSocial = () =>
     selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '2';
+
+  /**
+   * Checks if tech trends should be shown
+   * @returns {boolean} True if tech trends should be shown
+   */
   const shouldShowTech = () =>
     selectedTrendType === null || selectedTrendType === '1' || selectedTrendType === '3';
+
+  /**
+   * Checks if trend matches selected impact
+   * @param {string} value - Impact level (low, medium, high, very high)
+   * @returns {boolean} True if trend matches impact filter
+   */
   const matchesImpact = (value: string) => {
     const map: { [key: string]: string } = {
       'low': '2',
@@ -142,6 +164,12 @@ export default function MainPage() {
     };
     return selectedImpact === null || selectedImpact === '1' || selectedImpact === map[value.toLowerCase()];
   };
+
+  /**
+   * Checks if trend matches selected timeframe
+   * @param {string} value - Timeframe (0-3 years, 3-5 years, 5-10 years)
+   * @returns {boolean} True if trend matches timeframe filter
+   */
   const matchesTimeframe = (value: string) => {
     const map: { [key: string]: string } = {
       '0-3 years': '2',
@@ -150,6 +178,12 @@ export default function MainPage() {
     };
     return selectedTimeframe === null || selectedTimeframe === '1' || selectedTimeframe === map[value.toLowerCase()];
   };
+
+  /**
+   * Checks if social key trend matches selected filter
+   * @param {string} trendName - Name of the social key trend
+   * @returns {boolean} True if trend matches social filter
+   */
   const matchesSocialKeyTrend = (trendName: string) => {
     const map: Record<string, string> = {
       'Labor Shortage and Regulations': '2',
@@ -159,6 +193,12 @@ export default function MainPage() {
     };
     return selectedSocialKeyTrend === null || selectedSocialKeyTrend === '1' || selectedSocialKeyTrend === map[trendName];
   };
+
+  /**
+   * Checks if tech focus area matches selected filter
+   * @param {string} areaName - Name of the tech focus area
+   * @returns {boolean} True if trend matches tech filter
+   */
   const matchesTechFocusArea = (areaName: string) => {
     const map: Record<string, string> = {
       'Autonomous Systems': '2',
@@ -169,10 +209,20 @@ export default function MainPage() {
     };
     return selectedTechFocusArea === null || selectedTechFocusArea === '1' || selectedTechFocusArea === map[areaName];
   };
+
+  // Calculates opacity for trend circles based on filter match
   const getSocialOpacity = (trendName: string) => 
     matchesSocialKeyTrend(trendName) ? 1 : 0.15;
   const getTechOpacity = (areaName: string) =>
     matchesTechFocusArea(areaName) ? 1 : 0.15;
+  
+  /**
+   * Checks if a trend item should be shown based on all active filters
+   * @param {string} timeframe - Trend timeframe
+   * @param {'social' | 'tech'} trendType - Type of trend
+   * @param {string} impact - Impact level
+   * @returns {boolean} True if item should be shown
+   */
   const shouldShowItem = (timeframe: string, trendType: 'social' | 'tech', impact: string) => {
     const typeMatch = trendType === 'social' ? shouldShowSocial() : shouldShowTech();
     return typeMatch && matchesTimeframe(timeframe) && matchesImpact(impact);
@@ -194,6 +244,7 @@ export default function MainPage() {
 )}
 
 
+        {/* Filter Dropdown Controls */}
         <DropdownComponent
           onTrendTypeChange={setSelectedTrendType}
           onImpactChange={setSelectedImpact}
@@ -457,6 +508,7 @@ export default function MainPage() {
 )}
 
         </View>
+        {/* Control Buttons and History */}
         <View style={styles.rightColumn}>
         <ControlButtons
          onShowTextPress={() => setShowTextLabels(!showTextLabels)}
@@ -491,6 +543,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
   },
+  // Styling for right column controls
   rightColumn: {
     flexDirection: 'column',
     justifyContent: 'flex-end',
@@ -498,12 +551,14 @@ const styles = StyleSheet.create({
     gap: 15,
     zIndex: -1
   },
+  // Styling for container that positions circle and label
   circleLabelContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
     top: -10,
   },
+  // Styling for trend circle labels
   labelContainer: {
     position: 'absolute',
     bottom: -10,
@@ -514,6 +569,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     maxWidth: 100,
   },
+  // Text styling for labels
   labelText: {
     fontFamily: 'Aptos_Bold',
     fontSize: 12,
