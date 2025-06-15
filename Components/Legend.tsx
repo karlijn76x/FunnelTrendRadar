@@ -29,12 +29,13 @@ const Legend = () => {
                                 </View>
                             </View>
                         </View>
+                        <View style={styles.dotsDivider}/>
                         <View style={styles.bottomRow}>
                             <View style={styles.bottomCircleColumn}>
-                                <View style={[styles.orangeCircle, styles.smallCircle]}></View>
-                                <View style={[styles.orangeCircle, styles.mediumCircle]}></View>
-                                <View style={[styles.orangeCircle, styles.bigCircle]}></View>
-                                <View style={[styles.orangeCircle, styles.veryBigCircle]}></View>
+                                <View style={[styles.grayCircle, styles.smallCircle]}></View>
+                                <View style={[styles.grayCircle, styles.mediumCircle]}></View>
+                                <View style={[styles.grayCircle, styles.bigCircle]}></View>
+                                <View style={[styles.grayCircle, styles.veryBigCircle]}></View>
                             </View>
                             <View style={styles.textColumn}>
                                 <View style={styles.smallRow}>
@@ -86,6 +87,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#000'
   },
+  dotsDivider: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#000',
+    marginHorizontal: -5
+  },
   heading: {
     borderBottomWidth: 1,
     borderBottomColor: '#000',
@@ -95,7 +101,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 5,
-    gap: 30
+    gap: 10
   },
   dotsRow: {
     flexDirection: 'row'
@@ -170,6 +176,11 @@ const styles = StyleSheet.create({
   },
   purpleCircle: {
     backgroundColor: '#5A136D',
+    borderWidth: 1,
+    borderColor: '#000'
+  },
+  grayCircle: {
+    backgroundColor: '#A5ABB0',
     borderWidth: 1,
     borderColor: '#000'
   },
