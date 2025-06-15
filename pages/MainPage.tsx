@@ -495,7 +495,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
-    gap: 15
+    gap: 15,
+    zIndex: -1
   },
   circleLabelContainer: {
     alignItems: 'center',
