@@ -28,6 +28,7 @@ const PaginationDots: React.FC<{ totalSteps: number; currentStep: number }> = ({
   );
 };
 
+
 const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
   visible,
   onClose,
@@ -56,7 +57,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
       break;
     case 2:
       title = 'What you see';
-      description = 'Each bubble’s size reflects its impact, \nwhile its color reveals the type of trend. \nThe lower in the funnel, the closer it is in time.';
+      description = 'Each circle’s size reflects its impact, \nwhile its color reveals the type of trend. \nThe lower in the funnel, the closer it is in time.';
       circles = (
         <View style={styles.circlesWrapper}>
           <View style={styles.column}>
@@ -71,22 +72,16 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
       title = 'Use the filters';
       description = 'Want to see trends relevant to your\n department or interests? \nUse the filters above.';
       circles = (
-        <View style={styles.filterLinesContainer}>
-          <View style={styles.filterLine}>
-            <View style={[styles.filterDot, { left: 25, top: -8 }]} />
-          </View>
-          <View style={styles.filterLine}>
-            <View style={[styles.filterDot, { right: 20, top: -8 }]} />
-          </View>
-          <View style={styles.filterLine}>
-            <View style={[styles.filterDot, { left: '40%', top: -8 }]} />
-          </View>
-        </View>
+        <Image
+      source={require('../assets/images/filters_illustration.png')}
+      resizeMode="contain"
+      style={styles.image}
+    />
       );
       break;
     case 4:
       title = 'Explore further';
-      description = 'Click on a bubble to learn more, or\n compare trends to discover new \nopportunities.';
+      description = 'Click on a circle to learn more, or\n compare trends to discover new \nopportunities.';
       circles = (
         <View style={styles.clickCircleWrapper}>
           <View style={styles.clickArrowWrapper}>
@@ -97,13 +92,27 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
         </View>
       );
       break;
+      case 5:
+        title = 'Smart Feature';
+        description = 'Hit "Compare" to view trends \n side by side. Quickly spot connections,\n overlaps, and opportunities.'; 
+        circles = (
+          <View style={styles.circlesWrapper}>
+            <View style={[styles.circle, styles.purpleCircle, { marginRight: 20 }]} />
+            <View style={[styles.circle, styles.purpleCircle]} />
+            <View style={styles.compareRectangle}>
+              <Text style={styles.compareText}>Compare</Text>
+            </View>
+          </View>
+        );
+        break;
     default:
       return null;
   }
 
-  const isLastStep = step === 4;
-  const buttonText = step === 1 ? 'Start' : isLastStep ? 'Done' : 'Next';
-  const buttonAction = isLastStep ? onClose : onNext;
+  const isLastStep = step === 5; 
+  const buttonText = step === 1 ? 'Start tutorial' : isLastStep ? 'Done' : 'Next';
+  const buttonAction = isLastStep ? onClose : onNext; 
+
 
   // Position pages 
   let content;
@@ -134,8 +143,8 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
           {content}
 
           {/* Pagination Dots indicator */}
-          {step >= 2 && step <= 4 && (
-          <PaginationDots totalSteps={3} currentStep={step - 1} />
+          {step >= 2 && step <= 5 && (
+          <PaginationDots totalSteps={4} currentStep={step - 1} />
           )}
 
 
@@ -150,7 +159,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
                style={[styles.button, { backgroundColor: '#FBA96B', marginTop: 10 }]}
                onPress={onClose}
               >
-                <Text style={[styles.buttonText, { color: 'black' }]}>Skip Info</Text>
+                <Text style={[styles.buttonText, { color: 'black' }]}>Skip tutorial</Text>
              </TouchableOpacity>
            )}
               {/* Don't show again switch vanaf step 2 */}
@@ -162,12 +171,11 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
                trackColor={{ false: '#ccc', true: '#FBA96B' }}
                thumbColor={dontShowAgain ? '#F57523' : '#f4f3f4'}
              />
-             <Text style={[styles.checkboxLabel, { fontFamily: 'Aptos_Bold' }]}>
+             <Text style={[styles.checkboxLabel, { fontFamily: 'Aptos' }]}>
              Don't show this again
              </Text>
             </View>
-            )}
-
+            )} 
           </View>
         </View>
       </View>
@@ -201,10 +209,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Aptos_Bold',
   },
   title: {
-    fontSize: 30,
+    fontSize: 33,
     fontWeight: 'bold',
     textAlign: 'center',
     fontFamily: 'Aptos_Bold',
+    marginTop: 20,
   },
   subtitle: {
     marginTop: 8,
@@ -221,7 +230,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 30,    
     fontSize: 14,
-    fontFamily: 'Aptos_Bold',
+    fontFamily: 'Aptos',
   },
   //Case 1 styling
   circlesWrapper: {
@@ -308,6 +317,12 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: 'black',
   },
+  filtersImage: {
+    width: 250,
+    height: 150,
+    marginTop: 20,
+    marginBottom: 10,
+  },  
   //Case 4 styling
   clickArrowWrapper: {
     position: 'absolute',
@@ -337,6 +352,33 @@ const styles = StyleSheet.create({
     height: 150,
     marginTop: 20,
     marginBottom: 10,
+  },
+  //Case 5 styling
+  purpleCircle: {
+    backgroundColor: '#5A136D',
+    borderWidth: 3,
+    borderColor: 'black',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  compareRectangle: {
+    backgroundColor: '#FFEFDF',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 20,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#000000',
+    minHeight: 50,
+    marginTop: 100, 
+  },
+  
+  compareText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#000000',
+    fontFamily: 'Aptos_Bold',
   },
 
   // Styles for pagination dots

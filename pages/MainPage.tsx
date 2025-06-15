@@ -120,7 +120,7 @@ export default function MainPage() {
   };
   
   const handleNext = () => {
-    if (onboardingStep < 4) { 
+    if (onboardingStep < 5) { 
       setOnboardingStep(onboardingStep + 1);
     } else {
       setShowOnboarding(false); 
