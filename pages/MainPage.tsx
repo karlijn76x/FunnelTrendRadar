@@ -522,10 +522,14 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   compareTrendDetailsContainer: {
+  position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    marginTop: -500, 
   },
 });
