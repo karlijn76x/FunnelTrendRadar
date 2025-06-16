@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import TrendDetail from '../components/TrendDetail';
 import DropdownComponent from '../components/Dropdown_menu';
@@ -41,8 +41,9 @@ export default function MainPage() {
   const [animationFilterKey, setAnimationFilterKey] = useState(0);
   const [compareMode, setCompareMode] = useState(false);
   const [selectedCircles, setSelectedCircles] = useState<string[]>([]);
+  const [isTimeframeFilterChange, setIsTimeframeFilterChange] = useState(false);
+  const prevTimeframeRef = useRef(selectedTimeframe);
   
-
   const handleCirclePress = (circleName: string) => {
     if (compareMode) {
       setSelectedCircles((prev) => {
@@ -112,7 +113,13 @@ export default function MainPage() {
   
   // Refresh animations when filters change
   useEffect(() => {
+    if (prevTimeframeRef.current !== selectedTimeframe) {
+      setIsTimeframeFilterChange(true);
+    } else {
+      setIsTimeframeFilterChange(false);
+    }
     setAnimationFilterKey(prev => prev + 1);
+    prevTimeframeRef.current = selectedTimeframe;
   }, [selectedTrendType, selectedImpact, selectedTimeframe]);
 
   const handleDontShowAgainChange = async (value: boolean) => {
@@ -164,19 +171,12 @@ export default function MainPage() {
     };
     return selectedImpact === null || selectedImpact === '1' || selectedImpact === map[value.toLowerCase()];
   };
-
-  /**
-   * Checks if trend matches selected timeframe
-   * @param {string} value - Timeframe (0-3 years, 3-5 years, 5-10 years)
-   * @returns {boolean} True if trend matches timeframe filter
-   */
-  const matchesTimeframe = (value: string) => {
-    const map: { [key: string]: string } = {
-      '0-3 years': '2',
-      '3-5 years': '3',
-      '5-10 years': '4',
-    };
-    return selectedTimeframe === null || selectedTimeframe === '1' || selectedTimeframe === map[value.toLowerCase()];
+  
+  const shouldShowFunnelSection = (sectionTimeframe: string) => {
+    return selectedTimeframe === null || 
+           selectedTimeframe === '1' || 
+           selectedTimeframe === (sectionTimeframe === '5-10 years' ? '2' : 
+                                 sectionTimeframe === '3-5 years' ? '3' : '4');
   };
 
   /**
@@ -225,7 +225,8 @@ export default function MainPage() {
    */
   const shouldShowItem = (timeframe: string, trendType: 'social' | 'tech', impact: string) => {
     const typeMatch = trendType === 'social' ? shouldShowSocial() : shouldShowTech();
-    return typeMatch && matchesTimeframe(timeframe) && matchesImpact(impact);
+    const timeframeMatch = shouldShowFunnelSection(timeframe);
+    return typeMatch && timeframeMatch && matchesImpact(impact);
   };
 
   if (!loaded) return null;
@@ -258,6 +259,7 @@ export default function MainPage() {
         </View>
         <View style={styles.funnelStyle}>
           {/* 5-10 years section */}
+          {shouldShowFunnelSection('5-10 years') && (
             <View>
               <Image
                 style={{ width: 900, height: 105, resizeMode: 'cover' }}
@@ -270,6 +272,7 @@ export default function MainPage() {
                 fallDirection="left"
                 shouldShow={shouldShowItem('5-10 years', 'tech', 'high')}
                 filterKey={`${animationFilterKey}`}
+                skipAnimation={isTimeframeFilterChange}
               >
                 <View style={[styles.circleLabelContainer, { zIndex: 1, opacity: getTechOpacity('Autonomous Systems') }]}>
                   <TechTrendCircle
@@ -293,6 +296,7 @@ export default function MainPage() {
                 fallDirection="left"
                 shouldShow={shouldShowItem('5-10 years', 'social', 'low')}
                 filterKey={`${animationFilterKey}`}
+                skipAnimation={isTimeframeFilterChange}
               >
                 <View style={[styles.circleLabelContainer, { zIndex: 1, opacity: getSocialOpacity('Sustainability') }]}>
                   <SocialTrendCircle
@@ -309,8 +313,10 @@ export default function MainPage() {
                 </View>
               </FallingAnimation>
             </View>
+          )}
 
           {/* 3-5 years section */}
+          {shouldShowFunnelSection('3-5 years') && (
             <View>
               <Image
                 style={{ width: 800, height: 100, resizeMode: 'cover' }}
@@ -323,6 +329,7 @@ export default function MainPage() {
                 fallDirection="right"
                 shouldShow={shouldShowItem('3-5 years', 'tech', 'medium')}
                 filterKey={`${animationFilterKey}`}
+                skipAnimation={isTimeframeFilterChange}
               >
                 <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Artificial Intelligence') }]}>
                   <TechTrendCircle
@@ -346,6 +353,7 @@ export default function MainPage() {
                 fallDirection="right"
                 shouldShow={shouldShowItem('3-5 years', 'social', 'very high')}
                 filterKey={`${animationFilterKey}`}
+                skipAnimation={isTimeframeFilterChange}
               >
                 <View style={[styles.circleLabelContainer, { zIndex: 11, opacity: getSocialOpacity('Digitalization') }]}>
                   <SocialTrendCircle
@@ -362,8 +370,10 @@ export default function MainPage() {
                 </View>
               </FallingAnimation>
             </View>
+          )}
 
           {/* 0-3 years section */}
+          {shouldShowFunnelSection('0-3 years') && (
             <View style={{ position: 'relative' }}>
               <Image
                 style={{ width: 700, height: 250, resizeMode: 'cover', zIndex: 0 }}
@@ -376,6 +386,7 @@ export default function MainPage() {
                 fallDirection="left"
                 shouldShow={shouldShowItem('0-3 years', 'tech', 'medium')}
                 filterKey={`${animationFilterKey}`}
+                skipAnimation={isTimeframeFilterChange}
               >
                 <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Robotics') }]}>
                   <TechTrendCircle
@@ -399,6 +410,7 @@ export default function MainPage() {
                 fallDirection="left"
                 shouldShow={shouldShowItem('0-3 years', 'social', 'high')}
                 filterKey={`${animationFilterKey}`}
+                skipAnimation={isTimeframeFilterChange}
               >
                 <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getSocialOpacity('As-A-Service') }]}>
                   <SocialTrendCircle
@@ -421,6 +433,7 @@ export default function MainPage() {
                 fallDirection="right"
                 shouldShow={shouldShowItem('0-3 years', 'tech', 'low')}
                 filterKey={`${animationFilterKey}`}
+                skipAnimation={isTimeframeFilterChange}
               >
                 <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Digital & Cloud') }]}>
                   <TechTrendCircle
@@ -444,6 +457,7 @@ export default function MainPage() {
                 fallDirection="right"
                 shouldShow={shouldShowItem('0-3 years', 'social', 'medium')}
                 filterKey={`${animationFilterKey}`}
+                skipAnimation={isTimeframeFilterChange}
               >
                 <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getSocialOpacity('Labor Shortage and Regulations') }]}>
                   <SocialTrendCircle
@@ -466,6 +480,7 @@ export default function MainPage() {
                 fallDirection="right"
                 shouldShow={shouldShowItem('0-3 years', 'tech', 'very high')}
                 filterKey={`${animationFilterKey}`}
+                skipAnimation={isTimeframeFilterChange}
               >
                 <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Other') }]}>
                   <TechTrendCircle
@@ -483,6 +498,7 @@ export default function MainPage() {
                 </View>
               </FallingAnimation>
             </View>
+          )}
           
             {compareMode && selectedCircles.length === 2 ? (
             <View style={styles.compareTrendDetailsContainer}>
@@ -578,7 +594,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   compareTrendDetailsContainer: {
-  position: 'absolute',
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
