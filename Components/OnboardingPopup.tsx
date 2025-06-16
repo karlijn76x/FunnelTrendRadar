@@ -112,8 +112,6 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
   const isLastStep = step === 5; 
   const buttonText = step === 1 ? 'Start tutorial' : isLastStep ? 'Done' : 'Next';
   const buttonAction = isLastStep ? onClose : onNext; 
-
-
   // Position pages 
   let content;
   if (step === 1) {
@@ -261,6 +259,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 8,
     marginBottom: 16,
+    borderWidth: 2,
+    borderColor: '#000000',
   },
   buttonText: {
     color: '#000000',

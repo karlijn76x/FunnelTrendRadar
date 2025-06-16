@@ -3,8 +3,11 @@ import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
 import NavBarEdit from '../components/NavBarEditTrends';
 import SearchBar from '../components/Search_bar';
 import ManagementTable from "../components/ManagementTable"
+import { useNavigation } from '@react-navigation/native';
 
 function ManageTrends() {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <NavBarEdit/>
@@ -14,7 +17,10 @@ function ManageTrends() {
         <SearchBar/>
       </View>
 
-      <Pressable style={styles.addButton}>
+      <Pressable
+        style={styles.addButton}
+        onPress={() => navigation.navigate('Create Trend')}
+      >
         <Image style={styles.addImg} source={require('../assets/images/add_icon.png')}/>
       </Pressable>
 

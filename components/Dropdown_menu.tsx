@@ -12,6 +12,7 @@ type RootStackParamList = {
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
+// Callback functions for when filters change
 interface DropdownComponentProps {
   onTrendTypeChange: (value: string | null) => void;
   onImpactChange: (value: string | null) => void;
@@ -20,7 +21,7 @@ interface DropdownComponentProps {
   onTechFocusAreaChange: (value: string | null) => void;
 }
 
-//Data for trendtype dropdown menu
+// Data for trendtype dropdown menu
 const trendType = [
   { 
     label: 'All', 
@@ -39,7 +40,7 @@ const trendType = [
   },
 ];
 
-//Data for impact dropdown menu
+// Data for impact dropdown menu
 const impact = [
   { 
     label: 'All', 
@@ -67,7 +68,7 @@ const impact = [
   },
 ];
 
-//Data for timeframe dropdown menu
+// Data for timeframe dropdown menu
 const timeframe = [
     { label: 'All', value: '1' },
     { label: '0-3 years', value: '2' },
@@ -75,7 +76,7 @@ const timeframe = [
     { label: '5-10 years', value: '4' },
   ];
 
-//Data for socialkey trends dropdown menu
+// Data for socialkey trends dropdown menu
 const socialKeyTrends = [
     { label: 'All', value: '1' },
     { label: 'Labor Shortage and Regulations', value: '2' },
@@ -84,7 +85,7 @@ const socialKeyTrends = [
     { label: 'Sustainability', value: '5' },
   ];
 
-//Data for techfocus area dropdown menu
+// Data for techfocus area dropdown menu
 const techFocusArea = [
     { label: 'All', value: '1' },
     { label: 'Autonomous Systems', value: '2' },
@@ -96,11 +97,13 @@ const techFocusArea = [
 
 const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange, onImpactChange, onTimeframeChange, onSocialKeyTrendChange, onTechFocusAreaChange }) => {
   const navigation = useNavigation<NavigationProp>();
+  // State for each filter dropdown
   const [trendValue, setTrendValue] = useState<string | null>(null);
   const [impactValue, setImpactValue] = useState<string | null>(null);
   const [timeframeValue, setTimeframeValue] = useState<string | null>(null);
   const [socialKeyTrendsValue, setSocialKeyTrendsValue] = useState<string | null>(null);
   const [techFocusAreaValue, setTechFocusAreaValue] = useState<string | null>(null);
+  // UI state for dropdown focus
   const [focusedDropdown, setFocusedDropdown] = useState<string | null>(null);
   const [loaded] = useFonts({
     Aptos_Bold: require("../assets/fonts/Aptos-Bold.ttf")
@@ -108,9 +111,18 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
 
   if (!loaded) return null;
 
+  // Handle dropdown focus/blur for styling
   const handleFocus = (dropdownName: string) => setFocusedDropdown(dropdownName);
   const handleBlur = () => setFocusedDropdown(null);
 
+  /**
+   * Reusable dropdown component with filter functionality
+   * @param title - Display title for the filter dropdown
+   * @param data - Array of options for the dropdown
+   * @param value - Currently selected value
+   * @param setValue - State setter for the dropdown value
+   * @param notifyParent - Callback to notify parent component of changes
+   */
   const renderDropdown = (
     title: string,
     data: { label: string; value: string; image?: any }[],
@@ -137,6 +149,7 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
           value={value}
           onFocus={() => handleFocus(title)}
           onBlur={handleBlur}
+          // Custom dropdown icon
           renderItem={item => (
             <View style={styles.item}>
               {item.image && (
@@ -151,6 +164,7 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
               ]}>{item.label}</Text>
             </View>
           )}
+          // Handle filter selection change
           onChange={item => {
             setValue(item.value);
             if (notifyParent) notifyParent(item.value);
@@ -172,6 +186,7 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
           source={require('../assets/images/vanderlande_logo.png')}
         />
       </View>
+      {/* Filter dropdowns */}
       <View style={styles.dropdownsContainer}>
         {renderDropdown('Trend Type', trendType, trendValue, setTrendValue, onTrendTypeChange)}
         {renderDropdown('Impact', impact, impactValue, setImpactValue, onImpactChange)}
@@ -189,9 +204,9 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
   );
 };
 
-//Styling
+// Styling
 const styles = StyleSheet.create({
-  //Styling for the whole navbar
+  // Styling for the whole navbar
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -201,7 +216,7 @@ const styles = StyleSheet.create({
     borderColor:'black',
     borderBottomWidth: 2,
   },
-  //Styling for the logo
+  // Styling for the logo
   logoContainer: {
     marginTop: 10,
   },
@@ -210,7 +225,7 @@ const styles = StyleSheet.create({
     width: 170,
     height: 60,
   },
-  //Styling for the dropdown menus
+  // Styling for the dropdown menus
   dropdownsContainer: {
     flexDirection: 'row',
     gap: 10,
