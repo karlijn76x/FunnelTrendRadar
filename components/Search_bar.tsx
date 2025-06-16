@@ -121,7 +121,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onTrendSelect }) => {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    zIndex: 1,
+    zIndex: 1000,
   },
   searchBar: {
     flexDirection: 'row',
@@ -147,7 +147,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'black',
     maxHeight: 200,
-    zIndex: 2,
+    zIndex: 1001,
+    elevation: 5,
   },
   resultItem: {
     padding: 10,
