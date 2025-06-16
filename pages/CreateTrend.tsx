@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, Image } from 
 import { Dropdown } from 'react-native-element-dropdown';
 import NavBarEdit from '../components/NavBarEditTrends'
 import { useNavigation } from '@react-navigation/native';
+import trendsApi from '../apis/TrendsApi';
 
 const CreateTrend = () => {
     const navigation = useNavigation();
@@ -35,40 +36,40 @@ const CreateTrend = () => {
     
     // Data for trend type dropdown
     const trendType = [
-        { label: 'Social & Business Trends', value: '1', image: require('../assets/images/social_trends.png') },
-        { label: 'Technology Trends', value: '2', image: require('../assets/images/tech_trends.png') }
+        { label: 'Social & Business Trends', value: '0', image: require('../assets/images/social_trends.png') },
+        { label: 'Technology Trends', value: '1', image: require('../assets/images/tech_trends.png') }
     ];
     
     // Data for impact dropdown
     const impact = [
-        { label: 'Low', value: '1', image: require('../assets/images/low_impact.png') },
-        { label: 'Medium', value: '2', image: require('../assets/images/mid_impact.png') },
-        { label: 'High', value: '3', image: require('../assets/images/high_impact.png') },
-        { label: 'Very High', value: '4', image: require('../assets/images/very_high_impact.png') }
+        { label: 'Low', value: 'low impact', image: require('../assets/images/low_impact.png') },
+        { label: 'Medium', value: 'medium impact', image: require('../assets/images/mid_impact.png') },
+        { label: 'High', value: 'high impact', image: require('../assets/images/high_impact.png') },
+        { label: 'Very High', value: 'very high impact', image: require('../assets/images/very_high_impact.png') }
     ];
     
     // Data for timeframe dropdown
     const timeframe = [
-        { label: '0-3 years', value: '1' },
-        { label: '3-5 years', value: '2' },
-        { label: '5-10 years', value: '3' }
+        { label: '0-3 years', value: '0-3 years' },
+        { label: '3-5 years', value: '3-5 years' },
+        { label: '5-10 years', value: '5-10 years' }
     ];
 
     // Data for social key trends dropdown
     const socialKeyTrends = [
-        { label: 'Labor Shortage and Regulations', value: '1' },
-        { label: 'Digitalization', value: '2' },
-        { label: 'As-A-Service', value: '3' },
-        { label: 'Sustainability', value: '4' }
+        { label: 'Labor Shortage and Regulations', value: '0' },
+        { label: 'Digitalization', value: '1' },
+        { label: 'As-A-Service', value: '2' },
+        { label: 'Sustainability', value: '3' }
     ];
 
     // Data for technology focus area dropdown
     const techFocusArea = [
-        { label: 'Autonomous Systems', value: '1' },
-        { label: 'Artificial Intelligence', value: '2' },
-        { label: 'Robotics', value: '3' },
-        { label: 'Digital & Cloud', value: '4' },
-        { label: 'Other', value: '5' }
+        { label: 'Autonomous Systems', value: '4' },
+        { label: 'Artificial Intelligence', value: '5' },
+        { label: 'Robotics', value: '6' },
+        { label: 'Digital & Cloud', value: '7' },
+        { label: 'Other', value: '8' }
     ];
     
     // Effect to update category options when trend type changes
@@ -78,9 +79,9 @@ const CreateTrend = () => {
         setErrors(prev => ({ ...prev, category: false }));
         
         // Set appropriate category options based on selected trend type
-        if (selectedTrendType === '1') {
+        if (selectedTrendType === '0') {
             setCategoryOptions(socialKeyTrends);
-        } else if (selectedTrendType === '2') {
+        } else if (selectedTrendType === '1') {
             setCategoryOptions(techFocusArea);
         } else {
             setCategoryOptions([]);
@@ -110,7 +111,18 @@ const CreateTrend = () => {
 
     // Handle form submission
     const handleCreate = () => {
-        if (validateForm()) {}
+        if (validateForm()) {
+            const newTrend = {
+                title: title,
+                description: description,
+                impact: selectedImpact,
+                timeFrame: selectedTimeframe,
+                category: Number(selectedCategory),
+                trendType: Number(selectedTrendType)
+            };
+            trendsApi.createTrend(newTrend)
+                .then(navigation.goBack);
+        }
     };
 
     // Reset form to initial state and go back
