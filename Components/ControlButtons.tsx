@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 
+// Props for the control buttons component
 interface ControlButtonsProps {
   onComparePress: () => void;
   onShowTextPress: () => void;
@@ -11,6 +12,7 @@ interface ControlButtonsProps {
 const ControlButtons = ({ onShowTextPress, onComparePress, showTextLabels, compareMode }: ControlButtonsProps) => {
   return (
     <View style={styles.container}>
+      {/* Compare button */}
       <Pressable
        style={[styles.button, compareMode && styles.activeCompareButton]}
        onPress={onComparePress}
@@ -18,6 +20,7 @@ const ControlButtons = ({ onShowTextPress, onComparePress, showTextLabels, compa
         <Text style={styles.buttonText}>Compare</Text>
       </Pressable>
       
+      {/* Text visibility toggle button - shows/hides text labels */}
       <Pressable style={styles.button} onPress={onShowTextPress}>
         <Text style={styles.buttonText}>
           {showTextLabels ? 'Hide Text' : 'Show Text'}
@@ -39,12 +42,12 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 20,
-    flex: 1,
     alignItems: 'center',
     borderWidth: 2,
     borderColor: '#000000',
     minHeight: 50
   },
+  // Active state styling for compare button
   activeCompareButton: {
     borderColor: 'purple',
     borderWidth: 3,

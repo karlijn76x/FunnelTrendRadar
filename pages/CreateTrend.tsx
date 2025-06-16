@@ -2,20 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, Image } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import NavBarEdit from '../components/NavBarEditTrends'
+import { useNavigation } from '@react-navigation/native';
+import trendsApi from '../apis/TrendsApi';
 
 const CreateTrend = () => {
+    const navigation = useNavigation();
+
+    // Form input states
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    // Dropdown selection states
     const [selectedTrendType, setSelectedTrendType] = useState(null);
     const [selectedImpact, setSelectedImpact] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedTimeframe, setSelectedTimeframe] = useState(null);
+    // Dropdown focus states
     const [isTrendTypeFocus, setTrendTypeFocus] = useState(false);
     const [isImpactFocus, setIsImpactFocus] = useState(false);
     const [isCategoryFocus, setIsCategoryFocus] = useState(false);
     const [isTimeframeFocus, setIsTimeframeFocus] = useState(false);
+    // Category options based on selected trend type
     const [categoryOptions, setCategoryOptions] = useState<{ label: string; value: string }[]>([]);
     
+    // Error states for form validation
     const [errors, setErrors] = useState({
         title: false,
         trendType: false,
@@ -25,46 +34,54 @@ const CreateTrend = () => {
         description: false
     });
     
+    // Data for trend type dropdown
     const trendType = [
-        { label: 'Social & Business Trends', value: '1', image: require('../assets/images/social_trends.png') },
-        { label: 'Technology Trends', value: '2', image: require('../assets/images/tech_trends.png') }
+        { label: 'Social & Business Trends', value: '0', image: require('../assets/images/social_trends.png') },
+        { label: 'Technology Trends', value: '1', image: require('../assets/images/tech_trends.png') }
     ];
     
+    // Data for impact dropdown
     const impact = [
-        { label: 'Low', value: '1', image: require('../assets/images/low_impact.png') },
-        { label: 'Medium', value: '2', image: require('../assets/images/mid_impact.png') },
-        { label: 'High', value: '3', image: require('../assets/images/high_impact.png') },
-        { label: 'Very High', value: '4', image: require('../assets/images/very_high_impact.png') }
+        { label: 'Low', value: 'low impact', image: require('../assets/images/low_impact.png') },
+        { label: 'Medium', value: 'medium impact', image: require('../assets/images/mid_impact.png') },
+        { label: 'High', value: 'high impact', image: require('../assets/images/high_impact.png') },
+        { label: 'Very High', value: 'very high impact', image: require('../assets/images/very_high_impact.png') }
     ];
     
+    // Data for timeframe dropdown
     const timeframe = [
-        { label: '0-3 years', value: '1' },
-        { label: '3-5 years', value: '2' },
-        { label: '5-10 years', value: '3' }
+        { label: '0-3 years', value: '0-3 years' },
+        { label: '3-5 years', value: '3-5 years' },
+        { label: '5-10 years', value: '5-10 years' }
     ];
 
+    // Data for social key trends dropdown
     const socialKeyTrends = [
-        { label: 'Labor Shortage and Regulations', value: '1' },
-        { label: 'Digitalization', value: '2' },
-        { label: 'As-A-Service', value: '3' },
-        { label: 'Sustainability', value: '4' }
+        { label: 'Labor Shortage and Regulations', value: '0' },
+        { label: 'Digitalization', value: '1' },
+        { label: 'As-A-Service', value: '2' },
+        { label: 'Sustainability', value: '3' }
     ];
 
+    // Data for technology focus area dropdown
     const techFocusArea = [
-        { label: 'Autonomous Systems', value: '1' },
-        { label: 'Artificial Intelligence', value: '2' },
-        { label: 'Robotics', value: '3' },
-        { label: 'Digital & Cloud', value: '4' },
-        { label: 'Other', value: '5' }
+        { label: 'Autonomous Systems', value: '4' },
+        { label: 'Artificial Intelligence', value: '5' },
+        { label: 'Robotics', value: '6' },
+        { label: 'Digital & Cloud', value: '7' },
+        { label: 'Other', value: '8' }
     ];
     
+    // Effect to update category options when trend type changes
     useEffect(() => {
+        // Reset category selection when trend type changes
         setSelectedCategory(null);
         setErrors(prev => ({ ...prev, category: false }));
         
-        if (selectedTrendType === '1') {
+        // Set appropriate category options based on selected trend type
+        if (selectedTrendType === '0') {
             setCategoryOptions(socialKeyTrends);
-        } else if (selectedTrendType === '2') {
+        } else if (selectedTrendType === '1') {
             setCategoryOptions(techFocusArea);
         } else {
             setCategoryOptions([]);
@@ -77,6 +94,7 @@ const CreateTrend = () => {
         }
     };
 
+    // Form validation function
     const validateForm = () => {
         const newErrors = {
             title: !title.trim(),
@@ -91,10 +109,23 @@ const CreateTrend = () => {
         return !Object.values(newErrors).some(error => error);
     };
 
+    // Handle form submission
     const handleCreate = () => {
-        if (validateForm()) {}
+        if (validateForm()) {
+            const newTrend = {
+                title: title,
+                description: description,
+                impact: selectedImpact,
+                timeFrame: selectedTimeframe,
+                category: Number(selectedCategory),
+                trendType: Number(selectedTrendType)
+            };
+            trendsApi.createTrend(newTrend)
+                .then(navigation.goBack);
+        }
     };
 
+    // Reset form to initial state and go back
     const handleCancel = () => {
         setTitle('');
         setDescription('');
@@ -110,6 +141,7 @@ const CreateTrend = () => {
             timeframe: false,
             description: false
         });
+        navigation.goBack();
     };
 
   return (
@@ -117,8 +149,10 @@ const CreateTrend = () => {
       <NavBarEdit />
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
         <View style={styles.content}>
+          {/* Page title */}
           <Text style={styles.title}>Create a Trend</Text>
 
+          {/* Title input */}
           <View style={styles.section}>
               <Text style={styles.label}>
                 Title <Text style={styles.requiredAsterisk}>*</Text>
@@ -138,6 +172,7 @@ const CreateTrend = () => {
 
           <View style={styles.section}>
               <View style={styles.rowContainer}>
+                  {/* Trend Type dropdown */}
                   <View style={styles.dropdownContainer}>
                       <Text style={styles.label}>
                         Trend Type <Text style={styles.requiredAsterisk}>*</Text>
@@ -185,6 +220,7 @@ const CreateTrend = () => {
                     {errors.trendType && <Text style={styles.errorText}>Trend Type is Required</Text>}
                   </View>
                   
+                  {/* Impact dropdown */}
                   <View style={[styles.dropdownContainer, {marginLeft: 32}]}>
                       <Text style={styles.label}>
                         Impact <Text style={styles.requiredAsterisk}>*</Text>
@@ -236,6 +272,7 @@ const CreateTrend = () => {
 
           <View style={styles.section}>
               <View style={styles.rowContainer}>
+                  {/* Category dropdown */}
                   <View style={styles.dropdownContainer}>
                       <Text style={styles.label}>
                         Category <Text style={styles.requiredAsterisk}>*</Text>
@@ -262,11 +299,12 @@ const CreateTrend = () => {
                         setIsCategoryFocus(false);
                         clearError('category');
                       }}
-                      disable={!selectedTrendType}
+                      disable={!selectedTrendType}  // Disable until trend type is selected
                       />
                       {errors.category && <Text style={styles.errorText}>Category is Required</Text>}
                   </View>
                   
+                  {/* Timeframe dropdown */}
                   <View style={[styles.dropdownContainer, {marginLeft: 32}]}>
                       <Text style={styles.label}>
                         Timeframe <Text style={styles.requiredAsterisk}>*</Text>
@@ -298,6 +336,7 @@ const CreateTrend = () => {
               </View>
           </View>
 
+          {/* Description textarea */}
           <View style={styles.section}>
               <Text style={styles.label}>
                 Description <Text style={styles.requiredAsterisk}>*</Text>
@@ -319,6 +358,7 @@ const CreateTrend = () => {
           </View>
 
           <View style={styles.buttonContainer}>
+            {/* Cancel button - resets form */}
             <Pressable 
               style={({ pressed }) => [
                 styles.cancelButton,
@@ -328,6 +368,7 @@ const CreateTrend = () => {
             >
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </Pressable>
+            {/* Create button - submits form */}
             <Pressable 
               style={({ pressed }) => [
                 styles.createButton,
@@ -347,6 +388,7 @@ const CreateTrend = () => {
 export default CreateTrend
 
 const styles = StyleSheet.create({
+  // Styling for main container
   container: {
     backgroundColor: '#fff',
     flex: 1
@@ -362,23 +404,13 @@ const styles = StyleSheet.create({
     paddingTop: 32,
     alignItems: 'center'
   },
+  // Styling for text elements
   title: {
     fontSize: 48,
     fontFamily: 'Aptos_Bold',
     color: '#000',
     marginBottom: 4,
     textAlign: 'center',
-  },
-  section: {
-    marginBottom: 24,
-    width: 900
-  },
-  rowContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  dropdownContainer: {
-    flex: 1,
   },
   label: {
     fontSize: 24,
@@ -390,6 +422,27 @@ const styles = StyleSheet.create({
   requiredAsterisk: {
     color: '#FF0000',
   },
+  errorText: {
+    color: '#FF4444',
+    fontSize: 16,
+    fontFamily: 'Aptos',
+    marginTop: 4,
+    marginLeft: 4,
+  },
+  
+  // Styling for layout containers
+  section: {
+    marginBottom: 24,
+    width: 900
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  dropdownContainer: {
+    flex: 1,
+  },
+  // Styling for input field
   input: {
     borderWidth: 2,
     borderColor: '#000',
@@ -410,6 +463,7 @@ const styles = StyleSheet.create({
     height: 130,
     textAlignVertical: 'top',
   },
+  // Styling for dropdown
   dropdown: {
     height: 50,
     borderColor: '#000',
@@ -433,13 +487,30 @@ const styles = StyleSheet.create({
     fontFamily: 'Aptos',
     color: '#000',
   },
-  errorText: {
-    color: '#FF4444',
-    fontSize: 16,
-    fontFamily: 'Aptos',
-    marginTop: 4,
-    marginLeft: 4,
+  // Styling for dropdown item
+  item: {
+    flexDirection: 'row',
+    padding: 17,
+    alignItems: 'center',
   },
+  image: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+    resizeMode: 'contain',
+  },
+  selectedImage: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+    marginLeft: 5,
+    resizeMode: 'contain',
+  },
+  textItem: {
+    flex: 1,
+    fontSize: 16,
+  },
+  // Styling for buttons
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -478,27 +549,5 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: 'Aptos',
     fontWeight: '600',
-  },
-  item: {
-    flexDirection: 'row',
-    padding: 17,
-    alignItems: 'center',
-  },
-  image: {
-    width: 20,
-    height: 20,
-    marginRight: 10,
-    resizeMode: 'contain',
-  },
-  selectedImage: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-    marginLeft: 5,
-    resizeMode: 'contain',
-  },
-  textItem: {
-    flex: 1,
-    fontSize: 16,
   },
 })

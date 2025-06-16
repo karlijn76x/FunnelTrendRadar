@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   historyText: {
-    fontSize: 16,
+    fontSize: 14,
     borderBottomWidth: 1,
     fontWeight: 'bold',
     textAlign:'center',
