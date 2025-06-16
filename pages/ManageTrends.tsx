@@ -5,7 +5,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import NavBarEdit from '../components/NavBarEditTrends';
 import SearchBar from '../components/Search_bar';
 import ManagementTable from "../components/ManagementTable"
-import { useNavigation } from '@react-navigation/native';
 
 type RootStackParamList = {
   'Create Trend': undefined;

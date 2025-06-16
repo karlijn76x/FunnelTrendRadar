@@ -12,6 +12,7 @@ interface FallingAnimationProps {
   fallDirection?: 'left' | 'right';
   shouldShow: boolean;
   filterKey: string;  // Used to detect filter changes
+  skipAnimation?: boolean;
 }
 
 const FallingAnimation: React.FC<FallingAnimationProps> = ({ 
@@ -22,6 +23,7 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
   fallDirection,
   shouldShow,
   filterKey,
+  skipAnimation = false,
 }) => {
   // Refs for animation values and filter state tracking
   const position = useRef(new Animated.ValueXY()).current;
@@ -63,27 +65,32 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
     opacity.setValue(shouldShow ? 1 : 0);
     
     if (shouldShow) {
-      // Create smooth falling animation to target position
-      Animated.sequence([
-        Animated.delay(animationDelay),
-        Animated.parallel([
-          Animated.timing(position.x, {
-            toValue: targetX,
-            duration: 2500,
-            useNativeDriver: true,
-          }),
-          Animated.timing(position.y, {
-            toValue: targetY,
-            duration: 2500,
-            useNativeDriver: true,
-          }),
-          Animated.timing(opacity, {
-            toValue: 1,
-            duration: 2500,
-            useNativeDriver: true,
-          }),
-        ]),
-      ]).start();
+      if (skipAnimation) {
+        position.setValue({ x: targetX, y: targetY });
+        opacity.setValue(1);
+      } else {
+        // Create smooth falling animation to target position
+        Animated.sequence([
+          Animated.delay(animationDelay),
+          Animated.parallel([
+            Animated.timing(position.x, {
+              toValue: targetX,
+              duration: 2500,
+              useNativeDriver: true,
+            }),
+            Animated.timing(position.y, {
+              toValue: targetY,
+              duration: 2500,
+              useNativeDriver: true,
+            }),
+            Animated.timing(opacity, {
+              toValue: 1,
+              duration: 2500,
+              useNativeDriver: true,
+            }),
+          ]),
+        ]).start();
+      }
     }
   };
 
@@ -121,10 +128,14 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
       previousFilterKey.current = filterKey;
       
       if (shouldShow) {
-        animateFallDown();
-        setTimeout(() => {
-          animateToTarget(200);
-        }, 1200);
+        if (!skipAnimation) {
+          animateFallDown();
+          setTimeout(() => {
+            animateToTarget(200);
+          }, 1200);
+        } else {
+          animateToTarget();
+        }
       } else {
         animateFallDown();
       }
@@ -143,7 +154,7 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
         useNativeDriver: true,
       }).start();
     }
-  }, [shouldShow, filterKey]);
+  }, [shouldShow, filterKey, skipAnimation]);
 
   return (
     <Animated.View
