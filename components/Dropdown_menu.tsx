@@ -71,9 +71,9 @@ const impact = [
 // Data for timeframe dropdown menu
 const timeframe = [
     { label: 'All', value: '1' },
-    { label: '0-3 years', value: '2' },
+    { label: '0-3 years', value: '4' },
     { label: '3-5 years', value: '3' },
-    { label: '5-10 years', value: '4' },
+    { label: '5-10 years', value: '2' },
   ];
 
 // Data for socialkey trends dropdown menu
