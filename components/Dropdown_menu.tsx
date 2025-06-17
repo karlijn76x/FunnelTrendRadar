@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable, TouchableOpacity, Animated } from 'react-native';
 import { useFonts } from 'expo-font';
 import SearchBar from './Search_bar';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Dimensions } from 'react-native';
+//State for toggling side panel
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
+const panelWidth = screenWidth * 0.2; 
 
 type RootStackParamList = {
   ManageTrends: undefined;
@@ -97,6 +103,9 @@ const techFocusArea = [
 
 const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange, onImpactChange, onTimeframeChange, onSocialKeyTrendChange, onTechFocusAreaChange }) => {
   const navigation = useNavigation<NavigationProp>();
+  //State for toggling side panel
+  const [infoVisible, setInfoVisible] = useState(false); 
+  const slideAnim = useRef(new Animated.Value(panelWidth)).current;
   // State for each filter dropdown
   const [trendValue, setTrendValue] = useState<string | null>(null);
   const [impactValue, setImpactValue] = useState<string | null>(null);
@@ -174,6 +183,24 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
     );
   };
 
+  const toggleInfoPanel = () => {
+    if (infoVisible) {
+      Animated.timing(slideAnim, {
+        toValue: panelWidth, 
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => setInfoVisible(false));
+    } else {
+      setInfoVisible(true);
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
+  };
+  
+
   const handleEditPress = () => {
     navigation.navigate('Manage Trends');
   }
@@ -186,6 +213,7 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
           source={require('../assets/images/vanderlande_logo.png')}
         />
       </View>
+      
       {/* Filter dropdowns */}
       <View style={styles.dropdownsContainer}>
         {renderDropdown('Trend Type', trendType, trendValue, setTrendValue, onTrendTypeChange)}
@@ -194,12 +222,38 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
         {renderDropdown('Social Key Trend', socialKeyTrends, socialKeyTrendsValue, setSocialKeyTrendsValue, onSocialKeyTrendChange)}
         {renderDropdown('Tech Focus Area', techFocusArea, techFocusAreaValue, setTechFocusAreaValue, onTechFocusAreaChange)}
       </View>
-      <View style={styles.searchAndEditContainer}>
-        <SearchBar/>
+
+      {/* Search Bar and Icons */}
+    <View style={styles.searchAndEditContainer}>
+      <SearchBar />
+      <View style={styles.iconContainer}>
+        <TouchableOpacity onPress={toggleInfoPanel} style={styles.infoIcon}>
+          <MaterialIcons name="info" size={30} color="black" />
+        </TouchableOpacity>
         <Pressable onPress={handleEditPress}>
-          <Image style={styles.editImg} source={require('../assets/images/edit_icon.png')}/>
+          <Image style={styles.editImg} source={require('../assets/images/edit_icon.png')} />
         </Pressable>
       </View>
+    </View>
+    
+    {/* Side Panel */}
+    {infoVisible && (
+  <Animated.View style={[styles.infoPanel, { transform: [{ translateX: slideAnim }] }]}>
+    <Text style={[styles.infoText, styles.paragraph]}>
+      To identify potential industry disruptors early on, extensive trend research was conducted. A total of 270 relevant social and technological trends were identified across the segments: airports, parcel and warehousing.
+    </Text>
+    <Text style={[styles.infoText, styles.paragraph]}>
+      The impact of these trends were validated through a variety of sources; including expert interviews, industry reports, research into the investment landscape, and analysis of active patents. Through this process we gained a comprehensive understanding of the forces shaping the future of our industry and identified the most important trends to focus on.
+    </Text>
+    <Text style={[styles.infoText, styles.paragraph]}>
+      The top 40 trends are shown on the priority matrix on the right. Over time we will track the relevancy of these trends and continue watching for emerging signals. More information and trend definitions can be found in the appendix.
+    </Text>
+    <TouchableOpacity onPress={toggleInfoPanel} style={styles.closeButton}>
+      <MaterialIcons name="close" size={24} color="white" />
+    </TouchableOpacity>
+  </Animated.View>
+)}
+
     </View>
   );
 };
@@ -208,6 +262,7 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
 const styles = StyleSheet.create({
   // Styling for the whole navbar
   container: {
+    position: 'relative',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -215,6 +270,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderColor:'black',
     borderBottomWidth: 2,
+    zIndex: 1000,
   },
   // Styling for the logo
   logoContainer: {
@@ -224,6 +280,9 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: 170,
     height: 60,
+  },
+  infoIcon: {
+    marginRight: 10,
   },
   // Styling for the dropdown menus
   dropdownsContainer: {
@@ -280,9 +339,51 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
   },
+  iconContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 5, 
+  },
+  infoIcon: {
+    marginBottom: 5, 
+  },
   editImg: {
     width: 30,
     height: 30,
+  },
+  infoPanel: {
+    position: 'absolute',
+    right: 0, 
+    top: 0,
+    height: screenHeight,
+    width: panelWidth,
+    backgroundColor: 'white',
+    padding: 20,
+    borderWidth: 1,
+    justifyContent: 'flex-start',
+    borderColor: 'black',
+    zIndex: 10,
+  },
+  
+  infoText: {
+    color: 'black',
+    fontSize: 15,
+    textAlign: 'left',
+    lineHeight: 24,
+    zIndex: 20,
+    marginTop: 30
+  },
+  
+  paragraph: {
+    marginBottom: 15,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: '#000',
+    borderRadius: 20,
+    padding: 5,
   },
 });
 
