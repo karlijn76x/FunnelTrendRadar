@@ -41,11 +41,11 @@ const ManagementTable = ({ trends }) => {
     const renderRow = (item: any, isLast: boolean) => {
         return (
             <View style={[styles.row, isLast && styles.lastRow]} key={item.id}>
-                <Text style={styles.cell}>{item.title}</Text>
-                <Text style={styles.cell}>{item.trendType}</Text>
-                <Text style={styles.cell}>{item.timeFrame}</Text>
-                <Text style={styles.cell}>{item.impact}</Text>
-                <Text style={styles.cell}>{item.description}</Text>
+                <Text style={styles.cell} numberOfLines={1}>{item.title}</Text>
+                <Text style={styles.cell} numberOfLines={1}>{item.trendType}</Text>
+                <Text style={styles.cell} numberOfLines={1}>{item.timeFrame}</Text>
+                <Text style={styles.cell} numberOfLines={1}>{item.impact}</Text>
+                <Text style={styles.cell} numberOfLines={1}>{item.description}</Text>
                 <View style={styles.actionsCell}>
                     <TouchableOpacity 
                         style={styles.actionButton}
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
         borderBottomWidth:2,
         borderLeftWidth:2,
         borderRightWidth:2,
-        alignItems:'center'
+        alignItems:'center',
     },
     lastRow: {
         flexDirection: 'row',
@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: 'black',
         fontFamily: 'Aptos',
+        width: 100,
     },
     actionsCell: {
         flex: 1,
