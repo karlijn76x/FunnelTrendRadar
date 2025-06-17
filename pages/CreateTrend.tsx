@@ -121,7 +121,7 @@ const CreateTrend = () => {
                 trendType: Number(selectedTrendType)
             };
             trendsApi.createTrend(newTrend)
-                .then(navigation.goBack);
+                .then(() => navigation.navigate('Manage Trends'));
         }
     };
 

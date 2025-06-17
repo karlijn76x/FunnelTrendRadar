@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, Modal, Pressable } from 'react-native';
+import trendsApi from '../apis/TrendsApi';
+import { useNavigation } from '@react-navigation/native';
 
-const ManagementTable = () => {
+const ManagementTable = ({ trends }) => {
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [selectedTrend, setSelectedTrend] = useState<{ id: number; title: string } | null>(null);
+    const navigation = useNavigation<NavigationProp>();
 
     const handleDeleteClick = (trend: { id: number; title: string }) => {
         setSelectedTrend(trend);
@@ -11,8 +14,8 @@ const ManagementTable = () => {
     };
 
     const handleConfirmDelete = () => {
-        // TODO: Implement actual delete functionality
-        console.log('Deleting trend:', selectedTrend);
+        trendsApi.deleteTrend(selectedTrend.id);
+        navigation.navigate('Manage Trends', {query: ''});
         setDeleteModalVisible(false);
         setSelectedTrend(null);
     };
@@ -39,10 +42,10 @@ const ManagementTable = () => {
         return (
             <View style={[styles.row, isLast && styles.lastRow]} key={item.id}>
                 <Text style={styles.cell}>{item.title}</Text>
-                <Text style={styles.cell}>{item.category}</Text>
-                <Text style={styles.cell}>{item.timeframe}</Text>
+                <Text style={styles.cell}>{item.trendType}</Text>
+                <Text style={styles.cell}>{item.timeFrame}</Text>
                 <Text style={styles.cell}>{item.impact}</Text>
-                <Text style={styles.cell}>{item.descr}</Text>
+                <Text style={styles.cell}>{item.description}</Text>
                 <View style={styles.actionsCell}>
                     <TouchableOpacity style={styles.actionButton}>
                         <Image 
@@ -64,41 +67,10 @@ const ManagementTable = () => {
         );
     };
 
-    // Sample data
-    const data = [
-        {
-            id: 1,
-            title: "Circular Economy",
-            category: "Technology",
-            timeframe: "3-5 years",
-            impact: "High",
-            descr:"Descr",
-            actions: "Delete"
-        },
-        {
-            id: 2,
-            title: "Artificial Intelligence",
-            category: "Technology",
-            timeframe: "5-10 years",
-            impact: "Very High",
-            descr:"Descr",
-            actions: "Delete"
-        },
-        {
-            id: 3,
-            title: "Cybersecurity",
-            category: "Technology",
-            timeframe: "5-10 years",
-            impact: "High",
-            descr:"Descr",
-            actions: "Delete"
-        }
-    ];
-
     return (
         <View style={styles.container}>
             {renderHeader()}
-            {data.map((item, index) => renderRow(item, index === data.length - 1))}
+            {trends.map((item, index) => renderRow(item, index === trends.length - 1))}
 
             <Modal
                 animationType="fade"
