@@ -133,7 +133,7 @@ const TrendDetail: React.FC<PopupProps> = ({
           </TouchableOpacity>
 
           <View style={styles.header}>
-            <Text style={styles.title}>{circleName}</Text>
+            <Text style={styles.title}>{currentTrend.title}</Text>
           </View>
 
           <View style={styles.metaRow}>
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     height: 650,
     borderRadius: 350,
     overflow: "hidden",
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: "black",
     position: 'relative',
   },
