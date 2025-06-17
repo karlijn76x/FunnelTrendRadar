@@ -47,7 +47,10 @@ const ManagementTable = ({ trends }) => {
                 <Text style={styles.cell}>{item.impact}</Text>
                 <Text style={styles.cell}>{item.description}</Text>
                 <View style={styles.actionsCell}>
-                    <TouchableOpacity style={styles.actionButton}>
+                    <TouchableOpacity 
+                        style={styles.actionButton}
+                        onPress={() => navigation.navigate('Edit Trend', { trendId: item.id })}
+                    >
                         <Image 
                             source={require('../assets/images/edit_icon.png')}
                             style={styles.actionIcon}
