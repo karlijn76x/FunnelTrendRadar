@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Pressable, StyleProp, ViewStyle } from 'react-native';
 
-type Impact = 'low' | 'medium' | 'high' | 'veryHigh'; 
+type Impact = 'low impact' | 'medium impact' | 'high impact' | 'very high impact';
 
 type Props = {
   impact: Impact;
@@ -12,15 +12,15 @@ type Props = {
 };
 
 const getSize = (impact: Impact): number => {
-  switch (impact) {
-    case 'low':
+  switch (impact.toLowerCase()) {
+    case 'low impact':
+      return 15;
+    case 'medium impact':
+      return 25;
+    case 'high impact':
       return 35;
-    case 'medium':
-      return 55;
-    case 'high':
-      return 75;
-    case 'veryHigh':
-      return 90;
+    case 'very high impact':
+      return 45;
     default:
       return 50;
   }
@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
   circle: {
     borderWidth: 1,
     borderColor: '#000',
-    margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -12,7 +12,7 @@ import ControlButtons from '../components/ControlButtons';
 import FallingAnimation from '../components/FallingAnimation';
 import ViewHistory from '../components/ViewHistory';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import trendsApi from '../apis/TrendsApi';
 
 
 export default function MainPage() {
@@ -23,6 +23,12 @@ export default function MainPage() {
     Aptos_Italic: require("../assets/fonts/Aptos-Italic.ttf")
   });
 
+  const [trends, setTrends] = useState([]);
+  const [leftList, setLeftList] = useState([]);
+  const [topList, setTopList] = useState([]);
+  const [topDots, setTopDots] = useState([]);
+  const [middleDots, setMiddleDots] = useState([]);
+  const [bottomDots, setBottomDots] = useState([]);
   // UI state
   const [visible, setVisible] = useState(false);
   const [showTextLabels, setShowTextLabels] = useState(true); // Toggle for circle labels
@@ -44,21 +50,23 @@ export default function MainPage() {
   const [isTimeframeFilterChange, setIsTimeframeFilterChange] = useState(false);
   const prevTimeframeRef = useRef(selectedTimeframe);
   
-  const handleCirclePress = (circleName: string) => {
+  const handleCirclePress = (trend) => {
     if (compareMode) {
       setSelectedCircles((prev) => {
-        if (prev.includes(circleName)) {
-          console.log(`Deselecting circle: ${circleName}`);
-          return prev.filter((name) => name !== circleName);
+        if (prev === trend) {
+          console.log(`Deselecting circle`);
+          return prev.filter((x) => x !== trend);
         } else if (prev.length < 2) {
-          console.log(`Selecting circle: ${circleName}`);
-          return [...prev, circleName];
+          console.log(`Selecting circle`);
+          return [...prev, trend];
         }
         console.log(`Cannot select more than two circles`);
         return prev;
       });
     } else {
-      console.log(`Opening detail view for: ${circleName}`);
+        selectedCircles[0] = trend;
+        setSelectedCircles(selectedCircles);
+      console.log(`Opening detail view`);
       setVisible(true);
     }
   };
@@ -69,44 +77,214 @@ export default function MainPage() {
     setSelectedCircles([]); // Reset selected circles when toggling compare mode
   };
   
+  useEffect(() => {
+    getDots();
+  }, [trends, showTextLabels, selectedTrendType, selectedImpact, selectedTimeframe, selectedSocialKeyTrend, selectedTechFocusArea, selectedCircles]);
 
+    const getDots = () => {
+        let newTopDots = [];
+        let newMiddleDots = [];
+        let newBottomDots = [];
+          let newLeftList = [];
+          let newTopList = [];
+
+        if (leftList.length > 0) {
+            newLeftList = leftList;
+            newTopList = topList;
+        }
+        for (let i = 0; i < trends.length; i++) {
+            let left = 0;
+            let top = 0;
+            let dot = null;
+
+            if (leftList.length > 0) {
+                left = newLeftList[i];
+                top = newTopList[i];
+            } else {
+                let circleSize = 0;
+                let height = 0;
+                let width = 0;
+                let overlaps = false;
+                switch (trends[i].impact.toLowerCase()) {
+                    case 'low impact': {
+                        circleSize = 15;
+                        break;
+                    }
+                    case 'medium impact': {
+                        circleSize = 25;
+                        break;
+                    }
+                    case 'high impact': {
+                        circleSize = 35;
+                        break;
+                    }
+                    case 'very high impact': {
+                        circleSize = 45;
+                        break;
+                    }
+                }
+                switch (trends[i].timeFrame.toLowerCase()) {
+                    case '5-10 years': {
+                        width = 800;
+                        height = 105;
+                        break;
+                    }
+                    case '3-5 years': {
+                        width = 640;
+                        height = 100;
+                        break;
+                    }
+                    case '0-3 years': {
+                        width = 350;
+                        height = 250;
+                        break;
+                    }
+                }
+
+                left = Math.round(Math.random() * (width - circleSize));
+                top = Math.round(Math.random() * (height - circleSize));
+                fallSide = Math.random();
+
+                if (fallSide >= 0.5) {
+                    fallSide = 'right';
+                } else {
+                    fallSide = 'left';
+                }
+
+                for (let i = 0; i < newLeftList.length; i++) {
+                    if (newLeftList[i] > left - circleSize && newLeftList[i] < left + circleSize && newTopList[i] > top - circleSize && newTopList[i] < top + circleSize) {
+                        overlaps = true;
+                    }
+                }
+                while (overlaps) {
+                  left = Math.round(Math.random() * (width - circleSize));
+                  top = Math.round(Math.random() * (height - circleSize));
+                    overlaps = false;
+
+                    for (let i = 0; i < newLeftList.length; i++) {
+                        if (newLeftList[i] > left - circleSize && newLeftList[i] < left + circleSize && newTopList[i] > top - circleSize && newTopList[i] < top + circleSize) {
+                            overlaps = true;
+                        }
+                    }
+                }
+            }
+
+          newLeftList.push(left);
+          newTopList.push(top);
+
+            if (trends[i].trendType === 1) {
+                dot = (
+                  <FallingAnimation
+                    delay={0}
+                    targetX={left}
+                    targetY={top}
+                    fallDirection={fallSide}
+                    shouldShow={shouldShowItem(trends[i].timeFrame, 'tech', trends[i].impact)}
+                    filterKey={`${animationFilterKey}`}
+                    skipAnimation={isTimeframeFilterChange}
+                  >
+                    <View style={[styles.circleLabelContainer, { zIndex: 1, opacity: getTechOpacity(trends[i].category) }]}>
+                      <TechTrendCircle
+                        impact={trends[i].impact}
+                        onPress={() => handleCirclePress(trends[i])}
+                        selected={selectedCircles.includes(trends[i])}
+                      />
+                      {showTextLabels && (
+                        <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
+                          <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1} ellipsizeMode="tail">
+                            {trends[i].title}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  </FallingAnimation>
+                );
+            }
+            else {
+                  dot = (
+                      <FallingAnimation
+                        delay={0}
+                        targetX={left}
+                        targetY={top}
+                        fallDirection={fallSide}
+                        shouldShow={shouldShowItem(trends[i].timeFrame, 'social', trends[i].impact)}
+                        filterKey={`${animationFilterKey}`}
+                        skipAnimation={isTimeframeFilterChange}
+                      >
+                        <View style={[styles.circleLabelContainer, { zIndex: 1, opacity: getSocialOpacity(trends[i].category) }]}>
+                          <SocialTrendCircle
+                            impact={trends[i].impact}
+                            onPress={() => handleCirclePress(trends[i])}
+                            selected={selectedCircles.includes(trends[i])}
+                          />
+                          {showTextLabels && (
+                            <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
+                              <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1} ellipsizeMode="tail">
+                                {trends[i].title}
+                              </Text>
+                            </View>
+                          )}
+                        </View>
+                      </FallingAnimation>
+                  );
+            }
+
+            if (trends[i].timeFrame.toLowerCase() === '5-10 years') {
+                newTopDots.push(dot);
+            } else if (trends[i].timeFrame.toLowerCase() === '3-5 years') {
+                newMiddleDots.push(dot);
+            } else {
+                newBottomDots.push(dot);
+            }
+        }
+
+        setTopList(newTopList);
+        setLeftList(newLeftList);
+        setTopDots(newTopDots);
+        setMiddleDots(newMiddleDots);
+        setBottomDots(newBottomDots);
+    }
 
   useEffect(() => {
+    const retrieveTrends = async () => {
+        await trendsApi.getAllTrends()
+            .then(data => setTrends(data))
+            .catch(error => console.log(error));
+    };
+    retrieveTrends();
     const checkOnboardingStatus = async () => {
-      if (__DEV__) {
-        // In development always resert (temperary)
-        await AsyncStorage.removeItem('dontShowOnboarding');
-        await AsyncStorage.setItem('appStartCount', '0');
-      }
       try {
-        // Check if onboarding has been checked before
+        // Retrieve the number of times the app has been started
         const startCountStr = await AsyncStorage.getItem('appStartCount');
         let startCount = startCountStr ? parseInt(startCountStr) : 0;
         startCount += 1;
+         // Save the updated start count
         await AsyncStorage.setItem('appStartCount', startCount.toString());
-
+         // Check if the user chose not to show onboarding again
         const dontShow = await AsyncStorage.getItem('dontShowOnboarding');
-
+        // Show onboarding again on the 5th app start
         if (dontShow === 'true') {
           if (startCount === 5) {
-            
+            // Reset the flag so onboarding will be shown again
             setShowOnboarding(true);
             await AsyncStorage.setItem('dontShowOnboarding', 'false');
-
+             // Skip onboarding if it's not the 5th start
             setDontShowAgain(false);
           } else {
+             // Show onboarding if the user hasn't opted out
             setShowOnboarding(false);
           }
         } else {
           setShowOnboarding(true);
         }
-  
+
       } catch (e) {
         setShowOnboarding(true);
       } finally {
         setOnboardingChecked(true);
       }
     };
+    // Run onboarding check on component mount
     checkOnboardingStatus();
   }, []);
 
@@ -164,10 +342,10 @@ export default function MainPage() {
    */
   const matchesImpact = (value: string) => {
     const map: { [key: string]: string } = {
-      'low': '2',
-      'medium': '3',
-      'high': '4',
-      'very high': '5',
+      'low impact': '2',
+      'medium impact': '3',
+      'high impact': '4',
+      'very high impact': '5',
     };
     return selectedImpact === null || selectedImpact === '1' || selectedImpact === map[value.toLowerCase()];
   };
@@ -186,10 +364,10 @@ export default function MainPage() {
    */
   const matchesSocialKeyTrend = (trendName: string) => {
     const map: Record<string, string> = {
-      'Labor Shortage and Regulations': '2',
-      'Digitalization': '3',
-      'As-A-Service': '4',
-      'Sustainability': '5',
+      0: '2',
+      1: '3',
+      2: '4',
+      3: '5',
     };
     return selectedSocialKeyTrend === null || selectedSocialKeyTrend === '1' || selectedSocialKeyTrend === map[trendName];
   };
@@ -201,11 +379,11 @@ export default function MainPage() {
    */
   const matchesTechFocusArea = (areaName: string) => {
     const map: Record<string, string> = {
-      'Autonomous Systems': '2',
-      'Artificial Intelligence': '3',
-      'Robotics': '4',
-      'Digital & Cloud': '5',
-      'Other': '6',
+      4: '2',
+      5: '3',
+      6: '4',
+      7: '5',
+      8: '6',
     };
     return selectedTechFocusArea === null || selectedTechFocusArea === '1' || selectedTechFocusArea === map[areaName];
   };
@@ -265,53 +443,9 @@ export default function MainPage() {
                 style={{ width: 900, height: 105, resizeMode: 'cover' }}
                 source={require('../assets/images/funnel_top.png')}
               />
-              <FallingAnimation 
-                delay={0} 
-                targetX={100} 
-                targetY={5} 
-                fallDirection="left"
-                shouldShow={shouldShowItem('5-10 years', 'tech', 'high')}
-                filterKey={`${animationFilterKey}`}
-                skipAnimation={isTimeframeFilterChange}
-              >
-                <View style={[styles.circleLabelContainer, { zIndex: 1, opacity: getTechOpacity('Autonomous Systems') }]}>
-                  <TechTrendCircle
-                    impact="high"
-                    onPress={() => handleCirclePress('Outdoor Autonomous Systems')}
-                    selected={selectedCircles.includes('Outdoor Autonomous Systems')}
-                  />
-                  {showTextLabels && (
-                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
-                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1} ellipsizeMode="tail">
-                        Outdoor Autonomous Systems
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              </FallingAnimation>
-              <FallingAnimation 
-                delay={0} 
-                targetX={250} 
-                targetY={30} 
-                fallDirection="left"
-                shouldShow={shouldShowItem('5-10 years', 'social', 'low')}
-                filterKey={`${animationFilterKey}`}
-                skipAnimation={isTimeframeFilterChange}
-              >
-                <View style={[styles.circleLabelContainer, { zIndex: 1, opacity: getSocialOpacity('Sustainability') }]}>
-                  <SocialTrendCircle
-                    impact="low"
-                    onPress={() => setVisible(true)}
-                  />
-                  {showTextLabels && (
-                    <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
-                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1} ellipsizeMode="tail">
-                        Local for Local
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              </FallingAnimation>
+              <View style={{ position: 'absolute', paddingHorizontal: 50 }}>
+                {topDots}
+              </View>
             </View>
           )}
 
@@ -322,53 +456,9 @@ export default function MainPage() {
                 style={{ width: 800, height: 100, resizeMode: 'cover' }}
                 source={require('../assets/images/funnel_middle.png')}
               />
-              <FallingAnimation 
-                delay={0} 
-                targetX={400} 
-                targetY={-5} 
-                fallDirection="right"
-                shouldShow={shouldShowItem('3-5 years', 'tech', 'medium')}
-                filterKey={`${animationFilterKey}`}
-                skipAnimation={isTimeframeFilterChange}
-              >
-                <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Artificial Intelligence') }]}>
-                  <TechTrendCircle
-                    impact="medium"
-                    onPress={() => handleCirclePress('Generative AI')}
-                    selected={selectedCircles.includes('Generative AI')}
-                  />
-                  {showTextLabels && (
-                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
-                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1} ellipsizeMode="tail">
-                        Generative AI
-                      </Text>
-                    </View>
-                  )}
+                <View style={{ position: 'absolute', paddingHorizontal: 80 }}>
+                  {middleDots}
                 </View>
-              </FallingAnimation>
-              <FallingAnimation 
-                delay={0} 
-                targetX={600} 
-                targetY={-5} 
-                fallDirection="right"
-                shouldShow={shouldShowItem('3-5 years', 'social', 'very high')}
-                filterKey={`${animationFilterKey}`}
-                skipAnimation={isTimeframeFilterChange}
-              >
-                <View style={[styles.circleLabelContainer, { zIndex: 11, opacity: getSocialOpacity('Digitalization') }]}>
-                  <SocialTrendCircle
-                    impact="veryHigh"
-                    onPress={() => setVisible(true)}
-                  />
-                  {showTextLabels && (
-                    <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
-                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1} ellipsizeMode="tail">
-                        Privacy & Security
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              </FallingAnimation>
             </View>
           )}
 
@@ -379,148 +469,34 @@ export default function MainPage() {
                 style={{ width: 700, height: 250, resizeMode: 'cover', zIndex: 0 }}
                 source={require('../assets/images/funnel_bottom.png')}
               />
-              <FallingAnimation 
-                delay={0} 
-                targetX={100} 
-                targetY={10} 
-                fallDirection="left"
-                shouldShow={shouldShowItem('0-3 years', 'tech', 'medium')}
-                filterKey={`${animationFilterKey}`}
-                skipAnimation={isTimeframeFilterChange}
-              >
-                <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Robotics') }]}>
-                  <TechTrendCircle
-                    impact="medium"
-                    onPress={() => handleCirclePress('Humanoids')}
-                    selected={selectedCircles.includes('Humanoids')}
-                  />
-                  {showTextLabels && (
-                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
-                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1} ellipsizeMode="tail">
-                        Humanoids
-                      </Text>
-                    </View>
-                  )}
+                <View style={{ position: 'absolute', paddingHorizontal: 175 }}>
+                  {bottomDots}
                 </View>
-              </FallingAnimation>
-              <FallingAnimation 
-                delay={0} 
-                targetX={200} 
-                targetY={90} 
-                fallDirection="left"
-                shouldShow={shouldShowItem('0-3 years', 'social', 'high')}
-                filterKey={`${animationFilterKey}`}
-                skipAnimation={isTimeframeFilterChange}
-              >
-                <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getSocialOpacity('As-A-Service') }]}>
-                  <SocialTrendCircle
-                    impact="high"
-                    onPress={() => setVisible(true)}
-                  />
-                  {showTextLabels && (
-                    <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
-                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1} ellipsizeMode="tail">
-                        Everything as a Service
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              </FallingAnimation>
-              <FallingAnimation 
-                delay={0} 
-                targetX={350} 
-                targetY={50} 
-                fallDirection="right"
-                shouldShow={shouldShowItem('0-3 years', 'tech', 'low')}
-                filterKey={`${animationFilterKey}`}
-                skipAnimation={isTimeframeFilterChange}
-              >
-                <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Digital & Cloud') }]}>
-                  <TechTrendCircle
-                    impact="low"
-                    onPress={() => handleCirclePress('Cybersecurity')}
-                    selected={selectedCircles.includes('Cybersecurity')}
-                  />
-                  {showTextLabels && (
-                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
-                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1} ellipsizeMode="tail">
-                        Cybersecurity
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              </FallingAnimation>
-              <FallingAnimation 
-                delay={0} 
-                targetX={400} 
-                targetY={150} 
-                fallDirection="right"
-                shouldShow={shouldShowItem('0-3 years', 'social', 'medium')}
-                filterKey={`${animationFilterKey}`}
-                skipAnimation={isTimeframeFilterChange}
-              >
-                <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getSocialOpacity('Labor Shortage and Regulations') }]}>
-                  <SocialTrendCircle
-                    impact="medium"
-                    onPress={() => setVisible(true)}
-                  />
-                  {showTextLabels && (
-                    <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
-                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1} ellipsizeMode="tail">
-                        Changing Work
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              </FallingAnimation>
-              <FallingAnimation 
-                delay={0} 
-                targetX={430} 
-                targetY={5} 
-                fallDirection="right"
-                shouldShow={shouldShowItem('0-3 years', 'tech', 'very high')}
-                filterKey={`${animationFilterKey}`}
-                skipAnimation={isTimeframeFilterChange}
-              >
-                <View style={[styles.circleLabelContainer, { zIndex: 10, opacity: getTechOpacity('Other') }]}>
-                  <TechTrendCircle
-                    impact="veryHigh"
-                    onPress={() => handleCirclePress('3D Printing')}
-                    selected={selectedCircles.includes('3D Printing')}
-                  />
-                  {showTextLabels && (
-                    <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
-                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1} ellipsizeMode="tail">
-                        3D Printing
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              </FallingAnimation>
             </View>
           )}
-          
+
             {compareMode && selectedCircles.length === 2 ? (
             <View style={styles.compareTrendDetailsContainer}>
-            {selectedCircles.map((circleName, index) => {
-            console.log(`Rendering TrendDetail for: ${circleName}`);
+            {selectedCircles.map((trend, index) => {
+            console.log(`Rendering TrendDetail`);
           return (
            <TrendDetail
             key={index}
             visible={true}
             onClose={() => {
-            setSelectedCircles((prev) => prev.filter((name) => name !== circleName));
+            setSelectedCircles((prev) => prev.filter((x) => x !== trend));
            }}
-           circleName={circleName}
+            trends={trends}
            useModal={false}
-      
+           currentTrendIndex={trends.findIndex(x => x === selectedCircles[index])}
+
           />
           );
           })}
 
   </View>
   ) : (
-  <TrendDetail visible={visible} onClose={() => setVisible(false)} circleName="Cybersecurity" />
+  <TrendDetail visible={visible} onClose={() => setVisible(false)} trends={trends} currentTrendIndex={trends.findIndex(x => x === selectedCircles[0])} />
 )}
 
         </View>
@@ -577,13 +553,13 @@ const styles = StyleSheet.create({
   // Styling for trend circle labels
   labelContainer: {
     position: 'absolute',
-    bottom: -10,
+    bottom: -16,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: 'black',
     paddingHorizontal: 5,
     alignSelf: 'center',
-    maxWidth: 100,
+    maxWidth: 75,
   },
   // Text styling for labels
   labelText: {

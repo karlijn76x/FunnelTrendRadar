@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   topRow: {
     flexDirection: 'row',
     gap: 15,
-    paddingLeft: 17.5
+    paddingLeft: 12.5
   },
   bottomRow: {
     flexDirection: 'row',
@@ -117,31 +117,31 @@ const styles = StyleSheet.create({
   },
   trendTypeRow: {
     flexDirection: 'row',
-    height: 40,
+    height: 20,
     alignItems: 'center'
   },
   smallRow: {
     flexDirection: 'row',
     gap: 15,
-    height: 35,
+    height: 15,
     alignItems: 'center'
   },
   mediumRow: {
     flexDirection: 'row',
     gap: 15,
-    height: 55,
+    height: 25,
     alignItems: 'center'
   },
   bigRow: {
     flexDirection: 'row',
     gap: 15,
-    height: 75,
+    height: 35,
     alignItems: 'center'
   },
   veryBigRow: {
     flexDirection: 'row',
     gap: 15,
-    height: 90,
+    height: 45,
     alignItems: 'center'
   },
   timeframeRow: {
@@ -155,13 +155,13 @@ const styles = StyleSheet.create({
   topCircleColumn: {
     flexDirection: 'column',
     alignItems: 'center',
-    width: 55,
+    width: 20,
     gap: 15
   },
   bottomCircleColumn: {
     flexDirection: 'column',
     alignItems: 'center',
-    width: 90,
+    width: 45,
     gap: 15
   },
   textColumn: {
@@ -185,29 +185,29 @@ const styles = StyleSheet.create({
     borderColor: '#000'
   },
   trendTypeCircle: {
-    width: 40,
-    height: 40,
+    width: 20,
+    height: 20,
     borderRadius: 20
   },
   smallCircle: {
+    width: 15,
+    height: 15,
+    borderRadius: 7.5
+  },
+  mediumCircle: {
+    width: 25,
+    height: 25,
+    borderRadius: 12.5
+  },
+  bigCircle: {
     width: 35,
     height: 35,
     borderRadius: 17.5
   },
-  mediumCircle: {
-    width: 55,
-    height: 55,
-    borderRadius: 27.5
-  },
-  bigCircle: {
-    width: 75,
-    height: 75,
-    borderRadius: 37.5
-  },
   veryBigCircle: {
-    width: 90,
-    height: 90,
-    borderRadius: 45
+    width: 45,
+    height: 45,
+    borderRadius: 22.5
   },
   headingText: {
     fontFamily: 'Aptos_Bold',

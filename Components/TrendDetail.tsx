@@ -12,67 +12,81 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 
-interface Trend {
-  title: string;
-  category: string;
-  timeframe: string;
-  impact: number;
-  views: number;
-  description: string;
-  image: any;
-}
-
 interface PopupProps {
   visible: boolean;
   onClose: () => void;
-  circleName: string;
   useModal?: boolean;
   initialTrendIndex?: number;
 }
 
-const trends: Trend[] = [
-  {
-    title: "Circular Economy",
-    category: "Technology",
-    timeframe: "3-5 years",
-    impact: 4,
-    views: 91,
-    description: "Circularity aims to create a closed-loop system where resources are reused, recycled, and repurposed, minimizing waste and environmental impact.",
-    image: require("../assets/images/Circular-economy.jpg")
-  },
-  {
-    title: "Sustainable Energy",
-    category: "Technology",
-    timeframe: "5-10 years",
-    impact: 4,
-    views: 85,
-    description: "The transition to renewable energy sources accelerates as solar, wind, and other sustainable technologies become more efficient and cost-effective.",
-    image: require("../assets/images/Circular-economy.jpg") 
-  }
-];
-
 const TrendDetail: React.FC<PopupProps> = ({
   visible,
   onClose,
-  circleName,
-  initialTrendIndex = 0,
+  currentTrendIndex,
+  trends,
   useModal = true, // Default to Modal behavior
   
 
 }) => {
-  const [currentIndex, setCurrentIndex] = useState(initialTrendIndex);
+  const [currentIndex, setCurrentIndex] = useState(-1);
+  const [prevIndex, setPrevIndex] = useState(-1);
+  const [currentTrend, setCurrentTrend] = useState(0);
+  const [currentTrendImpact, setCurrentTrendImpact] = useState(0);
+  const [currentTrendTrendType, setCurrentTrendTrendType] = useState('');
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
-  const currentTrend = trends[currentIndex];
-
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % trends.length);
+    if (currentIndex === trends.length-1) {
+        setCurrentIndex(0);
+    } else {
+        setCurrentIndex(currentIndex+1);
+    }
   };
 
   const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev - 1 + trends.length) % trends.length);
+  if (currentIndex === 0) {
+      setCurrentIndex(trends.length-1);
+  } else {
+    setCurrentIndex(currentIndex-1);
+  }
   };
+
+    useEffect(() => {
+        if (currentIndex !== prevIndex) {
+            setCurrentTrend(trends[currentIndex]);
+            setPrevIndex(currentIndex);
+        }
+    }, [currentIndex]);
+
+    useEffect(() => {
+        if (currentIndex === -1) {
+            setCurrentTrend(trends[currentTrendIndex]);
+            setCurrentIndex(currentTrendIndex);
+        } else {
+            setCurrentTrend(trends[currentIndex]);
+        }
+        setCurrentTrend(trends[currentTrendIndex]);
+        setCurrentIndex(currentTrendIndex);
+        setPrevIndex(currentTrendIndex);
+    }, [currentTrendIndex]);
+
+    useEffect(() => {
+        if (currentTrend?.impact?.toLowerCase() === 'low impact') {
+            setCurrentTrendImpact(1);
+        } else if (currentTrend?.impact?.toLowerCase() === 'medium impact') {
+            setCurrentTrendImpact(2);
+        } else if (currentTrend?.impact?.toLowerCase() === 'high impact') {
+            setCurrentTrendImpact(3);
+        } else if (currentTrend?.impact?.toLowerCase() === 'very high impact') {
+            setCurrentTrendImpact(4);
+        }
+      if (currentTrend?.trendType === 0) {
+          setCurrentTrendTrendType('Social');
+      } else if (currentTrend?.trendType === 1) {
+          setCurrentTrendTrendType('Technology');
+      }
+    }, [currentTrend]);
 
   useEffect(() => {
     if (visible) {
@@ -109,89 +123,177 @@ const TrendDetail: React.FC<PopupProps> = ({
   }, [visible]);
 
 
-  const content = (
-    <Animated.View
-      style={[
-        styles.container,
-        {
-          transform: [{ scale: scaleAnim }],
-        },
-      ]}
-    >
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.navButton} onPress={handlePrevious}>
-          <MaterialIcons name="arrow-back-ios" size={30} color="white" />
-        </TouchableOpacity>
+  let content = null
+  if (currentTrendTrendType === 'Social') {
+      content = (
+        <Animated.View
+          style={[
+            styles.container,
+            {
+              transform: [{ scale: scaleAnim }],
+            },
+          ]}
+        >
+          <View style={styles.container}>
+            <TouchableOpacity style={styles.orangeNavButton} onPress={handlePrevious}>
+              <MaterialIcons name="arrow-back-ios" size={30} color="black" />
+            </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.navButton, styles.rightNavButton]} onPress={handleNext}>
-          <MaterialIcons name="arrow-forward-ios" size={30} color="white" />
-        </TouchableOpacity>
+            <TouchableOpacity style={[styles.orangeNavButton, styles.rightNavButton]} onPress={handleNext}>
+              <MaterialIcons name="arrow-forward-ios" size={30} color="black" />
+            </TouchableOpacity>
 
-        <View style={styles.whiteSection}>
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <MaterialIcons name="close" size={24} color="white" />
-          </TouchableOpacity>
+            <View style={styles.whiteSection}>
+              <TouchableOpacity style={styles.orangeCloseButton} onPress={onClose}>
+                <MaterialIcons name="close" size={24} color="black" />
+              </TouchableOpacity>
 
-          <View style={styles.header}>
-            <Text style={styles.title}>{currentTrend.title}</Text>
-          </View>
+              <View style={styles.header}>
+                <Text style={styles.title} numberOfLines={1}>{currentTrend?.title}</Text>
+              </View>
 
-          <View style={styles.metaRow}>
-            <View style={styles.metaItem}>
-              <View style={[styles.iconRectangle, { backgroundColor: "#5A136D" }]} />
-              <Text style={styles.metaText}>{currentTrend.category}</Text>
-            </View>
-            <View style={styles.metaItem}>
-              <MaterialIcons name="schedule" size={16} color="#000" />
-              <Text style={styles.metaText}>{currentTrend.timeframe}</Text>
-            </View>
-          </View>
-
-          <View style={styles.metaRow}>
-            <View style={styles.metaItem}>
-              <View style={[styles.impactDots, { flexDirection: 'row', alignItems: 'center', gap: 8 }]}>
-                <View style={{ flexDirection: 'column', gap: 4 }}>
-                  {[...Array(Math.ceil(currentTrend.impact / 2))].map((_, i) => (
-                    <View key={i} style={{ flexDirection: 'row', gap: 4 }}>
-                      <View style={styles.dot} />
-                      <View style={styles.dot} />
-                    </View>
-                  ))}
+              <View style={styles.metaRow}>
+                <View style={styles.metaItem}>
+                  <View style={[styles.iconRectangle, { backgroundColor: "#F57523" }]} />
+                  <Text style={styles.metaText}>{currentTrendTrendType}</Text>
                 </View>
-                <Text style={styles.metaText}>Very High Impact</Text>
+                <View style={styles.metaItem}>
+                  <MaterialIcons name="schedule" size={16} color="#000" />
+                  <Text style={styles.metaText}>{currentTrend?.timeFrame}</Text>
+                </View>
+              </View>
+
+              <View style={styles.metaRow}>
+                <View style={styles.metaItem}>
+                  <View style={[styles.impactDots, { flexDirection: 'row', alignItems: 'center', gap: 8 }]}>
+                    <View style={{ flexDirection: 'column', gap: 4 }}>
+                      {[...Array(Math.ceil(currentTrendImpact / 2))].map((_, i) => (
+                        <View key={i} style={{ flexDirection: 'row', gap: 4 }}>
+                          <View style={styles.dot} />
+                          <View style={styles.dot} />
+                        </View>
+                      ))}
+                    </View>
+                    <Text style={styles.metaText}>{currentTrend?.impact}</Text>
+                  </View>
+                </View>
+                <View style={styles.metaItem}>
+                  <MaterialIcons name="visibility" size={16} color="#000" />
+                  <Text style={styles.metaText}>{currentTrend?.views}</Text>
+                </View>
               </View>
             </View>
-            <View style={styles.metaItem}>
-              <MaterialIcons name="visibility" size={16} color="#000" />
-              <Text style={styles.metaText}>{currentTrend.views}</Text>
+
+            <View style={styles.border} />
+
+            <View style={styles.orangeSection}>
+              <Text style={styles.blackDescription}>
+                {currentTrend?.description}
+              </Text>
+
+              <Image
+                source={require("../assets/images/Circular-economy.jpg")}
+                style={styles.image}
+                resizeMode="cover"
+              />
             </View>
           </View>
-        </View>
-
-        <View style={styles.border} />
-
-        <View style={styles.purpleSection}>
-          <Text style={styles.description}>
-            {currentTrend.description}
-          </Text>
-
-          <Image
-            source={currentTrend.image}
-            style={styles.image}
-            resizeMode="cover"
-          />
-        </View>
-      </View>
-    </Animated.View>
-  );
-  if (useModal) {
-    return (
-      <Modal visible={visible} transparent animationType="none">
-        <Animated.View style={[styles.overlay, { opacity: opacityAnim }]}>
-          {content}
         </Animated.View>
-      </Modal>
+      );
+      if (useModal) {
+        return (
+          <Modal visible={visible} transparent animationType="none">
+            <Animated.View style={[styles.overlay, { opacity: opacityAnim }]}>
+              {content}
+            </Animated.View>
+          </Modal>
+        );
+    }
+  } else {
+    content = (
+      <Animated.View
+        style={[
+          styles.container,
+          {
+            transform: [{ scale: scaleAnim }],
+          },
+        ]}
+      >
+        <View style={styles.container}>
+          <TouchableOpacity style={styles.purpleNavButton} onPress={handlePrevious}>
+            <MaterialIcons name="arrow-back-ios" size={30} color="white" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.purpleNavButton, styles.rightNavButton]} onPress={handleNext}>
+            <MaterialIcons name="arrow-forward-ios" size={30} color="white" />
+          </TouchableOpacity>
+
+          <View style={styles.whiteSection}>
+            <TouchableOpacity style={styles.purpleCloseButton} onPress={onClose}>
+              <MaterialIcons name="close" size={24} color="white" />
+            </TouchableOpacity>
+
+            <View style={styles.header}>
+              <Text style={styles.title} numberOfLines={1}>{currentTrend?.title}</Text>
+            </View>
+
+            <View style={styles.metaRow}>
+              <View style={styles.metaItem}>
+                <View style={[styles.iconRectangle, { backgroundColor: "#5A136D" }]} />
+                <Text style={styles.metaText}>{currentTrendTrendType}</Text>
+              </View>
+              <View style={styles.metaItem}>
+                <MaterialIcons name="schedule" size={16} color="#000" />
+                <Text style={styles.metaText}>{currentTrend?.timeFrame}</Text>
+              </View>
+            </View>
+
+            <View style={styles.metaRow}>
+              <View style={styles.metaItem}>
+                <View style={[styles.impactDots, { flexDirection: 'row', alignItems: 'center', gap: 8 }]}>
+                  <View style={{ flexDirection: 'column', gap: 4 }}>
+                    {[...Array(Math.ceil(currentTrendImpact / 2))].map((_, i) => (
+                      <View key={i} style={{ flexDirection: 'row', gap: 4 }}>
+                        <View style={styles.dot} />
+                        <View style={styles.dot} />
+                      </View>
+                    ))}
+                  </View>
+                  <Text style={styles.metaText}>{currentTrend?.impact}</Text>
+                </View>
+              </View>
+              <View style={styles.metaItem}>
+                <MaterialIcons name="visibility" size={16} color="#000" />
+                <Text style={styles.metaText}>{currentTrend?.views}</Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.border} />
+
+          <View style={styles.purpleSection}>
+            <Text style={styles.whiteDescription}>
+              {currentTrend?.description}
+            </Text>
+
+            <Image
+              source={require("../assets/images/Circular-economy.jpg")}
+              style={styles.image}
+              resizeMode="cover"
+            />
+          </View>
+        </View>
+      </Animated.View>
     );
+    if (useModal) {
+      return (
+        <Modal visible={visible} transparent animationType="none">
+          <Animated.View style={[styles.overlay, { opacity: opacityAnim }]}>
+            {content}
+          </Animated.View>
+        </Modal>
+      );
+    }
   }
 
   // Inline rendering for compare mode
@@ -240,7 +342,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 40,
   },
-  closeButton: {
+    orangeSection: {
+      height: '63%',
+      backgroundColor: '#F57523',
+      padding: 20,
+      justifyContent: "center",
+      alignItems: "center",
+      gap: 40,
+    },
+  purpleCloseButton: {
     position: "absolute",
     right: 100,
     top: 100,
@@ -249,9 +359,21 @@ const styles = StyleSheet.create({
     padding: 4,
     zIndex: 1,
   },
+    orangeCloseButton: {
+      position: "absolute",
+      right: 100,
+      top: 100,
+      backgroundColor: "#F57523",
+      borderRadius: 20,
+      padding: 4,
+      zIndex: 1,
+    },
   header: {
     marginTop:60,
     marginBottom:45,
+    width: 400,
+    flexDirection: "row",
+    justifyContent: "center",
   },
   title: {
     fontSize: 30,
@@ -297,13 +419,20 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: "red",
   },
-  description: {
+  whiteDescription: {
     width: 400,
     fontSize: 18,
     color: "white",
     textAlign: "center",
     fontFamily:'Aptos',
   },
+    blackDescription: {
+      width: 400,
+      fontSize: 18,
+      color: "black",
+      textAlign: "center",
+      fontFamily:'Aptos',
+    },
   image: {
     marginTop: 12,
     height: 150,
@@ -311,7 +440,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
   },
-  navButton: {
+  purpleNavButton: {
     position: "absolute",
     left: 20,
     top: '50%',
@@ -321,6 +450,16 @@ const styles = StyleSheet.create({
     padding: 10,
     zIndex: 2,
   },
+    orangeNavButton: {
+      position: "absolute",
+      left: 20,
+      top: '50%',
+      transform: [{ translateY: -20 }],
+      backgroundColor: "#F57523",
+      borderRadius: 25,
+      padding: 10,
+      zIndex: 2,
+    },
   rightNavButton: {
     left: 'auto',
     right: 20,
