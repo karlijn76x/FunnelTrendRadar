@@ -5,9 +5,11 @@ import NavBarEdit from '../components/NavBarEditTrends'
 import { useNavigation } from '@react-navigation/native';
 import trendsApi from '../apis/TrendsApi';
 
-const CreateTrend = () => {
+const CreateTrend = ({ route }) => {
     const navigation = useNavigation();
 
+    const [trend, setTrend] = useState(null);
+    const [resetCategory, setResetCategory] = useState(false);
     // Form input states
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -71,11 +73,20 @@ const CreateTrend = () => {
         { label: 'Digital & Cloud', value: '7' },
         { label: 'Other', value: '8' }
     ];
+
+    // Effect to update category options when trend type changes
+    useEffect(() => {
+        trendsApi.getTrend(route.params.trendId)
+            .then(res => setTrend(res));
+    }, [route.params?.trendId]);
     
     // Effect to update category options when trend type changes
     useEffect(() => {
         // Reset category selection when trend type changes
-        setSelectedCategory(null);
+        if (resetCategory) {
+            setSelectedCategory(null);
+            setResetCategory(true);
+        }
         setErrors(prev => ({ ...prev, category: false }));
         
         // Set appropriate category options based on selected trend type
@@ -87,6 +98,17 @@ const CreateTrend = () => {
             setCategoryOptions([]);
         }
     }, [selectedTrendType]);
+
+    useEffect(() => {
+        if (trend !== null) {
+            setTitle(trend.title);
+            setDescription(trend.description);
+            setSelectedTrendType(String(trend.trendType));
+            setSelectedImpact(trend.impact);
+            setSelectedCategory(String(trend.category));
+            setSelectedTimeframe(trend.timeFrame);
+        }
+    }, [trend]);
 
     const clearError = (field: keyof typeof errors) => {
         if (errors[field]) {
@@ -110,9 +132,10 @@ const CreateTrend = () => {
     };
 
     // Handle form submission
-    const handleCreate = () => {
+    const handleUpdate = () => {
         if (validateForm()) {
             const newTrend = {
+                id: trend.id,
                 title: title,
                 description: description,
                 impact: selectedImpact,
@@ -120,7 +143,7 @@ const CreateTrend = () => {
                 category: Number(selectedCategory),
                 trendType: Number(selectedTrendType)
             };
-            trendsApi.createTrend(newTrend)
+            trendsApi.updateTrend(newTrend, trend.id)
                 .then(() => navigation.navigate('Manage Trends'));
         }
     };
@@ -374,9 +397,9 @@ const CreateTrend = () => {
                 styles.createButton,
                 { opacity: pressed ? 0.8 : 1 }
               ]}
-              onPress={handleCreate}
+              onPress={handleUpdate}
             >
-              <Text style={styles.createButtonText}>Create</Text>
+              <Text style={styles.createButtonText}>Save</Text>
             </Pressable>
           </View>
         </View>
