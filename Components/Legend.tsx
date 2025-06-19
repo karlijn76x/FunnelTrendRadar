@@ -1,12 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import { useFonts } from 'expo-font';
 
 const Legend = () => {
-    const [loaded, error] = useFonts({
-        Aptos_Bold: require("../assets/fonts/Aptos-Bold.ttf")
-    });
-
     return (
         <View style={styles.container}>
             <View style={styles.dotsRow}>
