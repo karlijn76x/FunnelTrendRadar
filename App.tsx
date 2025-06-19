@@ -180,7 +180,7 @@ export default function App() {
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
-                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1} ellipsizeMode="tail">
                         Outdoor Autonomous Systems
                       </Text>
                     </View>
@@ -195,7 +195,7 @@ export default function App() {
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
-                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1}>
+                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1} ellipsizeMode="tail">
                         Local for Local
                       </Text>
                     </View>
@@ -218,7 +218,7 @@ export default function App() {
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
-                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1} ellipsizeMode="tail">
                         Generative AI
                       </Text>
                     </View>
@@ -233,7 +233,7 @@ export default function App() {
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
-                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1}>
+                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1} ellipsizeMode="tail">
                         Privacy & Security
                       </Text>
                     </View>
@@ -256,7 +256,7 @@ export default function App() {
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
-                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1} ellipsizeMode="tail">
                         Humanoids
                       </Text>
                     </View>
@@ -271,7 +271,7 @@ export default function App() {
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
-                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1}>
+                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1} ellipsizeMode="tail">
                         Everything as a Service
                       </Text>
                     </View>
@@ -286,7 +286,7 @@ export default function App() {
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
-                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1} ellipsizeMode="tail">
                         Cybersecurity
                       </Text>
                     </View>
@@ -301,7 +301,7 @@ export default function App() {
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#F57523' }]}>
-                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1}>
+                      <Text style={[styles.labelText, { color: 'black' }]} numberOfLines={1} ellipsizeMode="tail">
                         Changing Work
                       </Text>
                     </View>
@@ -316,7 +316,7 @@ export default function App() {
                   />
                   {showTextLabels && (
                     <View style={[styles.labelContainer, { backgroundColor: '#5A136D' }]}>
-                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1}>
+                      <Text style={[styles.labelText, { color: 'white' }]} numberOfLines={1} ellipsizeMode="tail">
                         3D Printing
                       </Text>
                     </View>
