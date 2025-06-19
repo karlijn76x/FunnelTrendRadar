@@ -106,6 +106,7 @@ Before running the FunnelTrendRadar app locally, ensure you have the following i
 3. The app will install and start on the emulator.
 
 ## Demo
+![demo](./assets/images/trend_radar_final_product.gif)
 
 ## Authors
 - [@briahnaaztria19](https://github.com/briahnaaztria19)
