@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
 import { StyleSheet, Text, View, Image, Pressable, TouchableOpacity, Animated } from 'react-native';
-import { useFonts } from 'expo-font';
 import SearchBar from './Search_bar';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -114,9 +113,6 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
   const [techFocusAreaValue, setTechFocusAreaValue] = useState<string | null>(null);
   // UI state for dropdown focus
   const [focusedDropdown, setFocusedDropdown] = useState<string | null>(null);
-  const [loaded] = useFonts({
-    Aptos_Bold: require("../assets/fonts/Aptos-Bold.ttf")
-  });
 
   if (!loaded) return null;
 
