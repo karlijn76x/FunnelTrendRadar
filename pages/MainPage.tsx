@@ -54,19 +54,15 @@ export default function MainPage() {
     if (compareMode) {
       setSelectedCircles((prev) => {
         if (prev === trend) {
-          console.log(`Deselecting circle`);
           return prev.filter((x) => x !== trend);
         } else if (prev.length < 2) {
-          console.log(`Selecting circle`);
           return [...prev, trend];
         }
-        console.log(`Cannot select more than two circles`);
         return prev;
       });
     } else {
         selectedCircles[0] = trend;
         setSelectedCircles(selectedCircles);
-      console.log(`Opening detail view`);
       setVisible(true);
     }
   };
@@ -478,7 +474,6 @@ export default function MainPage() {
             {compareMode && selectedCircles.length === 2 ? (
             <View style={styles.compareTrendDetailsContainer}>
             {selectedCircles.map((trend, index) => {
-            console.log(`Rendering TrendDetail`);
           return (
            <TrendDetail
             key={index}
