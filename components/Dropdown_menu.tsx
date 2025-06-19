@@ -7,7 +7,6 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Dimensions } from 'react-native';
-//State for toggling side panel
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 const panelWidth = screenWidth * 0.2; 
@@ -18,7 +17,6 @@ type RootStackParamList = {
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-// Callback functions for when filters change
 interface DropdownComponentProps {
   onTrendTypeChange: (value: string | null) => void;
   onImpactChange: (value: string | null) => void;
@@ -27,7 +25,6 @@ interface DropdownComponentProps {
   onTechFocusAreaChange: (value: string | null) => void;
 }
 
-// Data for trendtype dropdown menu
 const trendType = [
   { 
     label: 'All', 
@@ -46,7 +43,6 @@ const trendType = [
   },
 ];
 
-// Data for impact dropdown menu
 const impact = [
   { 
     label: 'All', 
@@ -74,7 +70,6 @@ const impact = [
   },
 ];
 
-// Data for timeframe dropdown menu
 const timeframe = [
     { label: 'All', value: '1' },
     { label: '0-3 years', value: '4' },
@@ -82,7 +77,6 @@ const timeframe = [
     { label: '5-10 years', value: '2' },
   ];
 
-// Data for socialkey trends dropdown menu
 const socialKeyTrends = [
     { label: 'All', value: '1' },
     { label: 'Labor Shortage and Regulations', value: '2' },
@@ -91,7 +85,6 @@ const socialKeyTrends = [
     { label: 'Sustainability', value: '5' },
   ];
 
-// Data for techfocus area dropdown menu
 const techFocusArea = [
     { label: 'All', value: '1' },
     { label: 'Autonomous Systems', value: '2' },
@@ -103,16 +96,13 @@ const techFocusArea = [
 
 const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange, onImpactChange, onTimeframeChange, onSocialKeyTrendChange, onTechFocusAreaChange }) => {
   const navigation = useNavigation<NavigationProp>();
-  //State for toggling side panel
   const [infoVisible, setInfoVisible] = useState(false); 
   const slideAnim = useRef(new Animated.Value(panelWidth)).current;
-  // State for each filter dropdown
   const [trendValue, setTrendValue] = useState<string | null>(null);
   const [impactValue, setImpactValue] = useState<string | null>(null);
   const [timeframeValue, setTimeframeValue] = useState<string | null>(null);
   const [socialKeyTrendsValue, setSocialKeyTrendsValue] = useState<string | null>(null);
   const [techFocusAreaValue, setTechFocusAreaValue] = useState<string | null>(null);
-  // UI state for dropdown focus
   const [focusedDropdown, setFocusedDropdown] = useState<string | null>(null);
   const [loaded] = useFonts({
     Aptos_Bold: require("../assets/fonts/Aptos-Bold.ttf")
@@ -120,7 +110,6 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
 
   if (!loaded) return null;
 
-  // Handle dropdown focus/blur for styling
   const handleFocus = (dropdownName: string) => setFocusedDropdown(dropdownName);
   const handleBlur = () => setFocusedDropdown(null);
 
@@ -158,7 +147,6 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
           value={value}
           onFocus={() => handleFocus(title)}
           onBlur={handleBlur}
-          // Custom dropdown icon
           renderItem={item => (
             <View style={styles.item}>
               {item.image && (
@@ -173,7 +161,6 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
               ]}>{item.label}</Text>
             </View>
           )}
-          // Handle filter selection change
           onChange={item => {
             setValue(item.value);
             if (notifyParent) notifyParent(item.value);
@@ -258,9 +245,7 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({ onTrendTypeChange
   );
 };
 
-// Styling
 const styles = StyleSheet.create({
-  // Styling for the whole navbar
   container: {
     position: 'relative',
     flexDirection: 'row',
@@ -272,7 +257,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     zIndex: 1000,
   },
-  // Styling for the logo
   logoContainer: {
     marginTop: 10,
   },
@@ -284,7 +268,6 @@ const styles = StyleSheet.create({
   infoIcon: {
     marginRight: 10,
   },
-  // Styling for the dropdown menus
   dropdownsContainer: {
     flexDirection: 'row',
     gap: 10,

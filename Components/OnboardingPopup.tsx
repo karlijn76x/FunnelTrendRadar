@@ -111,8 +111,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
 
   const isLastStep = step === 5; 
   const buttonText = step === 1 ? 'Start tutorial' : isLastStep ? 'Done' : 'Next';
-  const buttonAction = isLastStep ? onClose : onNext; 
-  // Position pages 
+  const buttonAction = isLastStep ? onClose : onNext;
   let content;
   if (step === 1) {
     content = (
@@ -184,7 +183,6 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({
 export default OnboardingPopup;
 
 const styles = StyleSheet.create({
-  // General popup styling
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
@@ -230,7 +228,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Aptos',
   },
-  //Case 1 styling
   circlesWrapper: {
     flexDirection: 'row',
     marginTop: 16,
@@ -267,7 +264,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontFamily: 'Aptos_Bold',
   },
-  //Case 2 styling
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -300,7 +296,6 @@ const styles = StyleSheet.create({
     borderColor: '#5A136D',
     top: -30,
   },
-  //Case 3 styling
   clickCircleWrapper: {
     marginVertical: 20,
     alignItems: 'center',
@@ -323,7 +318,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
   },  
-  //Case 4 styling
   clickArrowWrapper: {
     position: 'absolute',
     top: 70,
@@ -353,7 +347,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
   },
-  //Case 5 styling
   purpleCircle: {
     backgroundColor: '#5A136D',
     borderWidth: 3,
@@ -380,8 +373,6 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontFamily: 'Aptos_Bold',
   },
-
-  // Styles for pagination dots
   paginationContainer: {
     flexDirection: 'row',
     justifyContent: 'center',

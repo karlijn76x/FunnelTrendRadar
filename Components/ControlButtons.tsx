@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 
-// Props for the control buttons component
 interface ControlButtonsProps {
   onComparePress: () => void;
   onShowTextPress: () => void;
@@ -47,7 +46,6 @@ const styles = StyleSheet.create({
     borderColor: '#000000',
     minHeight: 50
   },
-  // Active state styling for compare button
   activeCompareButton: {
     borderColor: 'purple',
     borderWidth: 3,

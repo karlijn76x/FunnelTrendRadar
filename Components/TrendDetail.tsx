@@ -24,7 +24,7 @@ const TrendDetail: React.FC<PopupProps> = ({
   onClose,
   currentTrendIndex,
   trends,
-  useModal = true, // Default to Modal behavior
+  useModal = true,
   
 
 }) => {
@@ -296,7 +296,6 @@ const TrendDetail: React.FC<PopupProps> = ({
     }
   }
 
-  // Inline rendering for compare mode
   return <View style={styles.inlineContainer}>{content}</View>;
 };
 

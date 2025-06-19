@@ -30,13 +30,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ onTrendSelect, trends }) => {
     const normalizedTitle = normalizeText(trend.title);
     const normalizedCategory = normalizeText(trend.category);
 
-    // Check if any word in the query matches the title or category
     const queryWords = normalizedQuery.split(' ').filter(word => word.length > 0);
 
     return queryWords.some(word =>
       normalizedTitle.includes(word) ||
       normalizedCategory.includes(word) ||
-      // Check for partial matches in each word
       trend.title.toLowerCase().split(' ').some(titleWord =>
         titleWord.startsWith(word) || word.startsWith(titleWord)
       ) ||

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, StyleProp, ViewStyle } from 'react-native';
 
-type ImpactLevel = 'low impact' | 'medium impact' | 'high impact' | 'very high impact'; // Nieuw type toegevoegd
+type ImpactLevel = 'low impact' | 'medium impact' | 'high impact' | 'very high impact';
 
 type Props = {
   impact: ImpactLevel;
@@ -55,10 +55,10 @@ const styles = StyleSheet.create({
     borderColor: '#000',
   },
     defaultCircle: {
-      backgroundColor: '#F57523', // Default color
+      backgroundColor: '#F57523',
     },
   selectedCircle: {
-    backgroundColor: '#F5752380', // Light purple for selected state
+    backgroundColor: '#F5752380',
   },
   label: {
     color: '#000',
