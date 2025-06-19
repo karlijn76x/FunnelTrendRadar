@@ -3,7 +3,7 @@
     "name": "FunnelTrendRadar",
     "slug": "FunnelTrendRadar",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "landscape",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
@@ -20,10 +20,28 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.luuksteusfij.FunnelTrendRadar"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "916cabfd-f15b-4da8-8bc7-f09356758010"
+      }
+    },
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Aptos.ttf",
+            "./assets/fonts/Aptos-Bold.ttf",
+            "./assets/fonts/Aptos-ExtraBold.ttf"
+          ]
+        }
+      ]
+    ]
   }
 }
