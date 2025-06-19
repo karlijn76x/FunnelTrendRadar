@@ -3,6 +3,7 @@ import { Animated, Dimensions } from 'react-native';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
+// Handles animation when filters change
 interface FallingAnimationProps {
   targetX: number;
   targetY: number;
@@ -10,7 +11,7 @@ interface FallingAnimationProps {
   children: React.ReactNode;
   fallDirection?: 'left' | 'right';
   shouldShow: boolean;
-  filterKey: string;
+  filterKey: string;  // Used to detect filter changes
   skipAnimation?: boolean;
 }
 
@@ -24,16 +25,20 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
   filterKey,
   skipAnimation = false,
 }) => {
+  // Refs for animation values and filter state tracking
   const position = useRef(new Animated.ValueXY()).current;
   const opacity = useRef(new Animated.Value(1)).current;
-  const previousFilterKey = useRef(filterKey);
+  const previousFilterKey = useRef(filterKey);  // Track previous filter state
   const isInitialMount = useRef(true);
-
+  
+  // Determine which side to fall from
   const isLeftSide = fallDirection ? fallDirection === 'left' : targetX < screenWidth / 2;
-
+  
+  // Calculate starting position above screen
   const getStartPosition = () => {
     const verticalStart = -360;
-
+    
+    // Offset horizontally from target to create angled fall effect
     const horizontalStart = isLeftSide 
       ? targetX - 150
       : targetX + 150;
@@ -44,6 +49,7 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
     };
   };
 
+  // Calculate position to fall off screen
   const getFallDownPosition = () => {
     return {
       x: 350,
@@ -51,6 +57,7 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
     };
   };
 
+  // Animate item falling to target position
   const animateToTarget = (animationDelay = 0) => {
     const { x: startX, y: startY } = getStartPosition();
     
@@ -62,6 +69,7 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
         position.setValue({ x: targetX, y: targetY });
         opacity.setValue(1);
       } else {
+        // Create smooth falling animation to target position
         Animated.sequence([
           Animated.delay(animationDelay),
           Animated.parallel([
@@ -86,6 +94,7 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
     }
   };
 
+  // Animate item falling off screen
   const animateFallDown = () => {
     const { x: fallX, y: fallY } = getFallDownPosition();
     
@@ -108,11 +117,14 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
     ]).start();
   };
 
+  // Handle filter changes and visibility
   useEffect(() => {
     if (isInitialMount.current) {
+      // Initial load - animate to target
       isInitialMount.current = false;
       animateToTarget(delay);
     } else if (previousFilterKey.current !== filterKey) {
+      // Filter changed - fall down then reappear
       previousFilterKey.current = filterKey;
       
       if (shouldShow) {
@@ -128,12 +140,14 @@ const FallingAnimation: React.FC<FallingAnimationProps> = ({
         animateFallDown();
       }
     } else if (!shouldShow) {
+      // Item should be hidden
       Animated.timing(opacity, {
         toValue: 0,
         duration: 300,
         useNativeDriver: true,
       }).start();
     } else {
+      // Item should be visible
       Animated.timing(opacity, {
         toValue: 1,
         duration: 300,

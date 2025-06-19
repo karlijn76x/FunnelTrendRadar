@@ -26,12 +26,14 @@ const styles = StyleSheet.create({
       borderColor: 'black',
       borderBottomWidth: 2,
     },
+    //Styling for the whole navbar
     container: {
       paddingHorizontal: 15,
       paddingVertical: 24,
       width: '100%',
       height: 117,
     },
+    //Styling for the logo
     logo: {
       resizeMode: 'contain',
       width: 170,

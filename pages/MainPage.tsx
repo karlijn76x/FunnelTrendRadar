@@ -29,17 +29,21 @@ export default function MainPage() {
   const [topDots, setTopDots] = useState([]);
   const [middleDots, setMiddleDots] = useState([]);
   const [bottomDots, setBottomDots] = useState([]);
+  // UI state
   const [visible, setVisible] = useState(false);
-  const [showTextLabels, setShowTextLabels] = useState(true);
+  const [showTextLabels, setShowTextLabels] = useState(true); // Toggle for circle labels
+  // Filter states
   const [selectedTrendType, setSelectedTrendType] = useState<string | null>(null);
   const [selectedImpact, setSelectedImpact] = useState<string | null>(null);
   const [selectedTimeframe, setSelectedTimeframe] = useState<string | null>(null);
   const [selectedSocialKeyTrend, setSelectedSocialKeyTrend] = useState<string | null>(null);
   const [selectedTechFocusArea, setSelectedTechFocusArea] = useState<string | null>(null);
+  // Onboarding states
   const [showOnboarding, setShowOnboarding] = useState(true);
   const [onboardingStep, setOnboardingStep] = useState(1);
   const [dontShowAgain, setDontShowAgain] = useState(false);
   const [onboardingChecked, setOnboardingChecked] = useState(false);
+  // Animation and interaction states
   const [animationFilterKey, setAnimationFilterKey] = useState(0);
   const [compareMode, setCompareMode] = useState(false);
   const [selectedCircles, setSelectedCircles] = useState<string[]>([]);
@@ -50,15 +54,19 @@ export default function MainPage() {
     if (compareMode) {
       setSelectedCircles((prev) => {
         if (prev === trend) {
+          console.log(`Deselecting circle`);
           return prev.filter((x) => x !== trend);
         } else if (prev.length < 2) {
+          console.log(`Selecting circle`);
           return [...prev, trend];
         }
+        console.log(`Cannot select more than two circles`);
         return prev;
       });
     } else {
         selectedCircles[0] = trend;
         setSelectedCircles(selectedCircles);
+      console.log(`Opening detail view`);
       setVisible(true);
     }
   };
@@ -66,7 +74,7 @@ export default function MainPage() {
 
   const handleComparePress = () => {
     setCompareMode(!compareMode);
-    setSelectedCircles([]);
+    setSelectedCircles([]); // Reset selected circles when toggling compare mode
   };
   
   useEffect(() => {
@@ -240,22 +248,30 @@ export default function MainPage() {
   useEffect(() => {
     const retrieveTrends = async () => {
         await trendsApi.getAllTrends()
-            .then(data => setTrends(data));
+            .then(data => setTrends(data))
+            .catch(error => console.log(error));
     };
     retrieveTrends();
     const checkOnboardingStatus = async () => {
       try {
+        // Retrieve the number of times the app has been started
         const startCountStr = await AsyncStorage.getItem('appStartCount');
         let startCount = startCountStr ? parseInt(startCountStr) : 0;
         startCount += 1;
+         // Save the updated start count
         await AsyncStorage.setItem('appStartCount', startCount.toString());
+         // Check if the user chose not to show onboarding again
         const dontShow = await AsyncStorage.getItem('dontShowOnboarding');
+        // Show onboarding again on the 5th app start
         if (dontShow === 'true') {
           if (startCount === 5) {
+            // Reset the flag so onboarding will be shown again
             setShowOnboarding(true);
             await AsyncStorage.setItem('dontShowOnboarding', 'false');
+             // Skip onboarding if it's not the 5th start
             setDontShowAgain(false);
           } else {
+             // Show onboarding if the user hasn't opted out
             setShowOnboarding(false);
           }
         } else {
@@ -268,9 +284,12 @@ export default function MainPage() {
         setOnboardingChecked(true);
       }
     };
+    // Run onboarding check on component mount
     checkOnboardingStatus();
   }, []);
 
+  
+  // Refresh animations when filters change
   useEffect(() => {
     if (prevTimeframeRef.current !== selectedTimeframe) {
       setIsTimeframeFilterChange(true);
@@ -286,6 +305,7 @@ export default function MainPage() {
     try {
       await AsyncStorage.setItem('dontShowOnboarding', value ? 'true' : 'false');
     } catch (e) {
+      // Error 
     }
   };
   
@@ -296,6 +316,10 @@ export default function MainPage() {
       setShowOnboarding(false); 
     }
   };
+
+
+
+  // Filter logic functions
 
   /**
    * Checks if social trends should be shown
@@ -364,6 +388,7 @@ export default function MainPage() {
     return selectedTechFocusArea === null || selectedTechFocusArea === '1' || selectedTechFocusArea === map[areaName];
   };
 
+  // Calculates opacity for trend circles based on filter match
   const getSocialOpacity = (trendName: string) => 
     matchesSocialKeyTrend(trendName) ? 1 : 0.15;
   const getTechOpacity = (areaName: string) =>
@@ -453,6 +478,7 @@ export default function MainPage() {
             {compareMode && selectedCircles.length === 2 ? (
             <View style={styles.compareTrendDetailsContainer}>
             {selectedCircles.map((trend, index) => {
+            console.log(`Rendering TrendDetail`);
           return (
            <TrendDetail
             key={index}
@@ -510,6 +536,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
   },
+  // Styling for right column controls
   rightColumn: {
     flexDirection: 'column',
     justifyContent: 'flex-end',
@@ -517,12 +544,14 @@ const styles = StyleSheet.create({
     gap: 15,
     zIndex: -1
   },
+  // Styling for container that positions circle and label
   circleLabelContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
     top: -10,
   },
+  // Styling for trend circle labels
   labelContainer: {
     position: 'absolute',
     bottom: -16,
@@ -533,6 +562,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     maxWidth: 75,
   },
+  // Text styling for labels
   labelText: {
     fontFamily: 'Aptos_Bold',
     fontSize: 12,

@@ -39,7 +39,7 @@ const TechTrendCircle: React.FC<Props> = ({ impact, onPress, style, opacity = 1,
             height: size,
             borderRadius: size / 2,
           },
-          selected ? styles.selectedCircle : styles.defaultCircle,
+          selected ? styles.selectedCircle : styles.defaultCircle, // Apply selected or default style
         ]}
       >
       </View>
@@ -55,10 +55,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   defaultCircle: {
-    backgroundColor: '#5A136D',
+    backgroundColor: '#5A136D', // Default color
   },
   selectedCircle: {
-    backgroundColor: '#D8BFD8',
+    backgroundColor: '#D8BFD8', // Light purple for selected state
   },
  
 });

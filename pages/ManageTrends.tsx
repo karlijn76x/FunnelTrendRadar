@@ -39,10 +39,12 @@ function ManageTrends({ route }) {
             const normalizedQuery = normalizeText(route.params.query);
             const normalizedTitle = normalizeText(trend.title);
 
+            // Check if any word in the query matches the title or category
             const queryWords = normalizedQuery.split(' ').filter(word => word.length > 0);
 
             return queryWords.some(word =>
               normalizedTitle.includes(word) ||
+              // Check for partial matches in each word
               trend.title.toLowerCase().split(' ').some(titleWord =>
                 titleWord.startsWith(word) || word.startsWith(titleWord)
               )
